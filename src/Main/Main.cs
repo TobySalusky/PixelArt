@@ -22,6 +22,10 @@ namespace PixelArt
         public static Camera camera;
         public static Canvas canvas;
 
+        // settings
+        public static Tool tool= Tool.Brush;
+        public static Color brushColor = Color.Black;
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -67,6 +71,11 @@ namespace PixelArt
             if (keys.down(Keys.Escape)) {
                 Exit();
             }
+
+            if (mouse.middleDown) {
+                Vector2 worldDiff = camera.toWorld(mouse.pos) - camera.toWorld(new Vector2(lastMouseState.X, lastMouseState.Y));
+                camera.pos -= worldDiff;
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -79,12 +88,13 @@ namespace PixelArt
             KeyInfo keys = new KeyInfo(keyState, lastKeyState);
             MouseInfo mouse = new MouseInfo(mouseState, lastMouseState);
             
-            lastKeyState = keyState;
-            lastMouseState = mouseState;
-            
             globalControls(deltaTime, keys, mouse);
 
+            canvas.input(deltaTime, keys, mouse);
 
+            // end stuff
+            lastKeyState = keyState;
+            lastMouseState = mouseState;
             
             base.Update(gameTime);
         }
