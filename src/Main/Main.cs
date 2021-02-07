@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,7 +11,16 @@ namespace PixelArt
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
-        private Main instance;
+        private static Main instance;
+        
+        public static KeyboardState lastKeyState;
+        public static MouseState lastMouseState;
+
+        public static List<UIElement> uiElements = new List<UIElement>();
+
+        // OBJECTS
+        public static Camera camera;
+        public static Canvas canvas;
 
         public Main()
         {
@@ -22,8 +33,22 @@ namespace PixelArt
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
 
+            // Graphics stuff and setup
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1920;
+            Window.IsBorderless = false;
+            Window.AllowUserResizing = true;
+            graphics.ApplyChanges();
+            
+            // loading
+            Textures.loadTextures();
+
+            // var Init
+            camera = new Camera(Vector2.Zero, 5);
+            canvas = new Canvas(Textures.get("bush"));
+            
+            
             base.Initialize();
         }
 
@@ -34,23 +59,57 @@ namespace PixelArt
             // TODO: use this.Content to load your game content here
         }
 
+        private float delta(GameTime gameTime) {
+            return (float) gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        public void globalControls(float deltaTime, KeyInfo keys, MouseInfo mouse) {
+            if (keys.down(Keys.Escape)) {
+                Exit();
+            }
+        }
+
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            float deltaTime = delta(gameTime);
 
-            // TODO: Add your update logic here
+            KeyboardState keyState = Keyboard.GetState();
+            MouseState mouseState = Mouse.GetState();
 
+            KeyInfo keys = new KeyInfo(keyState, lastKeyState);
+            MouseInfo mouse = new MouseInfo(mouseState, lastMouseState);
+            
+            lastKeyState = keyState;
+            lastMouseState = mouseState;
+            
+            globalControls(deltaTime, keys, mouse);
+
+
+            
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Colors.background);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin(SpriteSortMode.Deferred,
+                BlendState.NonPremultiplied,
+                SamplerState.PointClamp);
+
+            
+            canvas.render(camera, spriteBatch);
+            
+            Texture2D rect = Textures.get("rect");
+            spriteBatch.Draw(rect, new Rectangle(0, 0, 200, 1080), Colors.panel);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public static GraphicsDevice getGraphicsDevice() {
+            return instance.GraphicsDevice;
         }
     }
 }
