@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Net.Sockets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace PixelArt {
     public class Canvas {
@@ -18,6 +20,8 @@ namespace PixelArt {
 
         public bool changesMade = false;
 
+        public List<Undo> undos = new List<Undo>();
+        
         public Canvas(int xPix, int yPix) : this(Textures.genRect(new Color(1F, 1F, 1F, 0F), xPix, yPix)) {}
 
         public Canvas(Texture2D texture) {
@@ -41,13 +45,19 @@ namespace PixelArt {
 
             switch (Main.tool) {
                 case Tool.Brush:
-                    
+
+                    if (mouse.leftPressed) addUndo();
+
                     if (mouse.leftDown) {
                         if (inBounds(pixel)) {
                             setColor(pixel, Main.brushColor);
                         }
                     }
                     break;
+            }
+
+            if (keys.pressed(Keys.Z) && keys.down(Keys.LeftControl)) {
+                useUndo();
             }
 
             if (changesMade) {
@@ -65,8 +75,22 @@ namespace PixelArt {
                 spriteBatch.Draw(layer.texture, renderRect, Color.White);
             }
         }
-        
-        
+
+        public void addUndo() {
+            undos.Add(new Undo(this));
+        }
+
+        public void useUndo() {
+            int index = undos.Count - 1;
+            
+            if (index < 0) return;
+            
+            undos[index].apply(this);
+            undos.RemoveAt(index);
+
+            layerColor = Util.colorArray(layer.texture);
+        }
+
         public bool inBounds(int x, int y) {
             return (x >= 0 && x < xPix && y >= 0 && y < yPix);
         }
