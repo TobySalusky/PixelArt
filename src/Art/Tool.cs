@@ -1,5 +1,5 @@
 ﻿namespace PixelArt {
     public enum Tool {
-        Brush, Eraser, FillBucket
+        Brush, Eraser, FillBucket, Rect
     }
 }

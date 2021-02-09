@@ -11,6 +11,14 @@ namespace PixelArt {
 
         private static Random rand = new Random();
 
+        public static Point min(Point p1, Point p2) {
+            return new Point(Math.Min(p1.X, p2.X), Math.Min(p1.Y, p2.Y));
+        }
+
+        public static Point max(Point p1, Point p2) {
+            return new Point(Math.Max(p1.X, p2.X), Math.Max(p1.Y, p2.Y));
+        }
+        
         public static float nearestAngle(float angle, float targetAngle) {
             float diff = targetAngle - angle;
             if (Math.Abs(diff) < Maths.PI) {

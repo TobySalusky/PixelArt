@@ -36,6 +36,16 @@ using Microsoft.Xna.Framework.Graphics;
             return rect;
         }
 
+        public static Texture2D copy(Texture2D texture) {
+            return toTexture(Util.colorArray(texture), texture.Width, texture.Height);
+        }
+
+        public static Texture2D toTexture(Color[] colArr, int x, int y) {
+            Texture2D rect = new Texture2D(Main.getGraphicsDevice(), x, y);
+            rect.SetData(colArr);
+            return rect;
+        }
+
         public static Texture2D genRect(Color rectColor, int x, int y) {
             Texture2D rect = new Texture2D(Main.getGraphicsDevice(), x, y);
             

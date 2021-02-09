@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_.19.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Toby\Documents\GitHub\PixelArt" t="IncludeRecursive">
+      <e p=".gitattributes" t="Include" />
+      <e p="app.manifest" t="Include" />
+      <e p="Assets" t="Include">
+        <e p="Textures" t="Include">
+          <e p="bush.png" t="Include" />
+          <e p="null.png" t="Include" />
+        </e>
+      </e>
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="Content" t="Include">
+        <e p="Content.mgcb" t="Include" />
+        <e p="obj" t="Include">
+          <e p="DesktopGL" t="Include">
+            <e p="Content" t="Include">
+              <e p=".mgstats" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Icon.bmp" t="Include" />
+      <e p="Icon.ico" t="Include" />
+      <e p="Microsoft.Xna.Framework.Content.ContentTypeReader" t="Include" />
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="PixelArt.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="PixelArt.csproj" t="IncludeRecursive" />
+      <e p="README.md" t="Include" />
+      <e p="src" t="Include">
+        <e p="Art" t="Include">
+          <e p="Canvas.cs" t="Include" />
+          <e p="Layer.cs" t="Include" />
+          <e p="Tool.cs" t="Include" />
+          <e p="Undo.cs" t="Include" />
+        </e>
+        <e p="Camera.cs" t="Include" />
+        <e p="Main" t="Include">
+          <e p="Main.cs" t="Include" />
+          <e p="Program.cs" t="Include" />
+        </e>
+        <e p="UI" t="Include">
+          <e p="Screens" t="Include">
+            <e p="UIScreen.cs" t="Include" />
+          </e>
+          <e p="UI.cs" t="Include" />
+          <e p="UIButton.cs" t="Include" />
+          <e p="UIElement.cs" t="Include" />
+          <e p="UITransition.cs" t="Include" />
+        </e>
+        <e p="Util" t="Include">
+          <e p="Colors.cs" t="Include" />
+          <e p="FileUtil.cs" t="Include" />
+          <e p="Fonts.cs" t="Include" />
+          <e p="FrameCounter.cs" t="Include" />
+          <e p="KeyInfo.cs" t="Include" />
+          <e p="Logger.cs" t="Include" />
+          <e p="Maths.cs" t="Include" />
+          <e p="MouseInfo.cs" t="Include" />
+          <e p="Paths.cs" t="Include" />
+          <e p="Textures.cs" t="Include" />
+          <e p="Util.cs" t="Include" />
+        </e>
+      </e>
+    </e>
+  </component>
+</project>

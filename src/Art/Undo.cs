@@ -3,15 +3,17 @@ using Microsoft.Xna.Framework;
 
 namespace PixelArt {
     public class Undo {
-        public List<Color[]> arrs = new List<Color[]>();
+        public List<Layer> layers = new List<Layer>();
 
         public Undo(Canvas canvas) {
-            arrs.Add(Util.colorArray(canvas.layer.texture));
+            foreach (var layer in canvas.layers) {
+                layers.Add(layer.copy());
+            }
         }
 
         public void apply(Canvas canvas) {
             // TODO: multilayer
-            canvas.layer.texture.SetData(arrs[0]);
+            canvas.layers = layers;
         }
     }
 }
