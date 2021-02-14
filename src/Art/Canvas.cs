@@ -15,6 +15,7 @@ namespace PixelArt {
         public Texture2D background;
         public int xPix, yPix;
         public int area;
+        public Vector2 pixDimen;
         
         public List<Layer> layers = new List<Layer>();
         public Layer layer;
@@ -29,7 +30,9 @@ namespace PixelArt {
         public bool hasPreview;
         public Texture2D previewTexture;
         public Color[] previewColor;
-        
+
+        public bool grid = false;
+        public Texture2D gridTexture;
         
         
         // SPECIFICS
@@ -37,11 +40,24 @@ namespace PixelArt {
         // control-z
         public const float firstHoldZ = 0.3F, afterHoldZ = 0.075F;
         public float holdTimeZ;
-        // rect tool
-        public Point rectBegin;
         
+        // Tools
+        // general
+        public Point beginPixel;
+        public Vector2 beginMousePos;
         
+        // shapes
+        public bool shapeFill = false;
+
+        // brush tool
+        public Brush brush;
+
+
+        public Canvas(int pixSize) : this(pixSize, pixSize) {}
+
         public Canvas(int xPix, int yPix) : this(Textures.genRect(Colors.erased, xPix, yPix)) {}
+
+        public Canvas(string str) : this(Textures.get(str)) { }
 
         public Canvas(Texture2D texture) {
 
@@ -51,11 +67,14 @@ namespace PixelArt {
             xPix = texture.Width;
             yPix = texture.Height;
             area = xPix * yPix;
+            pixDimen = new Vector2(xPix, yPix);
             
             pos = Vector2.Zero;
             dimen = new Vector2(1, (float) yPix / xPix) * 100;
 
             selectedLayerIndex = 0;
+
+            brush = new Brush();
         }
 
         public void input(float deltaTime, KeyInfo keys, MouseInfo mouse) {
@@ -73,11 +92,11 @@ namespace PixelArt {
 
                     if (mouse.leftPressed) {
                         addUndo();
-                        brushAt(mousePos);
+                        brush.brushAt(mousePos, this, layerColor);
                     }
 
                     if (mouse.leftDown) {
-                        brushBetween(lastMousePos, mousePos);
+                        brush.brushBetween(lastMousePos, mousePos, this, layerColor);
                     }
                     break;
                 
@@ -87,14 +106,23 @@ namespace PixelArt {
                     Main.brushColor = Colors.erased;
                     if (mouse.leftPressed) {
                         addUndo();
-                        brushAt(mousePos);
+                        brush.brushAt(mousePos, this, layerColor);
                     }
 
                     if (mouse.leftDown) {
-                        brushBetween(lastMousePos, mousePos);
+                        brush.brushBetween(lastMousePos, mousePos, this, layerColor);
                     }
 
                     Main.brushColor = saveColor;
+                    break;
+                
+                case Tool.ColorPick:
+                    if (mouse.leftPressed) {
+                        if (inBounds(pixel)) {
+                            var full = genSingleImage();
+                            Main.brushColor = getRGB(pixel, Util.colorArray(full));
+                        }
+                    }
                     break;
                 
                 case Tool.FillBucket:
@@ -107,24 +135,98 @@ namespace PixelArt {
                 case Tool.Rect:
 
                     if (mouse.leftPressed) {
-                        rectBegin = pixel;
+                        beginPixel = pixel;
                         addUndo();
                     }
 
                     if (mouse.leftDown) {
                         
-                        Point p1 = Util.max(Util.min(pixel, rectBegin), new Point(0, 0));
-                        Point p2 = Util.min(Util.max(pixel, rectBegin), new Point(xPix - 1, yPix - 1));
+                        Point endPixel = pixel;
+
+                        if (keys.down(Keys.LeftShift)) {
+                            Vector2 start = new Vector2(beginPixel.X + 0.5F, beginPixel.Y + 0.5F);
+                            Vector2 diff = mousePos - start;
+                            diff = Maths.signEach(diff) * Maths.max(Maths.mags(diff));
+
+                            endPixel = toPixel(start + diff);
+                        }
+
+                        
+                        Point p1 = Util.max(Util.min(endPixel, beginPixel), new Point(0, 0));
+                        Point p2 = Util.min(Util.max(endPixel, beginPixel), new Point(xPix - 1, yPix - 1));
 
                         hasPreview = true;
                         clearPreview();
-                        iterBetween(p1, p2, (x, y) => setRGB(x, y, Main.brushColor, previewColor));
+
+                        void Fill(int x, int y) {
+                            setRGB(x, y, Main.brushColor, previewColor);
+                        }
+
+                        if (shapeFill) {
+                            iterBetween(p1, p2, Fill);
+                        }
+                        else {
+                            iterBetween(p1, new Point(p2.X, p1.Y), Fill);
+                            iterBetween(p1, new Point(p1.X, p2.Y), Fill);
+                            iterBetween(new Point(p2.X, p1.Y + 1), p2, Fill);
+                            iterBetween(new Point(p1.X + 1, p2.Y), p2, Fill);
+                        }
                     }
 
                     if (mouse.leftUnpressed) {
                         bindPreview();
                     }
+                    break;
+                
+                case Tool.Ellipse:
 
+                    if (mouse.leftPressed) {
+                        beginPixel = pixel;
+                        addUndo();
+                    }
+
+                    if (mouse.leftDown) {
+
+                        Point endPixel = pixel;
+
+                        if (keys.down(Keys.LeftShift)) {
+                            Vector2 start = new Vector2(beginPixel.X + 0.5F, beginPixel.Y + 0.5F);
+                            Vector2 diff = mousePos - start;
+                            diff = Maths.signEach(diff) * Maths.max(Maths.mags(diff));
+
+                            endPixel = toPixel(start + diff);
+                        }
+
+                        Point p1 = Util.min(endPixel, beginPixel);
+                        Point p2 = Util.max(endPixel, beginPixel);
+
+                        Vector2 center = new Vector2(p1.X + p2.X + 1, p1.Y + p2.Y + 1) / 2F;
+                        Vector2 dimen = new Vector2(p2.X + 1 - p1.X, p2.Y + 1 - p1.Y);
+
+                        hasPreview = true;
+
+                        void CircleFill(int x, int y) {
+                            if (inBounds(x, y) && Util.inEllipse(new Vector2(x + 0.5F, y + 0.5F), center, dimen)) 
+                                setRGB(x, y, Main.brushColor, previewColor);
+                        }
+                        
+                        void CircleDraw(int x, int y) {
+                            Vector2 vec = new Vector2(x + 0.5F, y + 0.5F);
+                            if (inBounds(x, y) && 
+                                Util.inEllipse(vec, center, dimen) &&
+                                !Util.inEllipse(vec, center, dimen - Vector2.One * 2)) 
+                                setRGB(x, y, Main.brushColor, previewColor);
+                        }
+
+                        clearPreview();
+                        Action<int, int> call = CircleFill;
+                        if (!shapeFill) call = CircleDraw;
+                        iterBetween(Util.max(p1, new Point(0, 0)), Util.min(p2, new Point(xPix - 1, yPix - 1)), call);
+                    }
+
+                    if (mouse.leftUnpressed) {
+                        bindPreview();
+                    }
                     break;
             }
 
@@ -148,6 +250,24 @@ namespace PixelArt {
             }
 
             previewTexture = hasPreview ? Textures.toTexture(previewColor, xPix, yPix) : null;
+        }
+
+        public void genGridTexture() {
+            int mult = 32;
+            int xPixels = xPix * mult;
+            int yPixels = yPix * mult;
+            var col = new Color[xPixels * yPixels];
+
+            for (int x = 0; x < xPixels; x++) {
+                for (int y = 0; y < yPixels; y++) {
+                    col[x + y * xPixels] =
+                        (x % mult == mult - 1 || x % mult == 0 || y % mult == mult - 1 || y % mult == 0)
+                            ? Color.Gray
+                            : Colors.erased;
+                }
+            }
+
+            gridTexture = Textures.toTexture(col, xPixels, yPixels);
         }
 
         public void bindPreview() {
@@ -208,6 +328,9 @@ namespace PixelArt {
         }
 
         public void fillAt(Point pixel) {
+            
+            if (!inBounds(pixel)) return;
+
             var full = Util.colorArray(genSingleImage());
 
             Color onColor = getRGB(pixel, full);
@@ -252,30 +375,12 @@ namespace PixelArt {
             }
         }
 
-        public void brushBetween(Vector2 start, Vector2 end) {
-            
-            Vector2 diff = end - start;
-            float mag = Util.mag(diff);
-            float angle = Util.angle(diff);
-            
-            for (float add = 0; add <= mag; add += 0.1F) {
-                Vector2 canvasPos = Util.polar(add, angle) + start;
-                brushAt(canvasPos);
-            }
-        }
-
         public void iterBetween(Point start, Point endInc, Action<int, int> action) { // end is inclusive
             for (int x = start.X; x <= endInc.X; x++) {
                 for (int y = start.Y; y <= endInc.Y; y++) {
                     action.Invoke(x, y);
                 }
             }
-        }
-
-        public void brushAt(Vector2 canvasPos) {
-            Point pixel = toPixel(canvasPos);
-            if (inBounds(pixel))
-                setRGB(pixel, Main.brushColor);
         }
 
         public void render(Camera camera, SpriteBatch spriteBatch) {
@@ -288,6 +393,14 @@ namespace PixelArt {
                 if (hasPreview && layer == this.layer) {
                     spriteBatch.Draw(previewTexture, renderRect, Color.White);
                 }
+            }
+
+            if (grid) {
+                if (gridTexture == null) {
+                    genGridTexture();
+                }
+
+                spriteBatch.Draw(gridTexture, renderRect, Color.White);
             }
         }
 

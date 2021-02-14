@@ -29,9 +29,10 @@ namespace PixelArt {
 
         public override void render(SpriteBatch spriteBatch) {
             base.render(spriteBatch);
-            Vector2 nameDimen = Fonts.arial.MeasureString(name);
-            spriteBatch.DrawString(Fonts.arial, name, pos - nameDimen / 2, Color.White);
+            //Vector2 nameDimen = Fonts.arial.MeasureString(name);
+            //spriteBatch.DrawString(Fonts.arial, name, pos - nameDimen / 2, Color.White);
         }
+        
 
         public override void update(MouseInfo mouse, KeyInfo keys, float deltaTime) {
 
@@ -52,7 +53,7 @@ namespace PixelArt {
         }
         
         public override void clicked(MouseInfo mouse, KeyInfo keys, float deltaTime) {
-            clickFunc.Invoke();
+            clickFunc?.Invoke();
         }
     }
 }

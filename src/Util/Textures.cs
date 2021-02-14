@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
     public class Textures {
 
         private static Dictionary<string, Texture2D> textures;
-        public static Texture2D nullTexture;
+        public static Texture2D nullTexture, rect, invis;
 
         public static void loadTextures() {
 
@@ -19,10 +19,17 @@ using Microsoft.Xna.Framework.Graphics;
             textures["pixel"] = genRect(Color.White);
             textures["rect"] = genRect(Color.White);
             textures["UIButton"] = genRect(new Color(Color.Black, 0.5F));
+            textures["ToolButton"] = genRect(Color.Gray);
+            textures["PanelSide"] = genRect(Colors.panel);
+            textures["UIBack"] = genRect(Colors.exportBack);
+            textures["Darken"] = genRect(new Color(Color.Black, 0.3F));
             textures["invis"] = genRect(new Color(1F,1F,1F,0F));
 
             processFolder(Paths.texturePath);
 
+            rect = textures["rect"];
+            invis = textures["invis"];
+            
             nullTexture = textures["null"];
         }
 

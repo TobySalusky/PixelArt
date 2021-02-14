@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,6 +9,11 @@ namespace PixelArt {
         public Vector2 startPos, startDimen;
         public Texture2D texture;
 
+        public Func<bool> deleteCondition;
+        public bool delete;
+
+        public bool noHit;
+
         public virtual void update(MouseInfo mouse, KeyInfo keys, float deltaTime) {
             
             if (mouseOver(mouse.pos)) { 
@@ -17,9 +23,36 @@ namespace PixelArt {
                 notHovered(mouse, keys, deltaTime);
             }
 
-            if (mouse.leftPressed && mouseOver(mouse.pos)) {
+            if (!noHit && mouse.leftPressed && mouseOver(mouse.pos) && !Main.uiHit) {
                 clicked(mouse, keys, deltaTime);
+                Main.uiHit = true;
             }
+
+            if (deleteCondition != null) {
+                if (deleteCondition.Invoke()) {
+                    delete = true;
+                }
+            }
+        }
+
+        public virtual Color findTint() {
+            return Color.White;
+        }
+
+        public Vector2 xyAmount(Vector2 mousePos) {
+            return (mousePos - (pos - dimen / 2)) / dimen;
+        }
+        public Vector2 xyAmountClamped(Vector2 mousePos) {
+            var (x, y) = xyAmount(mousePos);
+            return new Vector2(Math.Clamp(x, 0, 1), Math.Clamp(y, 0, 1));
+        }
+
+        public Vector2 xyAmountToScreen(Vector2 xyAmount) {
+            return (pos - dimen / 2) + dimen * xyAmount;
+        }
+
+        public Vector2 clampTo(Vector2 mousePos) {
+            return xyAmountToScreen(xyAmountClamped(mousePos));
         }
 
         public virtual void hovered(MouseInfo mouse, KeyInfo keys, float deltaTime) {
@@ -36,10 +69,10 @@ namespace PixelArt {
         }
 
         public virtual void render(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(texture, drawRect(), Color.White);
+            spriteBatch.Draw(texture, drawRect(), findTint());
         }
 
-        public virtual Rectangle drawRect() {
+        public Rectangle drawRect() {
             return Util.center(pos, dimen);
         }
 

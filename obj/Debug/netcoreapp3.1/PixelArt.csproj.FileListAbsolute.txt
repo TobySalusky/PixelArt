@@ -44,3 +44,4 @@ C:\Users\Toby\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.csproj.
 C:\Users\Toby\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.dll
 C:\Users\Toby\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.pdb
 C:\Users\Toby\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.genruntimeconfig.cache
+C:\Users\Toby\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\Content\Arial.xnb

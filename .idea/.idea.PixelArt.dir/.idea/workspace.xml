@@ -5,29 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c742f77-da5b-4ff1-9600-6aa6b2bad433" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Util/FrameCounter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Art/Brush.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Art/ColorWheel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Art/HSV.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Art/HueSlider.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Art/ToolButton.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/UI/PanelSide.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/UI/UIBack.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/UI/UISlider.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/UI/UIText.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Content.mgcb" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Content.mgcb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/obj/DesktopGL/Content/.mgstats" beforeDir="false" afterPath="$PROJECT_DIR$/Content/obj/DesktopGL/Content/.mgstats" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.runtimeconfig.dev.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.runtimeconfig.dev.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.FileListAbsolute.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csprojAssemblyReference.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.genruntimeconfig.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.g.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Art/Canvas.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Canvas.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Art/Layer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Layer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Art/Tool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Tool.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Art/Undo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Undo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Main.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/Screens/UIScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/Screens/UIScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/UIButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/UIElement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIElement.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Util/Colors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Colors.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Util/Fonts.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Fonts.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Util/Logger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Logger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Util/Maths.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Maths.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Util/Textures.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Textures.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Util/Util.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Util.cs" afterDir="false" />
     </list>
@@ -41,13 +56,28 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/src/Util/Textures.cs" />
       <option value="$PROJECT_DIR$/src/Art/Undo.cs" />
+      <option value="$PROJECT_DIR$/src/Util/FrameCounter.cs" />
       <option value="$PROJECT_DIR$/src/Art/Layer.cs" />
+      <option value="$PROJECT_DIR$/src/Util/Logger.cs" />
+      <option value="$PROJECT_DIR$/src/UI/Screens/UIScreen.cs" />
+      <option value="$PROJECT_DIR$/src/Art/HSV.cs" />
+      <option value="$PROJECT_DIR$/src/Art/HueSlider.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UISlider.cs" />
+      <option value="$PROJECT_DIR$/src/Art/ColorWheel.cs" />
+      <option value="$PROJECT_DIR$/src/UI/PanelSide.cs" />
+      <option value="$PROJECT_DIR$/src/Util/Colors.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UIButton.cs" />
+      <option value="$PROJECT_DIR$/src/Util/Fonts.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UIText.cs" />
+      <option value="$PROJECT_DIR$/src/Util/Textures.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UIElement.cs" />
+      <option value="$PROJECT_DIR$/src/Art/ToolButton.cs" />
+      <option value="$PROJECT_DIR$/src/Art/Brush.cs" />
       <option value="$PROJECT_DIR$/src/Art/Tool.cs" />
       <option value="$PROJECT_DIR$/src/Util/Util.cs" />
-      <option value="$PROJECT_DIR$/src/Util/FrameCounter.cs" />
-      <option value="$PROJECT_DIR$/src/Util/Colors.cs" />
+      <option value="$PROJECT_DIR$/src/Util/Maths.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UIBack.cs" />
       <option value="$PROJECT_DIR$/src/Art/Canvas.cs" />
       <option value="$PROJECT_DIR$/src/Main/Main.cs" />
     </changedPaths>
@@ -59,9 +89,12 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34994584" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
@@ -93,7 +126,19 @@
       <option name="presentableId" value="Default" />
       <updated>1612809501868</updated>
       <workItem from="1612809507854" duration="5393000" />
-      <workItem from="1612837544732" duration="4029000" />
+      <workItem from="1612837544732" duration="4122000" />
+      <workItem from="1612877371337" duration="2608000" />
+      <workItem from="1612890293467" duration="314000" />
+      <workItem from="1612894467053" duration="11003000" />
+      <workItem from="1612966497085" duration="9713000" />
+      <workItem from="1612982548743" duration="1458000" />
+      <workItem from="1613005151829" duration="8526000" />
+      <workItem from="1613070059373" duration="3810000" />
+      <workItem from="1613091228887" duration="213000" />
+      <workItem from="1613100156874" duration="600000" />
+      <workItem from="1613157374817" duration="600000" />
+      <workItem from="1613192154345" duration="1276000" />
+      <workItem from="1613245951158" duration="9196000" />
     </task>
     <servers />
   </component>
@@ -112,8 +157,13 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

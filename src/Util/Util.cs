@@ -11,6 +11,34 @@ namespace PixelArt {
 
         private static Random rand = new Random();
 
+        public static bool inEllipse(Vector2 vec, Vector2 center, Vector2 dimen) {
+            if (Maths.sum(Maths.squareEach(vec - center) / Maths.squareEach(dimen / 2)) < 1)
+                return true;
+            return false;
+        }
+
+        public static Rectangle expand(Rectangle rect, int amount) {
+            return new Rectangle(rect.X - amount, rect.Y - amount, rect.Width + amount * 2, rect.Height + amount * 2);
+        }
+
+        public static void drawRect(SpriteBatch spriteBatch, Vector2 pos, Vector2 dimen, int width, Color color) {
+            drawRect(spriteBatch, center(pos, dimen), width, color);
+        }
+
+        public static void drawRect(SpriteBatch spriteBatch, Rectangle rect, int width, Color color) {
+            Texture2D line = Textures.get("rect");
+            
+            spriteBatch.Draw(line, new Rectangle(rect.X, rect.Y, rect.Width, width), color);
+            spriteBatch.Draw(line, new Rectangle(rect.X, rect.Y + rect.Height - width, rect.Width, width), color);
+            
+            spriteBatch.Draw(line, new Rectangle(rect.X, rect.Y + width, width, rect.Height - width * 2), color);
+            spriteBatch.Draw(line, new Rectangle(rect.X + rect.Width - width, rect.Y + width, width, rect.Height - width * 2), color);
+        }
+
+        public static Point point(Vector2 vec) {
+            return new Point((int) vec.X, (int) vec.Y);
+        }
+
         public static Point min(Point p1, Point p2) {
             return new Point(Math.Min(p1.X, p2.X), Math.Min(p1.Y, p2.Y));
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System.Drawing;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PixelArt {
     public class Layer {
