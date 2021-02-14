@@ -45,9 +45,6 @@ namespace PixelArt {
         // general
         public Point beginPixel;
         public Vector2 beginMousePos;
-        
-        // shapes
-        public bool shapeFill = false;
 
         // brush tool
         public Brush brush;
@@ -162,7 +159,7 @@ namespace PixelArt {
                             setRGB(x, y, Main.brushColor, previewColor);
                         }
 
-                        if (shapeFill) {
+                        if (ToolSettings.shapeFill) {
                             iterBetween(p1, p2, Fill);
                         }
                         else {
@@ -220,7 +217,7 @@ namespace PixelArt {
 
                         clearPreview();
                         Action<int, int> call = CircleFill;
-                        if (!shapeFill) call = CircleDraw;
+                        if (!ToolSettings.shapeFill) call = CircleDraw;
                         iterBetween(Util.max(p1, new Point(0, 0)), Util.min(p2, new Point(xPix - 1, yPix - 1)), call);
                     }
 

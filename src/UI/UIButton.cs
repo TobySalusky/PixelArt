@@ -12,6 +12,11 @@ namespace PixelArt {
         public const float hoverSpeed = 5;
         public const float hoverMult = 1.1F;
         public string name;
+
+        public Texture2D topTexture;
+        public Color topColor = Color.White;
+
+        public Func<Color> colorFunc;
         
         public UIButton(Action clickFunc, Vector2 pos, Vector2 dimen, string name = "Untitiled") {
             this.clickFunc = clickFunc;
@@ -24,15 +29,26 @@ namespace PixelArt {
             startPos = pos;
             startDimen = dimen;
             
-            texture = Textures.get("UIButton");
+            texture = Textures.rect;
         }
+        
+        public UIButton(Action clickFunc, Rectangle rectangle, string name = "Untitiled") : this(clickFunc, Util.toVec(rectangle.Center), Util.toVec(rectangle.Size), name) {}
 
         public override void render(SpriteBatch spriteBatch) {
             base.render(spriteBatch);
-            //Vector2 nameDimen = Fonts.arial.MeasureString(name);
-            //spriteBatch.DrawString(Fonts.arial, name, pos - nameDimen / 2, Color.White);
+            if (topTexture != null) {
+                spriteBatch.Draw(topTexture, drawRect(), topColor);
+            }
         }
-        
+
+        public override Color findTint() {
+            if (colorFunc != null) {
+                return colorFunc.Invoke();
+            }
+
+            return base.findTint();
+        }
+
 
         public override void update(MouseInfo mouse, KeyInfo keys, float deltaTime) {
 

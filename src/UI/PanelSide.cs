@@ -2,10 +2,11 @@
 using Microsoft.Xna.Framework;
 
 namespace PixelArt {
-    public class PanelSide : UIButton {
-        public PanelSide(Rectangle rectangle) : base(null, Util.toVec(rectangle.Center), Util.toVec(rectangle.Size), "PanelSide") {
-            hoverGrow = false;
+    public class PanelSide : UIBack {
+        public PanelSide(Rectangle rectangle) : base(rectangle) {
             texture = Textures.get("PanelSide");
+            border = Color.LightGray;
+            borderWidth = 1;
         }
     }
 }

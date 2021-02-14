@@ -9,14 +9,17 @@
       <e p="Assets" t="Include">
         <e p="Textures" t="Include">
           <e p="bush.png" t="Include" />
-          <e p="ColorPickTool.png" t="Include" />
-          <e p="EllipseTool.png" t="Include" />
-          <e p="EraserTool.png" t="Include" />
-          <e p="FillBucketTool.png" t="Include" />
           <e p="null.png" t="Include" />
-          <e p="RectTool.png" t="Include" />
-          <e p="Tools" t="Include">
-            <e p="BrushTool.png" t="Include" />
+          <e p="UI" t="Include">
+            <e p="ExitButton.png" t="Include" />
+            <e p="Tools" t="Include">
+              <e p="BrushTool.png" t="Include" />
+              <e p="ColorPickTool.png" t="Include" />
+              <e p="EllipseTool.png" t="Include" />
+              <e p="EraserTool.png" t="Include" />
+              <e p="FillBucketTool.png" t="Include" />
+              <e p="RectTool.png" t="Include" />
+            </e>
           </e>
         </e>
       </e>
@@ -64,6 +67,8 @@
           <e p="Layer.cs" t="Include" />
           <e p="Tool.cs" t="Include" />
           <e p="ToolButton.cs" t="Include" />
+          <e p="ToolSettings.cs" t="Include" />
+          <e p="ToolUtil.cs" t="Include" />
           <e p="Undo.cs" t="Include" />
         </e>
         <e p="Camera.cs" t="Include" />

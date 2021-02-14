@@ -38,6 +38,7 @@ namespace PixelArt
 
         // settings
         public static Tool tool = Tool.Brush;
+        public static Tool lastTool;
         public static Color brushColor = Color.Black;
 
         // SPECIFICS
@@ -99,6 +100,8 @@ namespace PixelArt
             hueSlider = new HueSlider(new Vector2(205, 100), new Vector2(20, 150));
 
             uiElements.Add(new PanelSide(new Rectangle(0, 0, 225, screenHeight)));
+            
+            uiElements.Add(new PanelSide(new Rectangle(screenWidth - 150, 0, 150, screenHeight)));
             uiElements.Add(colorWheel);
             uiElements.Add(hueSlider);
             
@@ -108,8 +111,10 @@ namespace PixelArt
             }));
 
             foreach (Tool toolType in Util.GetValues<Tool>()) {
-                uiElements.Add(new ToolButton(toolType, new Vector2(30, 230 + (int) toolType * 40)));
+                uiElements.Add(new ToolButton(toolType, new Vector2(24, 230 + (int) toolType * 40)));
             }
+            
+            setTool(Tool.Brush);
         }
 
         private float delta(GameTime gameTime) {
@@ -152,8 +157,14 @@ namespace PixelArt
             toolControls(deltaTime, keys, mouse);
         }
 
-        public void toolControls(float deltaTime, KeyInfo keys, MouseInfo mouse) {
+        public static void setTool(Tool newTool) {
+            tool = newTool;
+            var list = ToolUtil.genToolSettings(tool);
             
+            uiElements.AddRange(list);
+        }
+
+        public void toolControls(float deltaTime, KeyInfo keys, MouseInfo mouse) {
             // TOOLS
             if (keys.pressed(Keys.A))
                 tool = Tool.Brush;
@@ -167,11 +178,10 @@ namespace PixelArt
                 tool = Tool.Rect;
             if (keys.pressed(Keys.C))
                 tool = Tool.Ellipse;
-            
+
             // SETTINGS
             if (keys.pressed(Keys.G))
                 canvas.grid = !canvas.grid;
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -207,6 +217,11 @@ namespace PixelArt
                 canvas.input(deltaTime, keys, mouse);
             }
 
+            if (lastTool != tool) {
+                setTool(tool);
+                lastTool = tool;
+            }
+
             // end stuff
             lastKeyState = keyState;
             lastMouseState = mouseState;
@@ -222,7 +237,10 @@ namespace PixelArt
             List<UIElement> elements = new List<UIElement> {
                 new UIBack(screenCenter, screenDimen) {texture = Textures.get("Darken")},
                 new UIBack(screenCenter, screenDimen * 0.7F) {color = Colors.exportBack, border = Color.LightGray},
-                new UIButton(exportImage, screenCenter + Vector2.UnitY * 120, new Vector2(800, 150), "Export as PNG") {
+                new UIButton(() => exportOpen = false, screenCenter + new Vector2(580, -320), Vector2.One * 60, "Exit Export") {
+                    texture = Textures.get("PanelSide"), topTexture = Textures.get("ExitButton"), topColor = Colors.exportMid
+                },
+                new UIButton(exportImage, screenCenter + Vector2.UnitY * 250, new Vector2(800, 150), "Export as PNG") {
                     texture = Textures.get("PanelSide")
                 }
             };

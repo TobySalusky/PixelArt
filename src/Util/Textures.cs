@@ -22,7 +22,7 @@ using Microsoft.Xna.Framework.Graphics;
             textures["ToolButton"] = genRect(Color.Gray);
             textures["PanelSide"] = genRect(Colors.panel);
             textures["UIBack"] = genRect(Colors.exportBack);
-            textures["Darken"] = genRect(new Color(Color.Black, 0.3F));
+            textures["Darken"] = genRect(new Color(Color.Black, 0.5F));
             textures["invis"] = genRect(new Color(1F,1F,1F,0F));
 
             processFolder(Paths.texturePath);
@@ -32,7 +32,7 @@ using Microsoft.Xna.Framework.Graphics;
             
             nullTexture = textures["null"];
         }
-
+        
         public static Dictionary<string, Texture2D> debugTexturesGrab() {
             return textures;
         }
