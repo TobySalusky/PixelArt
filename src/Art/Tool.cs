@@ -3,6 +3,6 @@ using Microsoft.Xna.Framework;
 
 namespace PixelArt {
     public enum Tool {
-        Brush, Eraser, ColorPick, FillBucket, Rect, Ellipse
+        Brush, Eraser, ColorPick, FillBucket, Rect, Ellipse, RectSelect
     }
 }

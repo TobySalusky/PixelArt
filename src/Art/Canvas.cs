@@ -46,6 +46,10 @@ namespace PixelArt {
         public Point beginPixel;
         public Vector2 beginMousePos;
 
+        // selection type tools
+        public bool selecting, hasSelection;
+        public Texture2D selectionTexture;
+        public Rectangle selectRect;
 
         public Canvas(int pixSize) : this(pixSize, pixSize) {}
 
@@ -220,6 +224,42 @@ namespace PixelArt {
                         bindPreview();
                     }
                     break;
+                
+                case Tool.RectSelect:
+
+                    if (mouse.leftPressed) {
+                        beginPixel = pixel;
+                    }
+
+                    if (mouse.leftDown) {
+                        
+                        Point endPixel = pixel;
+
+                        if (keys.down(Keys.LeftShift)) {
+                            Vector2 start = new Vector2(beginPixel.X + 0.5F, beginPixel.Y + 0.5F);
+                            Vector2 diff = mousePos - start;
+                            diff = Maths.signEach(diff) * Maths.max(Maths.mags(diff));
+
+                            endPixel = toPixel(start + diff);
+                        }
+
+                        
+                        Point p1 = Util.max(Util.min(endPixel, beginPixel), new Point(0, 0));
+                        Point p2 = Util.min(Util.max(endPixel, beginPixel), new Point(xPix - 1, yPix - 1));
+
+                        selecting = true;
+                        selectRect = new Rectangle(p1.X, p1.Y, p2.X - p1.X + 1, p2.Y - p2.Y + 1);
+                        
+                        //hasPreview = true;
+                        //clearPreview();
+                    }
+
+                    if (mouse.leftUnpressed) {
+                        hasSelection = true;
+                        
+                        // TODO: split image
+                    }
+                    break;
             }
 
             if (keys.down(Keys.Z) && keys.down(Keys.LeftControl)) {
@@ -283,6 +323,7 @@ namespace PixelArt {
             Rectangle rect = new Rectangle(0, 0, xPix, yPix);
             spriteBatch.Draw(layer.texture, rect, Color.White);
             spriteBatch.Draw(previewTexture, rect, Color.White);
+            spriteBatch.Draw(selectionTexture, selectRect, Color.White);
 
             spriteBatch.End();
             g.SetRenderTarget(null);

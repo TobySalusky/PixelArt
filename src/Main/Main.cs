@@ -96,7 +96,7 @@ namespace PixelArt
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(1920, 1080);
+            canvas = new Canvas(128);
 
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
             hueSlider = new HueSlider(new Vector2(205, 100), new Vector2(20, 150));
