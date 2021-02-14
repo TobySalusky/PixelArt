@@ -10,9 +10,13 @@ namespace PixelArt {
         public string text = "";
 
         public Func<string> findString;
+
+        public bool rightAlign = false;
+        public Vector2 bindPos;
         
-        public UIText(Vector2 tl, Func<string> findString) {
-            pos = tl;
+        public UIText(Vector2 pos, Func<string> findString) {
+            this.pos = pos;
+            bindPos = pos;
             font = Fonts.Arial;
             this.findString = findString;
             noHit = true;
@@ -23,6 +27,9 @@ namespace PixelArt {
             base.update(mouse, keys, deltaTime);
 
             text = findString.Invoke();
+            if (rightAlign) {
+                pos.X = bindPos.X - font.MeasureString(text).X;
+            }
         }
 
         public override void render(SpriteBatch spriteBatch) {

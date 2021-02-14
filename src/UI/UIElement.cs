@@ -14,13 +14,17 @@ namespace PixelArt {
 
         public bool noHit;
 
+        public bool hover = false;
+        
         public virtual void update(MouseInfo mouse, KeyInfo keys, float deltaTime) {
             
             if (mouseOver(mouse.pos)) { 
                 hovered(mouse, keys, deltaTime);
+                hover = true;
             }
             else {
                 notHovered(mouse, keys, deltaTime);
+                hover = false;
             }
 
             if (!noHit && mouse.leftPressed && mouseOver(mouse.pos) && !Main.uiHit) {

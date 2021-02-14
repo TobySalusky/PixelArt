@@ -21,7 +21,25 @@ namespace PixelArt {
                     colorFunc = () => ToolSettings.shapeFill ? Color.Gray : Colors.background
                 });
                 
-                Logger.log(1111);
+            } else { // brush settings
+                // TODO: Non-linear slider
+                list.Add(new UISlider(Util.tl(tl + new Vector2(20, 20), new Vector2(160, 40)),
+                    x => ToolSettings.brush.size = x * (ToolSettings.brush.sizeRange.Y - ToolSettings.brush.sizeRange.X) + ToolSettings.brush.sizeRange.X,
+                    () => ((ToolSettings.brush.sizeRange.Y - ToolSettings.brush.sizeRange.X) == 0) ? 1 : 
+                        (ToolSettings.brush.size - ToolSettings.brush.sizeRange.X) / (ToolSettings.brush.sizeRange.Y - ToolSettings.brush.sizeRange.X)) {
+                    color = Color.Gray, fillColor = Colors.background
+                });
+                
+                list.Add(new UIText(tl + new Vector2(185, 30), () => "" + (int) ToolSettings.brush.size));
+                
+                for (int i = 0; i < ToolSettings.brushes.Length; i++) {
+                    Vector2 pos = tl + new Vector2(20, 100) + Vector2.UnitY * 30 * i;
+                    Brush brush = ToolSettings.brushes[i];
+                    list.Add(new BrushButton(brush, 
+                        Util.tl(pos, new Vector2(180, 30))));
+                    list.Add(new UIText(pos, () => brush.name));
+                    list.Add(new UIText(pos + 170 * Vector2.UnitX, () => brush.size.ToString("F1")) {rightAlign = true});
+                }
             }
 
             int stay = changeInt;

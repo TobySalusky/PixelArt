@@ -61,14 +61,17 @@
         <e p="Art" t="Include">
           <e p="Brush.cs" t="Include" />
           <e p="Canvas.cs" t="Include" />
-          <e p="ColorWheel.cs" t="Include" />
           <e p="HSV.cs" t="Include" />
-          <e p="HueSlider.cs" t="Include" />
           <e p="Layer.cs" t="Include" />
           <e p="Tool.cs" t="Include" />
-          <e p="ToolButton.cs" t="Include" />
           <e p="ToolSettings.cs" t="Include" />
           <e p="ToolUtil.cs" t="Include" />
+          <e p="UI" t="Include">
+            <e p="BrushButton.cs" t="Include" />
+            <e p="ColorWheel.cs" t="Include" />
+            <e p="HueSlider.cs" t="Include" />
+            <e p="ToolButton.cs" t="Include" />
+          </e>
           <e p="Undo.cs" t="Include" />
         </e>
         <e p="Camera.cs" t="Include" />

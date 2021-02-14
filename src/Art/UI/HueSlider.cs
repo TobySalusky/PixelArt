@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PixelArt {
     public class HueSlider : UISlider {
@@ -48,6 +49,11 @@ namespace PixelArt {
             Main.brushColor = new HSV(val * 360, sv.X, sv.Y).toColor();
 
             lastVal = val;
+        }
+        
+        public override void renderHandle(SpriteBatch spriteBatch) {
+            Util.drawRect(spriteBatch, findHandlePos(), Vector2.One * 12, 4, Color.Black);
+            Util.drawRect(spriteBatch, findHandlePos(), Vector2.One * 10, 2, Color.LightGray);
         }
     }
 }

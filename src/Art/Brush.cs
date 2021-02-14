@@ -5,7 +5,10 @@ namespace PixelArt {
     public class Brush {
 
         public float freq = 0.5F;
-        
+        public float size = 1;
+        public string name = "Pencil";
+        public Vector2 sizeRange = new Vector2(1, 1);
+
         public void brushBetween(Vector2 start, Vector2 end, Canvas canvas, Color[] arr) {
             
             Vector2 diff = end - start;
@@ -26,14 +29,19 @@ namespace PixelArt {
     }
 
     public class CircleBrush : Brush {
-
-        public float size;
         
         public CircleBrush(float size) {
             this.size = size;
+            name = "Brush";
+            sizeRange = new Vector2(1, 100);
         }
         
         public override void brushAt(Vector2 canvasPos, Canvas canvas, Color[] arr) {
+
+            if (size < 1.1F) {
+                base.brushAt(canvasPos, canvas, arr);
+                return;
+            }
 
             float rad = size / 2;
             

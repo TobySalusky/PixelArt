@@ -13,18 +13,26 @@ namespace PixelArt {
         
         public bool vertical;
 
+        public Color color = Color.White, fillColor = Color.Black;
+
         public UISlider(Vector2 pos, Vector2 dimen, Action<float> slideFunc = null, Func<float> findSlideFunc = null) {
             this.slideFunc = slideFunc;
             this.findSlideFunc = findSlideFunc;
             this.pos = pos;
             this.dimen = dimen;
             
-            texture = Textures.get("UIButton");
+            texture = Textures.rect;
         }
+
+        public UISlider(Rectangle rectangle, Action<float> slideFunc = null, Func<float> findSlideFunc = null) : this(Util.toVec(rectangle.Center), Util.toVec(rectangle.Size), slideFunc, findSlideFunc) { }
 
         public override void render(SpriteBatch spriteBatch) {
             base.render(spriteBatch);
             renderHandle(spriteBatch);
+        }
+
+        public override Color findTint() {
+            return color;
         }
 
         public override void clicked(MouseInfo mouse, KeyInfo keys, float deltaTime) {
@@ -55,9 +63,14 @@ namespace PixelArt {
             return xyAmountToScreen(vertical ? new Vector2(0.5F, slideAmount) : new Vector2(slideAmount, 0.5F));
         }
 
-        public void renderHandle(SpriteBatch spriteBatch) {
-            Util.drawRect(spriteBatch, findHandlePos(), Vector2.One * 12, 4, Color.Black);
-            Util.drawRect(spriteBatch, findHandlePos(), Vector2.One * 10, 2, Color.LightGray);
+        public virtual void renderHandle(SpriteBatch spriteBatch) {
+            if (!vertical) {
+
+                Rectangle rect = drawRect();
+                rect.Width = (int) (slideAmount * rect.Width);
+                spriteBatch.Draw(Textures.rect, rect, fillColor);
+                
+            } // TODO: vertical
         }
     }
 }

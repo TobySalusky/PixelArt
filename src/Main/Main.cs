@@ -90,11 +90,13 @@ namespace PixelArt
             // loading
             Textures.loadTextures();
             Fonts.loadFonts(Content);
+            
+            ToolSettings.loadTools();
 
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(128);
+            canvas = new Canvas(1920, 1080);
 
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
             hueSlider = new HueSlider(new Vector2(205, 100), new Vector2(20, 150));
@@ -178,6 +180,34 @@ namespace PixelArt
                 tool = Tool.Rect;
             if (keys.pressed(Keys.C))
                 tool = Tool.Ellipse;
+
+            if (tool == Tool.Brush || tool == Tool.Eraser) {
+                try {
+                    if (keys.pressed(Keys.D1))
+                        ToolSettings.brush = ToolSettings.brushes[0];
+                    if (keys.pressed(Keys.D2))
+                        ToolSettings.brush = ToolSettings.brushes[1];
+                    if (keys.pressed(Keys.D3))
+                        ToolSettings.brush = ToolSettings.brushes[2];
+                    if (keys.pressed(Keys.D4))
+                        ToolSettings.brush = ToolSettings.brushes[3];
+                    if (keys.pressed(Keys.D5))
+                        ToolSettings.brush = ToolSettings.brushes[4];
+                    if (keys.pressed(Keys.D6))
+                        ToolSettings.brush = ToolSettings.brushes[5];
+                    if (keys.pressed(Keys.D7))
+                        ToolSettings.brush = ToolSettings.brushes[6];
+                    if (keys.pressed(Keys.D8))
+                        ToolSettings.brush = ToolSettings.brushes[7];
+                    if (keys.pressed(Keys.D9))
+                        ToolSettings.brush = ToolSettings.brushes[8];
+                    if (keys.pressed(Keys.D0))
+                        ToolSettings.brush = ToolSettings.brushes[9];
+                }
+                catch (IndexOutOfRangeException e) {
+                    Logger.log("warning: used num-keys to try to change to out-of-range brush");
+                }
+            }
 
             // SETTINGS
             if (keys.pressed(Keys.G))

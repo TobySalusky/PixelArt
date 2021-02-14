@@ -5,29 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c742f77-da5b-4ff1-9600-6aa6b2bad433" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Art/ToolSettings.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Art/ToolUtil.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Art/UI/BrushButton.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Textures/ColorPickTool.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Textures/UI/Tools/ColorPickTool.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Textures/EllipseTool.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Textures/UI/Tools/EllipseTool.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Textures/EraserTool.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Textures/UI/Tools/EraserTool.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Textures/FillBucketTool.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Textures/UI/Tools/FillBucketTool.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Textures/RectTool.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Textures/UI/Tools/RectTool.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Textures/Tools/BrushTool.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Textures/UI/Tools/BrushTool.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Art/Brush.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Brush.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Art/Canvas.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Canvas.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Art/Tool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Tool.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Art/ToolButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/ToolButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Art/ColorWheel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/UI/ColorWheel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Art/HueSlider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/UI/HueSlider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Art/ToolButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/UI/ToolButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Art/ToolSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/ToolSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Art/ToolUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/ToolUtil.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Main.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UI/PanelSide.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/PanelSide.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/UIBack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIBack.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/UI/UIButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Util/Colors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Colors.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Util/Textures.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Textures.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/UIElement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIElement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/UISlider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UISlider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/UIText.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIText.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,25 +44,27 @@
       <option value="$PROJECT_DIR$/src/UI/Screens/UIScreen.cs" />
       <option value="$PROJECT_DIR$/src/Art/HSV.cs" />
       <option value="$PROJECT_DIR$/src/Art/HueSlider.cs" />
-      <option value="$PROJECT_DIR$/src/UI/UISlider.cs" />
       <option value="$PROJECT_DIR$/src/Art/ColorWheel.cs" />
       <option value="$PROJECT_DIR$/src/Util/Fonts.cs" />
-      <option value="$PROJECT_DIR$/src/UI/UIText.cs" />
-      <option value="$PROJECT_DIR$/src/UI/UIElement.cs" />
-      <option value="$PROJECT_DIR$/src/Art/Brush.cs" />
       <option value="$PROJECT_DIR$/src/Util/Util.cs" />
       <option value="$PROJECT_DIR$/src/Util/Maths.cs" />
-      <option value="$PROJECT_DIR$/src/UI/UIBack.cs" />
       <option value="$PROJECT_DIR$/src/UI/PanelSide.cs" />
       <option value="$PROJECT_DIR$/src/Art/ToolButton.cs" />
       <option value="$PROJECT_DIR$/src/Util/Textures.cs" />
       <option value="$PROJECT_DIR$/src/Util/Colors.cs" />
-      <option value="$PROJECT_DIR$/src/Art/ToolSettings.cs" />
-      <option value="$PROJECT_DIR$/src/Art/Canvas.cs" />
       <option value="$PROJECT_DIR$/src/Art/Tool.cs" />
-      <option value="$PROJECT_DIR$/src/Main/Main.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UIElement.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UIBack.cs" />
       <option value="$PROJECT_DIR$/src/UI/UIButton.cs" />
+      <option value="$PROJECT_DIR$/src/Art/Canvas.cs" />
+      <option value="$PROJECT_DIR$/src/Art/BrushButton.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UIText.cs" />
+      <option value="$PROJECT_DIR$/src/Art/UI/HueSlider.cs" />
+      <option value="$PROJECT_DIR$/src/UI/UISlider.cs" />
       <option value="$PROJECT_DIR$/src/Art/ToolUtil.cs" />
+      <option value="$PROJECT_DIR$/src/Art/Brush.cs" />
+      <option value="$PROJECT_DIR$/src/Main/Main.cs" />
+      <option value="$PROJECT_DIR$/src/Art/ToolSettings.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oD7qSUPfZ9heBectWdvQd0BcP6" />
@@ -123,7 +123,7 @@
       <workItem from="1613100156874" duration="600000" />
       <workItem from="1613157374817" duration="600000" />
       <workItem from="1613192154345" duration="1276000" />
-      <workItem from="1613245951158" duration="14171000" />
+      <workItem from="1613245951158" duration="20690000" />
     </task>
     <servers />
   </component>

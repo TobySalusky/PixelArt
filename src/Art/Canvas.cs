@@ -46,9 +46,6 @@ namespace PixelArt {
         public Point beginPixel;
         public Vector2 beginMousePos;
 
-        // brush tool
-        public Brush brush;
-
 
         public Canvas(int pixSize) : this(pixSize, pixSize) {}
 
@@ -70,8 +67,6 @@ namespace PixelArt {
             dimen = new Vector2(1, (float) yPix / xPix) * 100;
 
             selectedLayerIndex = 0;
-
-            brush = new Brush();
         }
 
         public void input(float deltaTime, KeyInfo keys, MouseInfo mouse) {
@@ -89,11 +84,11 @@ namespace PixelArt {
 
                     if (mouse.leftPressed) {
                         addUndo();
-                        brush.brushAt(mousePos, this, layerColor);
+                        ToolSettings.brush.brushAt(mousePos, this, layerColor);
                     }
 
                     if (mouse.leftDown) {
-                        brush.brushBetween(lastMousePos, mousePos, this, layerColor);
+                        ToolSettings.brush.brushBetween(lastMousePos, mousePos, this, layerColor);
                     }
                     break;
                 
@@ -103,11 +98,11 @@ namespace PixelArt {
                     Main.brushColor = Colors.erased;
                     if (mouse.leftPressed) {
                         addUndo();
-                        brush.brushAt(mousePos, this, layerColor);
+                        ToolSettings.brush.brushAt(mousePos, this, layerColor);
                     }
 
                     if (mouse.leftDown) {
-                        brush.brushBetween(lastMousePos, mousePos, this, layerColor);
+                        ToolSettings.brush.brushBetween(lastMousePos, mousePos, this, layerColor);
                     }
 
                     Main.brushColor = saveColor;
