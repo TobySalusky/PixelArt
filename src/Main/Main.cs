@@ -48,7 +48,6 @@ namespace PixelArt
         public FrameCounter fpsCounter = new FrameCounter();
         public int secondsPassed;
         
-        
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -96,7 +95,7 @@ namespace PixelArt
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(128);
+            canvas = new Canvas(64);
 
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
             hueSlider = new HueSlider(new Vector2(205, 100), new Vector2(20, 150));
@@ -112,8 +111,10 @@ namespace PixelArt
                 return "(" + point.X + ", " + point.Y + ")";
             }));
 
+            const int rows = 4;
             foreach (Tool toolType in Util.GetValues<Tool>()) {
-                uiElements.Add(new ToolButton(toolType, new Vector2(24, 230 + (int) toolType * 40)));
+                int i = (int) toolType;
+                uiElements.Add(new ToolButton(toolType, new Vector2(24 + (i / rows * 40), 230 + (i % rows) * 40)));
             }
             
             setTool(Tool.Brush);
@@ -162,8 +163,14 @@ namespace PixelArt
         public static void setTool(Tool newTool) {
             tool = newTool;
             var list = ToolUtil.genToolSettings(tool);
+
+            /*foreach (var element in list) { // TODO: update to remove flicker
+                element.update();
+            }*/
             
             uiElements.AddRange(list);
+
+            canvas.switchOff(lastTool);
         }
 
         public void toolControls(float deltaTime, KeyInfo keys, MouseInfo mouse) {
@@ -180,6 +187,8 @@ namespace PixelArt
                 tool = Tool.Rect;
             if (keys.pressed(Keys.C))
                 tool = Tool.Ellipse;
+            if (keys.pressed(Keys.Q))
+                tool = Tool.RectSelect;
 
             if (tool == Tool.Brush || tool == Tool.Eraser) {
                 try {
@@ -210,7 +219,7 @@ namespace PixelArt
             }
 
             // SETTINGS
-            if (keys.pressed(Keys.G))
+            if (keys.pressed(Keys.L))
                 canvas.grid = !canvas.grid;
         }
 
@@ -292,13 +301,13 @@ namespace PixelArt
 
         protected override void Draw(GameTime gameTime)
         {
+            
             GraphicsDevice.Clear(Colors.background);
 
             spriteBatch.Begin(SpriteSortMode.Deferred,
                 BlendState.NonPremultiplied,
                 SamplerState.PointClamp);
 
-            
             canvas.render(camera, spriteBatch);
             
             Texture2D rect = Textures.get("rect");
@@ -310,6 +319,7 @@ namespace PixelArt
             spriteBatch.Draw(rect, new Rectangle(7, 37, 36, 56), Color.Black);
             spriteBatch.Draw(rect, new Rectangle(8, 38, 34, 54), Color.LightGray);
             spriteBatch.Draw(rect, new Rectangle(10, 40, 30, 50), brushColor);
+            
             spriteBatch.End();
 
             base.Draw(gameTime);

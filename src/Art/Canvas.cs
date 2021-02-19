@@ -45,11 +45,15 @@ namespace PixelArt {
         // general
         public Point beginPixel;
         public Vector2 beginMousePos;
+        public bool tempTool;
+        public Tool switchedToFrom;
+        public bool usingTool;
 
         // selection type tools
-        public bool selecting, hasSelection;
+        public bool selecting, hasSelection, movingSelection;
         public Texture2D selectionTexture;
         public Rectangle selectRect;
+        public Point startRectTl;
 
         public Canvas(int pixSize) : this(pixSize, pixSize) {}
 
@@ -83,15 +87,24 @@ namespace PixelArt {
 
             hasPreview = false;
 
+            if (keys.pressed(Keys.G) && !hasSelection) {
+                tempTool = true;
+                selectRect = new Rectangle(0, 0, xPix, yPix);
+                hasSelection = true;
+                switchedToFrom = Main.tool;
+                Main.tool = Tool.RectSelect;
+            }
+
             switch (Main.tool) {
                 case Tool.Brush:
 
                     if (mouse.leftPressed) {
                         addUndo();
+                        usingTool = true;
                         ToolSettings.brush.brushAt(mousePos, this, layerColor);
                     }
 
-                    if (mouse.leftDown) {
+                    if (mouse.leftDown && usingTool) {
                         ToolSettings.brush.brushBetween(lastMousePos, mousePos, this, layerColor);
                     }
                     break;
@@ -102,10 +115,11 @@ namespace PixelArt {
                     Main.brushColor = Colors.erased;
                     if (mouse.leftPressed) {
                         addUndo();
+                        usingTool = true;
                         ToolSettings.brush.brushAt(mousePos, this, layerColor);
                     }
 
-                    if (mouse.leftDown) {
+                    if (mouse.leftDown && usingTool) {
                         ToolSettings.brush.brushBetween(lastMousePos, mousePos, this, layerColor);
                     }
 
@@ -226,39 +240,110 @@ namespace PixelArt {
                     break;
                 
                 case Tool.RectSelect:
+                    
+                    if (movingSelection) {
+                        Vector2 off = mousePos - beginMousePos;
+                        Point diff = new Point((int) Math.Round(off.X), (int) Math.Round(off.Y));
+
+                        selectRect.Location = startRectTl + diff;
+
+                        if (keys.pressed(Keys.Space) || keys.pressed(Keys.Enter) || mouse.leftPressed) { 
+                            bindSelection();
+                            hasSelection = false;
+                            movingSelection = false;
+                            selectionTexture = null;
+
+                            if (tempTool) {
+                                Main.tool = switchedToFrom;
+                            }
+                        }
+
+                        if (mouse.rightPressed) {
+                            hasSelection = false;
+                            movingSelection = false;
+                            selectionTexture = null;
+
+                            useUndo();
+                            
+                            if (tempTool) {
+                                Main.tool = switchedToFrom;
+                            }
+                        }
+
+                        break;
+                    }
 
                     if (mouse.leftPressed) {
                         beginPixel = pixel;
+                        selectionTexture = null;
+                        selecting = true;
                     }
 
-                    if (mouse.leftDown) {
-                        
-                        Point endPixel = pixel;
+                    if (selecting) {
 
-                        if (keys.down(Keys.LeftShift)) {
-                            Vector2 start = new Vector2(beginPixel.X + 0.5F, beginPixel.Y + 0.5F);
-                            Vector2 diff = mousePos - start;
-                            diff = Maths.signEach(diff) * Maths.max(Maths.mags(diff));
+                        if (mouse.leftDown) {
 
-                            endPixel = toPixel(start + diff);
+                            Point p1 = Util.min(Util.max(Util.min(pixel, beginPixel), new Point(0, 0)), new Point(xPix - 1, yPix - 1));
+                            Point p2 = Util.min(Util.max(Util.max(pixel, beginPixel), new Point(0, 0)), new Point(xPix - 1, yPix - 1));
+
+                            selectRect = new Rectangle(p1.X, p1.Y, p2.X - p1.X + 1, p2.Y - p1.Y + 1);
                         }
 
-                        
-                        Point p1 = Util.max(Util.min(endPixel, beginPixel), new Point(0, 0));
-                        Point p2 = Util.min(Util.max(endPixel, beginPixel), new Point(xPix - 1, yPix - 1));
-
-                        selecting = true;
-                        selectRect = new Rectangle(p1.X, p1.Y, p2.X - p1.X + 1, p2.Y - p2.Y + 1);
-                        
-                        //hasPreview = true;
-                        //clearPreview();
+                        if (mouse.leftUnpressed) {
+                            hasSelection = !(selectRect.Width == 1 && selectRect.Height == 1);
+                            selecting = false;
+                        }
+                    }
+                    
+                    // removing selection
+                    if (hasSelection && (keys.pressed(Keys.Space) || keys.pressed(Keys.Enter))) { 
+                        hasSelection = false;
+                        selectionTexture = null;
                     }
 
-                    if (mouse.leftUnpressed) {
-                        hasSelection = true;
-                        
-                        // TODO: split image
+                    // deleting
+                    if (hasSelection && (keys.pressed(Keys.X) || keys.pressed(Keys.Delete) || keys.pressed(Keys.Back))) {
+                        iterBetween(selectRect, (x, y) => {
+                            setRGB(x, y, Colors.erased);
+                        });
+
+                        hasSelection = false;
+                        selectionTexture = null;
                     }
+
+                    // grab
+                    if (hasSelection && keys.pressed(Keys.G)) {
+                        // snaps to bounds of image
+                        int minX = selectRect.X + selectRect.Width - 1, maxX = selectRect.X;
+                        int minY = selectRect.Y + selectRect.Height - 1, maxY = selectRect.Y;
+                        iterBetween(selectRect, (x, y) => {
+                            if (getRGB(x, y) != Colors.erased) {
+                                minX = Math.Min(minX, x);
+                                maxX = Math.Max(maxX, x);
+                                minY = Math.Min(minY, y);
+                                maxY = Math.Max(maxY, y);
+                            }
+                        });
+                        if (minX <= maxX && minY <= maxY) { 
+                            selectRect = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+                        }
+
+                        addUndo();
+                        
+                        Color[] arr = new Color[(selectRect.Width) * (selectRect.Height)];
+
+                        int i = 0;
+                        iterBetween(selectRect, (x, y) => { // TODO:remove a +1 +1 somewhere
+                            arr[i] = getRGB(x, y);
+                            setRGB(x, y, Colors.erased);
+                            i++;
+                        });
+                        selectionTexture = Textures.toTexture(arr, selectRect.Width, selectRect.Height);
+                        beginMousePos = mousePos;
+                        startRectTl = selectRect.Location;
+                        movingSelection = true;
+                    }
+
                     break;
             }
 
@@ -282,6 +367,19 @@ namespace PixelArt {
             }
 
             previewTexture = hasPreview ? Textures.toTexture(previewColor, xPix, yPix) : null;
+        }
+
+        public void switchOff(Tool lastTool) {
+            // remember temp-switching exits
+            usingTool = false;
+            switch (lastTool) {
+                case Tool.RectSelect:
+                    selecting = false;
+                    hasSelection = false;
+                    movingSelection = false;
+                    selectionTexture = null;
+                    break;
+            }
         }
 
         public void genGridTexture() {
@@ -323,6 +421,33 @@ namespace PixelArt {
             Rectangle rect = new Rectangle(0, 0, xPix, yPix);
             spriteBatch.Draw(layer.texture, rect, Color.White);
             spriteBatch.Draw(previewTexture, rect, Color.White);
+
+            spriteBatch.End();
+            g.SetRenderTarget(null);
+
+            layer.texture = renderTarget;
+        }
+        
+        public void bindSelection() {
+            GraphicsDevice g = Main.instance.GraphicsDevice;
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            RenderTarget2D renderTarget = new RenderTarget2D(
+                g,
+                xPix,
+                yPix,
+                false,
+                g.PresentationParameters.BackBufferFormat,
+                DepthFormat.Depth24);
+            
+            g.SetRenderTarget(renderTarget);
+
+            g.Clear(Colors.erased);
+            spriteBatch.Begin(SpriteSortMode.Deferred,
+                BlendState.NonPremultiplied,
+                SamplerState.PointClamp);
+            
+            Rectangle rect = new Rectangle(0, 0, xPix, yPix);
+            spriteBatch.Draw(layer.texture, rect, Color.White);
             spriteBatch.Draw(selectionTexture, selectRect, Color.White);
 
             spriteBatch.End();
@@ -408,9 +533,13 @@ namespace PixelArt {
             }
         }
 
+        public void iterBetween(Rectangle rect, Action<int, int> action) {
+            iterBetween(new Point(rect.X, rect.Y), new Point(rect.X + rect.Width - 1, rect.Y + rect.Height - 1), action);
+        }
+
         public void iterBetween(Point start, Point endInc, Action<int, int> action) { // end is inclusive
-            for (int x = start.X; x <= endInc.X; x++) {
-                for (int y = start.Y; y <= endInc.Y; y++) {
+            for (int y = start.Y; y <= endInc.Y; y++) {
+                for (int x = start.X; x <= endInc.X; x++) {
                     action.Invoke(x, y);
                 }
             }
@@ -423,8 +552,31 @@ namespace PixelArt {
 
             foreach (var layer in layers) {
                 spriteBatch.Draw(layer.texture, renderRect, Color.White);
-                if (hasPreview && layer == this.layer) {
-                    spriteBatch.Draw(previewTexture, renderRect, Color.White);
+                
+                if (layer == this.layer) {
+                    if (hasPreview)
+                        spriteBatch.Draw(previewTexture, renderRect, Color.White);
+
+                    if (selectionTexture != null) {
+                        Rectangle snip = new Rectangle(0,0,selectRect.Width,selectRect.Height); // TODO:
+                        if (selectRect.X < 0) {
+                            snip.X -= selectRect.X;
+                            snip.Width += selectRect.X;
+                        }
+                        if (selectRect.X + selectRect.Width - 1 >= xPix) {
+                            snip.Width -= (selectRect.X + selectRect.Width - 1 - (xPix - 1));
+                        }
+
+                        if (selectRect.Y < 0) {
+                            snip.Y -= selectRect.Y;
+                            snip.Height += selectRect.Y;
+                        }
+                        if (selectRect.Y + selectRect.Height - 1 >= yPix) {
+                            snip.Height -= (selectRect.Y + selectRect.Height - 1 - (yPix - 1));
+                        }
+
+                        spriteBatch.Draw(selectionTexture, canvasToScreen(new Rectangle(selectRect.X + snip.X, selectRect.Y + snip.Y, snip.Width, snip.Height)), snip, Color.White);
+                    }
                 }
             }
 
@@ -434,6 +586,37 @@ namespace PixelArt {
                 }
 
                 spriteBatch.Draw(gridTexture, renderRect, Color.White);
+            }
+            
+            renderGizmos(camera, spriteBatch);
+        }
+
+        public void renderGizmos(Camera camera, SpriteBatch spriteBatch) {
+            if (Main.tool == Tool.RectSelect && (selecting || hasSelection)) {
+                Rectangle screenRect = canvasToScreen(selectRect);
+                
+                Vector2 tl = new Vector2(screenRect.X, screenRect.Y);
+                Vector2 tr = tl + new Vector2(screenRect.Width, 0);
+                Vector2 bl = tl + new Vector2(0, screenRect.Height);
+                Vector2 br = tl + new Vector2(screenRect.Width, screenRect.Height);
+
+                if (!movingSelection) {
+                    Color cover = new Color(0.8F, 0.8F, 1F, 0.5F);
+                    Util.renderCutRect(camera.toScreen(pos, dimen), screenRect, spriteBatch, cover);
+                }
+                
+                if (movingSelection) {
+                    Util.drawRect(spriteBatch, Util.expand(screenRect, 4), 4, Color.Orange);
+                    Util.drawRect(spriteBatch, Util.expand(screenRect, 3), 2, Color.Black);
+                }
+                else {
+                    Color outline = Color.Black;
+                    const float thick = 2;
+                    Util.dotLineScreen(tl, tr, spriteBatch, outline, thick);
+                    Util.dotLineScreen(tr, br, spriteBatch, outline, thick);
+                    Util.dotLineScreen(br, bl, spriteBatch, outline, thick);
+                    Util.dotLineScreen(bl, tl, spriteBatch, outline, thick);
+                }
             }
         }
 
@@ -497,7 +680,21 @@ namespace PixelArt {
         }
 
         public Vector2 toCanvas(Vector2 screenPos) {
-            return (Main.camera.toWorld(screenPos) - (pos - dimen/2)) / dimen * new Vector2(xPix, yPix);
+            return (Main.camera.toWorld(screenPos) - (pos - dimen/2)) / dimen * pixDimen;
+        }
+        
+        public Vector2 canvasToWorld(Vector2 canvasPos) {
+            return (canvasPos * dimen / pixDimen) + (pos - dimen/2);
+        }
+
+        public Rectangle canvasToScreen(Rectangle rect) {
+            Vector2 p1 = canvasToWorld(new Vector2(rect.X, rect.Y));
+            Vector2 p2 = canvasToWorld(new Vector2(rect.X + rect.Width, rect.Y + rect.Height));
+            
+            Vector2 pos = (p1 + p2) / 2;
+            Vector2 dimen = p2 - p1;
+
+            return Main.camera.toScreen(pos, dimen);
         }
 
         public Point toPixel(Vector2 onCanvas) {

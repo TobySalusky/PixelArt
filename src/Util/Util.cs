@@ -11,6 +11,37 @@ namespace PixelArt {
 
         private static Random rand = new Random();
 
+        public static void drawLineScreen(Vector2 from, Vector2 to, SpriteBatch spriteBatch, Color color, float thickness = 1) {
+            var (dist, rot) = magAngle(to - from);
+
+            Vector2 tl = from + Util.rotate(Vector2.One * thickness * -0.5F, rot);
+            
+            Rectangle rect = new Rectangle((int) tl.X, (int) tl.Y, (int) (dist + thickness), (int) thickness);
+            spriteBatch.Draw(Textures.rect, rect, null, color, rot, Vector2.Zero, SpriteEffects.None, 0F);
+        }
+
+        public static void dotLineScreen(Vector2 from, Vector2 to, SpriteBatch spriteBatch, Color color, float thickness = 1, float segLength = 20, float gapLength = 10F) {
+            var (fullDist, rot) = magAngle(to - from);
+
+            float dist = -gapLength;
+            while (true) {
+                dist += gapLength + segLength;
+
+                if (dist >= fullDist) {
+                    if (dist - segLength < fullDist) { 
+                        drawLineScreen(from + polar(dist - segLength, rot), to, spriteBatch, color, thickness);
+                    }
+                    break;
+                }
+                
+                drawLineScreen(from + polar(dist - segLength, rot), from + polar(dist, rot), spriteBatch, color, thickness);
+            }
+        }
+
+        public static (float, float) magAngle(Vector2 vec) {
+            return (mag(vec), angle(vec));
+        }
+
         public static bool inEllipse(Vector2 vec, Vector2 center, Vector2 dimen) {
             if (Maths.sum(Maths.squareEach(vec - center) / Maths.squareEach(dimen / 2)) < 1)
                 return true;
@@ -73,7 +104,19 @@ namespace PixelArt {
             return val.X > tl.X && val.X < br.X && val.Y > tl.Y && val.Y < br.Y;
         }
 
-        // TODO: optimise, honestly seems super inefficient
+        public static void renderCutRect(Rectangle bounds, Rectangle cut, SpriteBatch spriteBatch, Color color) { 
+            Rectangle r1 = new Rectangle(bounds.X, bounds.Y, bounds.Width, cut.Y - bounds.Y);
+            Rectangle r2 = new Rectangle(bounds.X, cut.Y, cut.X - bounds.X, cut.Height);
+            Rectangle r3 = new Rectangle(cut.X + cut.Width, cut.Y, (bounds.Right - cut.Right), cut.Height);
+            Rectangle r4 = new Rectangle(bounds.X, cut.Y + cut.Height, bounds.Width, bounds.Y + bounds.Height - (cut.Y + cut.Height));
+
+            spriteBatch.Draw(Textures.rect, r1, color);
+            spriteBatch.Draw(Textures.rect, r2, color);
+            spriteBatch.Draw(Textures.rect, r3, color);
+            spriteBatch.Draw(Textures.rect, r4, color);
+        }
+
+        // TODO: THIS IS WRONG!!!
         public static Vector2 randomInOut(Rectangle inside, Rectangle outside) { // 'outside' should be a subsection of 'inside'
             float vol = area(inside) - area(outside);
 
