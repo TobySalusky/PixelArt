@@ -13,6 +13,7 @@ namespace PixelArt {
         public bool delete;
 
         public bool noHit;
+        public bool selectable;
 
         public bool hover = false;
         
@@ -30,6 +31,9 @@ namespace PixelArt {
             if (!noHit && mouse.leftPressed && mouseOver(mouse.pos) && !Main.uiHit) {
                 clicked(mouse, keys, deltaTime);
                 Main.uiHit = true;
+                if (selectable) {
+                    Main.selectedUI = this;
+                }
             }
 
             if (deleteCondition != null) {

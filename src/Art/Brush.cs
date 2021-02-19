@@ -55,4 +55,32 @@ namespace PixelArt {
             }
         }
     }
+
+    public class ClippingBrush : Brush {
+        public ClippingBrush(float size) {
+            this.size = size;
+            name = "Clipping";
+            sizeRange = new Vector2(1, 100);
+        }
+        
+        public override void brushAt(Vector2 canvasPos, Canvas canvas, Color[] arr) {
+
+            if (size < 1.1F) {
+                base.brushAt(canvasPos, canvas, arr);
+                return;
+            }
+
+            float rad = size / 2;
+            
+            for (int x = (int)(canvasPos.X - rad) - 1; x < canvasPos.X + rad + 1; x++) { // TODO: fix how being at size 1 screws up clipping effect (uses base)
+                for (int y = (int)(canvasPos.Y - rad) - 1; y < canvasPos.Y + rad + 1; y++) {
+                    Point pixel = new Point(x, y);
+                    if (canvas.inBounds(pixel) && Util.mag(new Vector2(x + 0.5F, y + 0.5F) - canvasPos) < rad) {
+                        if (canvas.getRGB(pixel) != Colors.erased) 
+                            canvas.setRGB(pixel, Main.brushColor);
+                    }
+                }
+            }
+        }
+    }
 }

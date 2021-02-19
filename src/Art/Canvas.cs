@@ -564,7 +564,7 @@ namespace PixelArt {
                             snip.Width += selectRect.X;
                         }
                         if (selectRect.X + selectRect.Width - 1 >= xPix) {
-                            snip.Width -= (selectRect.X + selectRect.Width - 1 - (xPix - 1));
+                            snip.Width -= (selectRect.X + selectRect.Width - xPix);
                         }
 
                         if (selectRect.Y < 0) {
@@ -572,7 +572,7 @@ namespace PixelArt {
                             snip.Height += selectRect.Y;
                         }
                         if (selectRect.Y + selectRect.Height - 1 >= yPix) {
-                            snip.Height -= (selectRect.Y + selectRect.Height - 1 - (yPix - 1));
+                            snip.Height -= (selectRect.Y + selectRect.Height - yPix);
                         }
 
                         spriteBatch.Draw(selectionTexture, canvasToScreen(new Rectangle(selectRect.X + snip.X, selectRect.Y + snip.Y, snip.Width, snip.Height)), snip, Color.White);

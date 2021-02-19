@@ -20,6 +20,8 @@ namespace PixelArt
 
         // UI
         public static bool uiHit;
+
+        public static UIElement selectedUI;
         
         public static List<UIElement> uiElements = new List<UIElement>();
         public static ColorWheel colorWheel;
@@ -125,10 +127,7 @@ namespace PixelArt
         }
 
         public void globalControls(float deltaTime, KeyInfo keys, MouseInfo mouse) {
-            if (keys.down(Keys.Escape)) {
-                Exit();
-            }
-            
+
             // CAMERA CONTROLS
             if (keys.down(Keys.LeftShift) && mouse.middlePressed || mouse.middleDown && keys.pressed(Keys.LeftShift)) {
                 startDragZoomMag = Util.mag(screenCenter - mouse.pos);
@@ -238,8 +237,19 @@ namespace PixelArt
 
             KeyInfo keys = new KeyInfo(keyState, lastKeyState);
             MouseInfo mouse = new MouseInfo(mouseState, lastMouseState);
+
+            if (selectedUI != null && selectedUI.delete) {
+                selectedUI = null;
+            }
+
+            bool keyInputOverride = selectedUI != null && Util.isClassOrSub(selectedUI, typeof(UITextInput));
             
-            globalControls(deltaTime, keys, mouse);
+            if (keys.down(Keys.Escape)) {
+                Exit();
+            }
+            
+            if (!keyInputOverride) 
+                globalControls(deltaTime, keys, mouse);
 
             for (int i = uiElements.Count - 1; i >= 0; i--) {
                 UIElement element = uiElements[i];
@@ -252,7 +262,7 @@ namespace PixelArt
                 element.update(mouse, keys, deltaTime);
             }
 
-            if (!uiHit) {
+            if (!uiHit && !keyInputOverride) {
                 canvas.input(deltaTime, keys, mouse);
             }
 
@@ -281,7 +291,8 @@ namespace PixelArt
                 },
                 new UIButton(exportImage, screenCenter + Vector2.UnitY * 250, new Vector2(800, 150), "Export as PNG") {
                     texture = Textures.get("PanelSide")
-                }
+                },
+                new UITextInput(screenCenter) {text = ":"}
             };
 
 

@@ -8,7 +8,8 @@
             new CircleBrush(3F),
             new CircleBrush(5),
             new CircleBrush(10),
-            new CircleBrush(15)
+            new CircleBrush(15),
+            new ClippingBrush(30), 
         };
 
         public static void loadTools() {

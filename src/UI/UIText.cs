@@ -26,7 +26,8 @@ namespace PixelArt {
         public override void update(MouseInfo mouse, KeyInfo keys, float deltaTime) {
             base.update(mouse, keys, deltaTime);
 
-            text = findString.Invoke();
+            if (findString != null)
+                text = findString.Invoke();
             if (rightAlign) {
                 pos.X = bindPos.X - font.MeasureString(text).X;
             }

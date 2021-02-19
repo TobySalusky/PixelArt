@@ -3,7 +3,7 @@
 namespace PixelArt {
     public class KeyInfo {
 
-        private KeyboardState newState, oldState;
+        public KeyboardState newState, oldState;
         
         public KeyInfo(KeyboardState newState, KeyboardState oldState) {
             this.newState = newState;
