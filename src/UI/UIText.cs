@@ -14,6 +14,8 @@ namespace PixelArt {
         public bool rightAlign = false;
         public Vector2 bindPos;
         
+        public Vector2 textOffset;
+        
         public UIText(Vector2 pos, Func<string> findString) {
             this.pos = pos;
             bindPos = pos;
@@ -21,6 +23,18 @@ namespace PixelArt {
             this.findString = findString;
             noHit = true;
             color = Color.White;
+            texture = Textures.invis;
+        }
+
+
+        public UIText(Vector2 pos, Vector2 dimen, Func<string> findString) : this(pos, findString){
+            this.dimen = dimen;
+            textOffset = new Vector2(10, dimen.Y / 2 - font.MeasureString("TEST").Y / 2);
+        }
+        
+        public UIText(string text, Vector2 pos, Vector2 dimen, bool rightAlign = false) : this(pos, dimen, null) {
+            this.text = text;
+            this.rightAlign = rightAlign;
         }
 
         public override void update(MouseInfo mouse, KeyInfo keys, float deltaTime) {
@@ -33,8 +47,12 @@ namespace PixelArt {
             }
         }
 
+        public virtual Vector2 textPos() { //TODO: scuffed, rework
+            return (rightAlign) ? pos + new Vector2(-1, 1) * textOffset : pos + textOffset;
+        }
+
         public override void render(SpriteBatch spriteBatch) {
-            spriteBatch.DrawString(font, text, pos, color);
+            spriteBatch.DrawString(font, text, textPos(), color);
         }
     }
 }

@@ -36,5 +36,14 @@ namespace PixelArt {
         public static float max(Vector2 vec) {
             return Math.Max(vec.X, vec.Y);
         }
+
+        public static Vector2 removeMin(Vector2 vec) { 
+            if (vec.X < vec.Y) return new Vector2(0, vec.Y);
+            return new Vector2(vec.X, 0);
+        }
+
+        public static Vector2 abs(Vector2 vec) { 
+            return new Vector2(Math.Abs(vec.X), Math.Abs(vec.Y));
+        }
     }
 }

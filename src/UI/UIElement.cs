@@ -28,11 +28,16 @@ namespace PixelArt {
                 hover = false;
             }
 
-            if (!noHit && mouse.leftPressed && mouseOver(mouse.pos) && !Main.uiHit) {
-                clicked(mouse, keys, deltaTime);
-                Main.uiHit = true;
-                if (selectable) {
-                    Main.selectedUI = this;
+            if (!noHit && mouse.leftPressed) {
+                if (mouseOver(mouse.pos) && !Main.uiHit) {
+                    clicked(mouse, keys, deltaTime);
+                    Main.uiHit = true;
+                    if (selectable) {
+                        Main.selectedUI = this;
+                    }
+                }
+                else { 
+                    notClicked(mouse, keys, deltaTime);
                 }
             }
 
@@ -41,6 +46,10 @@ namespace PixelArt {
                     delete = true;
                 }
             }
+        }
+
+        public virtual void notClicked(MouseInfo mouse, KeyInfo keys, float deltaTime) { 
+            
         }
 
         public virtual Color findTint() {

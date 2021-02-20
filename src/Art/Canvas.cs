@@ -145,11 +145,12 @@ namespace PixelArt {
                 case Tool.Rect:
 
                     if (mouse.leftPressed) {
+                        usingTool = true;
                         beginPixel = pixel;
                         addUndo();
                     }
 
-                    if (mouse.leftDown) {
+                    if (mouse.leftDown && usingTool) {
                         
                         Point endPixel = pixel;
 
@@ -183,8 +184,9 @@ namespace PixelArt {
                         }
                     }
 
-                    if (mouse.leftUnpressed) {
+                    if (mouse.leftUnpressed && usingTool) {
                         bindPreview();
+                        usingTool = false;
                     }
                     break;
                 
@@ -192,10 +194,11 @@ namespace PixelArt {
 
                     if (mouse.leftPressed) {
                         beginPixel = pixel;
+                        usingTool = true;
                         addUndo();
                     }
 
-                    if (mouse.leftDown) {
+                    if (mouse.leftDown && usingTool) {
 
                         Point endPixel = pixel;
 
@@ -234,8 +237,9 @@ namespace PixelArt {
                         iterBetween(Util.max(p1, new Point(0, 0)), Util.min(p2, new Point(xPix - 1, yPix - 1)), call);
                     }
 
-                    if (mouse.leftUnpressed) {
+                    if (mouse.leftUnpressed && usingTool) {
                         bindPreview();
+                        usingTool = false;
                     }
                     break;
                 
@@ -243,6 +247,10 @@ namespace PixelArt {
                     
                     if (movingSelection) {
                         Vector2 off = mousePos - beginMousePos;
+                        if (keys.down(Keys.LeftShift)) {
+                            off = Maths.signEach(off) * Maths.removeMin(Maths.abs(off));
+                        }
+
                         Point diff = new Point((int) Math.Round(off.X), (int) Math.Round(off.Y));
 
                         selectRect.Location = startRectTl + diff;

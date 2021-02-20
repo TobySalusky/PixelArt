@@ -282,6 +282,8 @@ namespace PixelArt
 
         public static void exportPopUp() {
             exportOpen = true;
+
+            Vector2 tl = screenCenter - screenDimen * 0.35F;
             
             List<UIElement> elements = new List<UIElement> {
                 new UIBack(screenCenter, screenDimen) {texture = Textures.get("Darken")},
@@ -292,7 +294,8 @@ namespace PixelArt
                 new UIButton(exportImage, screenCenter + Vector2.UnitY * 250, new Vector2(800, 150), "Export as PNG") {
                     texture = Textures.get("PanelSide")
                 },
-                new UITextInput(screenCenter) {text = ":"}
+                new UIText("Path:  ", tl + new Vector2(200, 200), new Vector2(100, 30), true),
+                new UITextInput(tl + new Vector2(200, 200), new Vector2(800, 30)) {backColor = Colors.panel, text = Paths.texturePath}
             };
 
 

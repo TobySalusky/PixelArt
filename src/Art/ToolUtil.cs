@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace PixelArt {
@@ -23,22 +24,25 @@ namespace PixelArt {
                 
             } else { // brush settings
                 // TODO: Non-linear slider
-                list.Add(new UISlider(Util.tl(tl + new Vector2(20, 20), new Vector2(160, 40)),
+                list.Add(new UISlider(Util.tl(tl + new Vector2(20, 20), new Vector2(120, 30)),
                     x => ToolSettings.brush.size = x * (ToolSettings.brush.sizeRange.Y - ToolSettings.brush.sizeRange.X) + ToolSettings.brush.sizeRange.X,
                     () => ((ToolSettings.brush.sizeRange.Y - ToolSettings.brush.sizeRange.X) == 0) ? 1 : 
                         (ToolSettings.brush.size - ToolSettings.brush.sizeRange.X) / (ToolSettings.brush.sizeRange.Y - ToolSettings.brush.sizeRange.X)) {
                     color = Color.Gray, fillColor = Colors.background
                 });
                 
-                list.Add(new UIText(tl + new Vector2(185, 30), () => "" + (int) ToolSettings.brush.size));
+                list.Add(new UIFloatInput(tl + new Vector2(145, 20), new Vector2(60, 30), 
+                    (x) => ToolSettings.brush.size = x, 
+                    (x) => Math.Clamp(x, ToolSettings.brush.sizeRange.X, ToolSettings.brush.sizeRange.Y), 
+                    () => (int) ToolSettings.brush.size) {backColor = Colors.background, rightAlign = false});
                 
                 for (int i = 0; i < ToolSettings.brushes.Length; i++) {
                     Vector2 pos = tl + new Vector2(20, 100) + Vector2.UnitY * 30 * i;
                     Brush brush = ToolSettings.brushes[i];
                     list.Add(new BrushButton(brush, 
                         Util.tl(pos, new Vector2(180, 30))));
-                    list.Add(new UIText(pos, () => brush.name));
-                    list.Add(new UIText(pos + 170 * Vector2.UnitX, () => brush.size.ToString("F1")) {rightAlign = true});
+                    list.Add(new UIText(pos, new Vector2(120, 30), () => brush.name));
+                    list.Add(new UIText(pos + 180 * Vector2.UnitX, new Vector2(50, 30), () => brush.size.ToString("F1")) {rightAlign = true});
                 }
             }
 
