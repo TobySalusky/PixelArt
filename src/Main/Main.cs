@@ -47,8 +47,9 @@ namespace PixelArt
         public float startDragZoomScale, startDragZoomMag;
         
         // DEBUG
-        public FrameCounter fpsCounter = new FrameCounter();
-        public int secondsPassed;
+        public static FrameCounter fpsCounter = new FrameCounter();
+        public static int secondsPassed;
+        public static float timePassed;
         
         public Main()
         {
@@ -97,7 +98,7 @@ namespace PixelArt
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(64);
+            canvas = new Canvas(128);
 
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
             hueSlider = new HueSlider(new Vector2(205, 100), new Vector2(20, 150));
@@ -151,7 +152,7 @@ namespace PixelArt
             // Saving
             if (keys.pressed(Keys.S) && keys.down(Keys.LeftControl)) {
                 if (!exportOpen)
-                    exportPopUp();
+                    Exporting.exportPopUp();
             }
 
 
@@ -226,6 +227,8 @@ namespace PixelArt
         {
             float deltaTime = delta(gameTime);
 
+            timePassed += deltaTime;
+
             fpsCounter.update(deltaTime);
             if ((int) gameTime.TotalGameTime.TotalSeconds > secondsPassed) {
                 secondsPassed = (int) gameTime.TotalGameTime.TotalSeconds;
@@ -278,39 +281,6 @@ namespace PixelArt
             if (mouse.leftUnpressed) uiHit = false;
             
             base.Update(gameTime);
-        }
-
-        public static void exportPopUp() {
-            exportOpen = true;
-
-            Vector2 tl = screenCenter - screenDimen * 0.35F;
-            
-            List<UIElement> elements = new List<UIElement> {
-                new UIBack(screenCenter, screenDimen) {texture = Textures.get("Darken")},
-                new UIBack(screenCenter, screenDimen * 0.7F) {color = Colors.exportBack, border = Color.LightGray},
-                new UIButton(() => exportOpen = false, screenCenter + new Vector2(580, -320), Vector2.One * 60, "Exit Export") {
-                    texture = Textures.get("PanelSide"), topTexture = Textures.get("ExitButton"), topColor = Colors.exportMid
-                },
-                new UIButton(exportImage, screenCenter + Vector2.UnitY * 250, new Vector2(800, 150), "Export as PNG") {
-                    texture = Textures.get("PanelSide")
-                },
-                new UIText("Path:  ", tl + new Vector2(200, 200), new Vector2(100, 30), true),
-                new UITextInput(tl + new Vector2(200, 200), new Vector2(800, 30)) {backColor = Colors.panel, text = Paths.texturePath}
-            };
-
-
-            foreach (var element in elements) {
-                element.deleteCondition = () => !exportOpen;
-            }
-            uiElements.AddRange(elements);
-        }
-
-        public static void exportImage() {
-            exportOpen = false;
-            
-            Texture2D texture = canvas.genSingleImage();
-            
-            Textures.exportTexture(texture, Paths.texturePath, "test" + Util.randInt(100000));
         }
 
         protected override void Draw(GameTime gameTime)

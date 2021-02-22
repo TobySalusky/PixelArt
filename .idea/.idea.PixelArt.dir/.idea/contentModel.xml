@@ -7,6 +7,9 @@
       <e p=".gitattributes" t="Include" />
       <e p="app.manifest" t="Include" />
       <e p="Assets" t="Include">
+        <e p="Exports" t="Include">
+          <e p="Logingoose.png" t="Include" />
+        </e>
         <e p="Textures" t="Include">
           <e p="bush.png" t="Include" />
           <e p="null.png" t="Include" />
@@ -18,6 +21,7 @@
               <e p="EllipseTool.png" t="Include" />
               <e p="EraserTool.png" t="Include" />
               <e p="FillBucketTool.png" t="Include" />
+              <e p="RectSelectTool.png" t="Include" />
               <e p="RectTool.png" t="Include" />
             </e>
           </e>
@@ -80,6 +84,7 @@
           <e p="Program.cs" t="Include" />
         </e>
         <e p="UI" t="Include">
+          <e p="Exporting.cs" t="Include" />
           <e p="PanelSide.cs" t="Include" />
           <e p="Screens" t="Include">
             <e p="UIScreen.cs" t="Include" />
@@ -88,8 +93,10 @@
           <e p="UIBack.cs" t="Include" />
           <e p="UIButton.cs" t="Include" />
           <e p="UIElement.cs" t="Include" />
+          <e p="UIFloatInput.cs" t="Include" />
           <e p="UISlider.cs" t="Include" />
           <e p="UIText.cs" t="Include" />
+          <e p="UITextInput.cs" t="Include" />
           <e p="UITransition.cs" t="Include" />
         </e>
         <e p="Util" t="Include">

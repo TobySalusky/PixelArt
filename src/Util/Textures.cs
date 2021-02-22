@@ -108,7 +108,7 @@ using Microsoft.Xna.Framework.Graphics;
         }
 
         public static void exportTexture(Texture2D texture, string location, string identifier) {
-            Stream stream = File.Create(location + identifier + ".png");
+            Stream stream = File.Create(FileUtil.addPathToIdentifier(location, identifier + ".png"));
             texture.SaveAsPng( stream, texture.Width, texture.Height );
             stream.Dispose();
         }

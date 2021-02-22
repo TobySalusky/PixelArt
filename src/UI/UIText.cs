@@ -15,6 +15,8 @@ namespace PixelArt {
         public Vector2 bindPos;
         
         public Vector2 textOffset;
+
+        public float fontHeight;
         
         public UIText(Vector2 pos, Func<string> findString) {
             this.pos = pos;
@@ -24,12 +26,14 @@ namespace PixelArt {
             noHit = true;
             color = Color.White;
             texture = Textures.invis;
+
+            fontHeight = font.MeasureString("TEST").Y;
         }
 
 
         public UIText(Vector2 pos, Vector2 dimen, Func<string> findString) : this(pos, findString){
             this.dimen = dimen;
-            textOffset = new Vector2(10, dimen.Y / 2 - font.MeasureString("TEST").Y / 2);
+            textOffset = new Vector2(10, dimen.Y / 2 - fontHeight / 2);
         }
         
         public UIText(string text, Vector2 pos, Vector2 dimen, bool rightAlign = false) : this(pos, dimen, null) {

@@ -4,7 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/Tobafett/Documents/GitHub/PixelArt/PixelArt/Content/Arial.spritefont</File>
+    <File>C:/Users/Toby/Documents/GitHub/PixelArt/Content/Arial.spritefont</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

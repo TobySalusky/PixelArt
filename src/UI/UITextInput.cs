@@ -16,6 +16,8 @@ namespace PixelArt {
         public Color selectBorder = Color.LightGray;
 
         public Action<string> stringAction;
+
+        public float timeSinceActive;
         
         public UITextInput(Vector2 pos, Vector2 dimen, Action<string> stringAction = null) : base(pos, dimen, null) {
             noHit = false;
@@ -38,10 +40,17 @@ namespace PixelArt {
             spriteBatch.Draw(Textures.rect, rect, backColor);
             Util.drawRect(spriteBatch, rect, 1, this == Main.selectedUI ? selectBorder : unselectedBorder);
             base.render(spriteBatch);
+
+            Vector2 textSize = font.MeasureString(text);
+            Vector2 linePos = textPos() + Vector2.UnitX * textSize.X;    
+
+            if (this == Main.selectedUI && (int) (timeSinceActive * 1.9F) % 2 == 0) // blinking cursor line
+                Util.drawLineScreen(linePos, linePos + Vector2.UnitY * fontHeight, spriteBatch, color);
         }
 
         public virtual void changeAction() { 
             stringAction?.Invoke(text);
+            timeSinceActive = 0;
         }
 
         public virtual void enterAction() {
@@ -58,6 +67,11 @@ namespace PixelArt {
             text += ' ';
         }
 
+        public override void clicked(MouseInfo mouse, KeyInfo keys, float deltaTime) {
+            base.clicked(mouse, keys, deltaTime);
+            timeSinceActive = 0;
+        }
+
         public override void notClicked(MouseInfo mouse, KeyInfo keys, float deltaTime) {
             if (this == Main.selectedUI)
                 enterAction();
@@ -68,6 +82,8 @@ namespace PixelArt {
         public override void update(MouseInfo mouse, KeyInfo keys, float deltaTime) {
 
             if (Main.selectedUI == this) {
+
+                timeSinceActive += deltaTime;
                 
                 KeyboardState oldState = keys.oldState;
                 KeyboardState newState = keys.newState;
