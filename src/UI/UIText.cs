@@ -17,6 +17,8 @@ namespace PixelArt {
         public Vector2 textOffset;
 
         public float fontHeight;
+
+        public bool center = false;
         
         public UIText(Vector2 pos, Func<string> findString) {
             this.pos = pos;
@@ -28,12 +30,18 @@ namespace PixelArt {
             texture = Textures.invis;
 
             fontHeight = font.MeasureString("TEST").Y;
+
+            dimen = new Vector2(0, fontHeight);
         }
 
 
         public UIText(Vector2 pos, Vector2 dimen, Func<string> findString) : this(pos, findString){
             this.dimen = dimen;
             textOffset = new Vector2(10, dimen.Y / 2 - fontHeight / 2);
+        }
+
+        public UIText(string text, Vector2 pos) : this(pos, new Vector2(-1, -1), null) {
+            this.text = text;
         }
         
         public UIText(string text, Vector2 pos, Vector2 dimen, bool rightAlign = false) : this(pos, dimen, null) {
@@ -52,6 +60,11 @@ namespace PixelArt {
         }
 
         public virtual Vector2 textPos() { //TODO: scuffed, rework
+            if (center) {
+                Vector2 textSize = font.MeasureString(text);
+                return pos - textSize / 2;
+            }
+
             return (rightAlign) ? pos + new Vector2(-1, 1) * textOffset : pos + textOffset;
         }
 

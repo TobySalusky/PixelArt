@@ -4,10 +4,14 @@ namespace PixelArt {
     public class KeyInfo {
 
         public KeyboardState newState, oldState;
+
+        public bool shift, control;
         
         public KeyInfo(KeyboardState newState, KeyboardState oldState) {
             this.newState = newState;
             this.oldState = oldState;
+            shift = down(Keys.LeftShift); // TODO: right also?
+            control = down(Keys.LeftControl);
         }
 
         public bool down(Keys key) {

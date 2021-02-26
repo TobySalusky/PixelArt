@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_.19.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_.19.01" t="ExcludeRecursive" />
     <e p="C:\Users\Toby\Documents\GitHub\PixelArt" t="IncludeRecursive">
       <e p=".gitattributes" t="Include" />
       <e p="app.manifest" t="Include" />
       <e p="Assets" t="Include">
         <e p="Exports" t="Include">
-          <e p="Logingoose.png" t="Include" />
+          <e p="e.png" t="Include" />
         </e>
         <e p="Textures" t="Include">
           <e p="bush.png" t="Include" />
@@ -73,7 +73,9 @@
           <e p="UI" t="Include">
             <e p="BrushButton.cs" t="Include" />
             <e p="ColorWheel.cs" t="Include" />
+            <e p="ExportTypeButton.cs" t="Include" />
             <e p="HueSlider.cs" t="Include" />
+            <e p="LayerButton.cs" t="Include" />
             <e p="ToolButton.cs" t="Include" />
           </e>
           <e p="Undo.cs" t="Include" />
@@ -86,6 +88,7 @@
         <e p="UI" t="Include">
           <e p="Exporting.cs" t="Include" />
           <e p="PanelSide.cs" t="Include" />
+          <e p="ProjectCreation.cs" t="Include" />
           <e p="Screens" t="Include">
             <e p="UIScreen.cs" t="Include" />
           </e>
@@ -109,6 +112,7 @@
           <e p="Maths.cs" t="Include" />
           <e p="MouseInfo.cs" t="Include" />
           <e p="Paths.cs" t="Include" />
+          <e p="PngIconConverter.cs" t="Include" />
           <e p="Textures.cs" t="Include" />
           <e p="Util.cs" t="Include" />
         </e>

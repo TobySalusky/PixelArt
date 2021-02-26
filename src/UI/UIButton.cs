@@ -18,8 +18,8 @@ namespace PixelArt {
 
         public Func<Color> colorFunc;
         
-        public Color border = new Color(1F, 1F, 1F, 0F);
-        public int borderWidth = 5;
+        public Color border = Color.Gray;
+        public int borderWidth = 0;
         
         public UIButton(Action clickFunc, Vector2 pos, Vector2 dimen, string name = "Untitiled") {
             this.clickFunc = clickFunc;
@@ -38,7 +38,9 @@ namespace PixelArt {
         public UIButton(Action clickFunc, Rectangle rectangle, string name = "Untitiled") : this(clickFunc, Util.toVec(rectangle.Center), Util.toVec(rectangle.Size), name) {}
 
         public override void render(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(Textures.get("rect"), Util.expand(drawRect(), borderWidth), border);
+            if (borderWidth > 0) {
+                spriteBatch.Draw(Textures.get("rect"), Util.expand(drawRect(), borderWidth), border);
+            }
             base.render(spriteBatch);
             if (topTexture != null) {
                 spriteBatch.Draw(topTexture, drawRect(), topColor);

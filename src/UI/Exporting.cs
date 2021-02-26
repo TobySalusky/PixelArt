@@ -9,7 +9,13 @@ namespace PixelArt {
         public static string pathError = "";
         public static string exportPath = Paths.exportPath;
         public static string exportName = "";
-        
+
+        public static ExportType exportType;
+
+        public enum ExportType {
+            png, allLayersPackaged, allLayers
+        }
+
         public static void exportPopUp() {
             Main.exportOpen = true;
 
@@ -18,13 +24,13 @@ namespace PixelArt {
             List<UIElement> elements = new List<UIElement> {
                 
                 // Backdrop and buttons
-                new UIBack(Main.screenCenter, Main.screenDimen) {texture = Textures.get("Darken")},
-                new UIBack(Main.screenCenter, Main.screenDimen * 0.7F) {color = Colors.exportBack, border = Color.LightGray},
+                new UIBack(Main.screenCenter, Main.screenDimen) {texture = Textures.get("Darken"), clickFunc = () => Main.exportOpen = false},
+                new UIBack(Main.screenCenter, Main.screenDimen * 0.7F) {color = Colors.exportBack, border = Color.LightGray, borderWidth = 5},
                 new UIButton(() => Main.exportOpen = false, Main.screenCenter + new Vector2(580, -320), Vector2.One * 60, "Exit Export") {
                     texture = Textures.get("PanelSide"), topTexture = Textures.get("ExitButton"), topColor = Colors.exportMid
                 },
                 new UIButton(exportImage, Main.screenCenter + Vector2.UnitY * 250, new Vector2(800, 150), "Export as PNG") {
-                    texture = Textures.get("PanelSide")
+                    texture = Textures.get("PanelSide"), borderWidth = 1
                 },
                 
                 // Path input
@@ -37,10 +43,19 @@ namespace PixelArt {
                 new UIText(tl + new Vector2(1000, 100), new Vector2(100, 30), () => pathError) {color = Colors.error},
                 
                 // Name input
-                new UIText("Name:  ", new Vector2(Main.screenCenter.X - 200, Main.screenCenter.Y), new Vector2(100, 90), true),
-                new UITextInput(new Vector2(Main.screenCenter.X - 200, Main.screenCenter.Y), new Vector2(400, 90), (str) => exportName = str) 
+                new UIText("Name:  ", new Vector2(Main.screenCenter.X - 200, Main.screenCenter.Y - 200) , new Vector2(100, 90), true),
+                new UITextInput(new Vector2(Main.screenCenter.X - 200, Main.screenCenter.Y - 200), new Vector2(400, 90), (str) => exportName = str) 
                     {backColor = Colors.panel, text = exportName},
                 
+                // Export Types
+                new ExportTypeButton(ExportType.png, Main.screenCenter + new Vector2(-250, 100)),
+                new UIText(".png", Main.screenCenter + new Vector2(-250, 100)) {center = true},
+                
+                new ExportTypeButton(ExportType.allLayersPackaged, Main.screenCenter + new Vector2(0, 100)),
+                new UIText("layers (packed)", Main.screenCenter + new Vector2(0, 100)) {center = true},
+                
+                new ExportTypeButton(ExportType.allLayers, Main.screenCenter + new Vector2(250, 100)),
+                new UIText("layers (unpacked)", Main.screenCenter + new Vector2(250, 100)) {center = true},
                 
             };
 
@@ -56,13 +71,28 @@ namespace PixelArt {
         }
 
         public static void exportImage() {
-
+            
             if (isValidPath(exportPath)) {
                 Main.exportOpen = false;
 
-                Texture2D texture = Main.canvas.genSingleImage();
 
-                Textures.exportTexture(texture, exportPath, (exportName == "") ? "Untitled " + Util.randInt(100000000) : exportName);
+                string name = (exportName == "") ? "Untitled " + Util.randInt(100000000) : exportName;
+                string path = FileUtil.correctPath(exportPath);
+
+                if (exportType == ExportType.png) {
+                    Texture2D texture = Main.canvas.genSingleImage();
+
+                    Textures.exportTexture(texture, exportPath, name);
+                } else if (exportType == ExportType.allLayers || exportType == ExportType.allLayersPackaged) {
+                    if (exportType == ExportType.allLayersPackaged) {
+                        path += name + "/";
+                        FileUtil.createDirIfNone(path);
+                    }
+
+                    for (int i = 0; i < Main.canvas.layers.Count; i++) {
+                        Textures.exportTexture(Main.canvas.layers[i].texture, path, name + i);
+                    }
+                }
             }
         }
     }

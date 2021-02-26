@@ -33,6 +33,10 @@ namespace PixelArt {
 
         public bool grid = false;
         public Texture2D gridTexture;
+
+        public Point tileDimen;
+        public bool tileGrid = false;
+        public Texture2D tileGridTexture;
         
         
         // SPECIFICS
@@ -93,6 +97,13 @@ namespace PixelArt {
                 hasSelection = true;
                 switchedToFrom = Main.tool;
                 Main.tool = Tool.RectSelect;
+            }
+
+            if (keys.pressed(Keys.N) && !keys.control) {
+                addUndo();
+                layers.Insert(selectedLayerIndex + 1, new Layer(Textures.genRect(Colors.erased, xPix, yPix)));
+                selectedLayerIndex++;
+                Main.updateLayerButtons = true;
             }
 
             switch (Main.tool) {
@@ -390,6 +401,34 @@ namespace PixelArt {
             }
         }
 
+        public void makeTiled(int tileSize) {
+            makeTiled(tileSize, tileSize);
+        }
+
+        public void makeTiled(int xTile, int yTile) {
+            tileDimen = new Point(xTile, yTile);
+            tileGrid = true;
+            
+            int mult = 12;
+            int xPixels = xPix * mult;
+            int yPixels = yPix * mult;
+            var col = new Color[xPixels * yPixels];
+
+            int multX = xTile * mult;
+            int multY = yTile * mult;
+            
+            for (int x = 0; x < xPixels; x++) {
+                for (int y = 0; y < yPixels; y++) {
+                    col[x + y * xPixels] =
+                        (x % multX == multX - 1 || x % multX == 0 || y % multY == multY - 1 || y % multY == 0)
+                            ? Color.Black
+                            : Colors.erased;
+                }
+            }
+
+            tileGridTexture = Textures.toTexture(col, xPixels, yPixels);
+        }
+        
         public void genGridTexture() {
             int mult = 32;
             int xPixels = xPix * mult;
@@ -595,7 +634,11 @@ namespace PixelArt {
 
                 spriteBatch.Draw(gridTexture, renderRect, Color.White);
             }
-            
+
+            if (tileGrid) {
+                spriteBatch.Draw(tileGridTexture, renderRect, Color.White);
+            }
+
             renderGizmos(camera, spriteBatch);
         }
 

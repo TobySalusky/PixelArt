@@ -29,6 +29,8 @@ namespace PixelArt
 
         public static bool exportOpen;
 
+        public static bool updateLayerButtons = true;
+
         // SCREEN
         public static Vector2 screenDimen;
         public static Vector2 screenCenter;
@@ -98,14 +100,15 @@ namespace PixelArt
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(128);
+            canvas = new Canvas(48);
+            //canvas.makeTiled(16);
 
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
             hueSlider = new HueSlider(new Vector2(205, 100), new Vector2(20, 150));
 
             uiElements.Add(new PanelSide(new Rectangle(0, 0, 225, screenHeight)));
             
-            uiElements.Add(new PanelSide(new Rectangle(screenWidth - 150, 0, 150, screenHeight)));
+            uiElements.Add(new PanelSide(new Rectangle(screenWidth - 175, 0, 175, screenHeight)));
             uiElements.Add(colorWheel);
             uiElements.Add(hueSlider);
             
@@ -221,6 +224,9 @@ namespace PixelArt
             // SETTINGS
             if (keys.pressed(Keys.L))
                 canvas.grid = !canvas.grid;
+            if (keys.pressed(Keys.T))
+                if (canvas.tileGridTexture != null)
+                    canvas.tileGrid = !canvas.tileGrid;
         }
 
         protected override void Update(GameTime gameTime)
@@ -268,6 +274,8 @@ namespace PixelArt
             if (!uiHit && !keyInputOverride) {
                 canvas.input(deltaTime, keys, mouse);
             }
+            
+            LayerButton.handleLayerButtons();
 
             if (lastTool != tool) {
                 setTool(tool);
