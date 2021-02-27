@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_.19.01" t="ExcludeRecursive" />
+    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_.19.00" t="ExcludeRecursive" />
     <e p="C:\Users\Toby\Documents\GitHub\PixelArt" t="IncludeRecursive">
       <e p=".gitattributes" t="Include" />
       <e p="app.manifest" t="Include" />
       <e p="Assets" t="Include">
         <e p="Exports" t="Include">
           <e p="e.png" t="Include" />
+          <e p="icon maybe.png" t="Include" />
+          <e p="weird lines.png" t="Include" />
         </e>
         <e p="Textures" t="Include">
           <e p="bush.png" t="Include" />

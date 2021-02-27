@@ -54,6 +54,15 @@
             "rid": "win-x86"
           }
         }
+      },
+      "System.Reactive.Windows.Forms/5.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net472/System.Reactive.Windows.Forms.dll": {}
+        },
+        "runtime": {
+          "lib/net472/System.Reactive.Windows.Forms.dll": {}
+        }
       }
     }
   },
@@ -165,12 +174,26 @@
         "runtimes/win-x86/native/SDL2.dll",
         "runtimes/win-x86/native/soft_oal.dll"
       ]
+    },
+    "System.Reactive.Windows.Forms/5.0.0": {
+      "sha512": "8etq1f+TYSkBU2Z9WIzErjSiE6/Cz0cZC5G1e1ktxKMTRoNO+gJuoXwm+XCnyHCZtQ3fH6zCRB06AxEzAghzsA==",
+      "type": "package",
+      "path": "system.reactive.windows.forms/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net472/System.Reactive.Windows.Forms.dll",
+        "lib/net472/System.Reactive.Windows.Forms.xml",
+        "system.reactive.windows.forms.5.0.0.nupkg.sha512",
+        "system.reactive.windows.forms.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "MonoGame.Content.Builder.Task >= 3.8.0.1641",
-      "MonoGame.Framework.DesktopGL >= 3.8.0.1641"
+      "MonoGame.Framework.DesktopGL >= 3.8.0.1641",
+      "System.Reactive.Windows.Forms >= 5.0.0"
     ]
   },
   "packageFolders": {
@@ -224,6 +247,10 @@
           "MonoGame.Framework.DesktopGL": {
             "target": "Package",
             "version": "[3.8.0.1641, )"
+          },
+          "System.Reactive.Windows.Forms": {
+            "target": "Package",
+            "version": "[5.0.0, )"
           }
         },
         "imports": [
@@ -244,5 +271,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Reactive.Windows.Forms 5.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "System.Reactive.Windows.Forms",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }

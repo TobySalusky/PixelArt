@@ -100,7 +100,7 @@ namespace PixelArt
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(48);
+            canvas = new Canvas(32);
             //canvas.makeTiled(16);
 
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
@@ -116,7 +116,7 @@ namespace PixelArt
                 Point point = canvas.toPixel(canvas.toCanvas(lastMousePos()));
                 return "(" + point.X + ", " + point.Y + ")";
             }));
-
+            
             const int rows = 4;
             foreach (Tool toolType in Util.GetValues<Tool>()) {
                 int i = (int) toolType;

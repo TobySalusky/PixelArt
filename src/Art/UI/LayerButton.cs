@@ -11,6 +11,8 @@ namespace PixelArt {
 
         public Layer layer;
 
+        public static Texture2D transBack = Textures.genTrans(96, 54, 6);
+
         public LayerButton(Layer layer, Vector2 pos, string name = "Untitled Layer") : base(null, pos, new Vector2(150, 80), name) {
             this.layer = layer;
             clickFunc = () => {
@@ -30,8 +32,12 @@ namespace PixelArt {
         public override void render(SpriteBatch spriteBatch) {
             base.render(spriteBatch);
 
-            Rectangle image = Util.expand(drawRect(), -10);
-            
+            Rectangle dr = drawRect();
+            const int width = 96, height = 54;
+            Rectangle imageMax = new Rectangle((int) (dr.X + (dimen.X - width) / 2F), (int) (dr.Y + (dimen.Y - height) / 2F), width, height);
+            Rectangle image = Util.useRatio(Util.textureVec(texture), imageMax);
+
+            spriteBatch.Draw(transBack, image, new Rectangle(0, 0, image.Width, image.Height), Color.White);
             spriteBatch.Draw(layer.texture, image, Color.White);
         }
 

@@ -5,26 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c742f77-da5b-4ff1-9600-6aa6b2bad433" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Art/UI/ExportTypeButton.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Art/UI/LayerButton.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/ProjectCreation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Util/PngIconConverter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Exports/Logingoose.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Art/Canvas.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Canvas.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Art/Undo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/Undo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Art/UI/LayerButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Art/UI/LayerButton.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Main.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UI/Exporting.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/Exporting.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UI/UIButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UI/UIText.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/UIText.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Util/FileUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/FileUtil.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Util/KeyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/KeyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Util/Textures.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Textures.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +52,6 @@
       <option value="$PROJECT_DIR$/src/Art/Tool.cs" />
       <option value="$PROJECT_DIR$/src/Util/Colors.cs" />
       <option value="$PROJECT_DIR$/src/Util/Paths.cs" />
-      <option value="$PROJECT_DIR$/src/Util/Textures.cs" />
       <option value="$PROJECT_DIR$/src/UI/UITextInput.cs" />
       <option value="$PROJECT_DIR$/src/UI/ProjectCreation.cs" />
       <option value="$PROJECT_DIR$/src/Art/LayerButton.cs" />
@@ -73,11 +61,12 @@
       <option value="$PROJECT_DIR$/src/UI/UIButton.cs" />
       <option value="$PROJECT_DIR$/src/Art/UI/ExportTypeButton.cs" />
       <option value="$PROJECT_DIR$/src/UI/UIText.cs" />
-      <option value="$PROJECT_DIR$/src/Art/UI/LayerButton.cs" />
-      <option value="$PROJECT_DIR$/src/Main/Main.cs" />
       <option value="$PROJECT_DIR$/src/Util/FileUtil.cs" />
       <option value="$PROJECT_DIR$/src/Util/PngIconConverter.cs" />
       <option value="$PROJECT_DIR$/src/UI/Exporting.cs" />
+      <option value="$PROJECT_DIR$/src/Util/Textures.cs" />
+      <option value="$PROJECT_DIR$/src/Art/UI/LayerButton.cs" />
+      <option value="$PROJECT_DIR$/src/Main/Main.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oD7qSUPfZ9heBectWdvQd0BcP6" />
@@ -87,6 +76,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34994584" />
     <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -149,7 +139,8 @@
       <workItem from="1614361020436" duration="709000" />
       <workItem from="1614365716220" duration="217000" />
       <workItem from="1614367493562" duration="878000" />
-      <workItem from="1614369325122" duration="4196000" />
+      <workItem from="1614369325122" duration="8269000" />
+      <workItem from="1614451830483" duration="1663000" />
     </task>
     <servers />
   </component>

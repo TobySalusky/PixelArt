@@ -37,6 +37,25 @@ using Microsoft.Xna.Framework.Graphics;
             return textures;
         }
 
+        public static Texture2D genTrans(int width, int height, int squareSize) {
+            Texture2D texture = new Texture2D(Main.getGraphicsDevice(), width, height);
+            
+            var arr = new Color[width * height];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bool dark = (x / squareSize % 2 == 0);
+                    if (y / squareSize % 2 == 0) {
+                        dark = !dark;
+                    }
+
+                    arr[x + y * width] = (dark) ? Color.LightGray : Color.White;
+                }
+            }
+            
+            texture.SetData(arr);
+            return texture;
+        }
+
         public static Texture2D genRect(Color rectColor) {
             Texture2D rect = new Texture2D(Main.getGraphicsDevice(), 1, 1);
             rect.SetData(new[] {rectColor});
