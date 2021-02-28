@@ -20,6 +20,10 @@ namespace PixelArt {
             Main.exportOpen = true;
 
             Vector2 tl = Main.screenCenter - Main.screenDimen * 0.35F;
+
+            var nameInput = new UITextInput(new Vector2(Main.screenCenter.X - 200, Main.screenCenter.Y - 200),
+                    new Vector2(400, 90), (str) => exportName = str) {backColor = Colors.panel, text = exportName};
+            Main.onNextUpdateStart.Add(() => Main.selectedUI = nameInput);
             
             List<UIElement> elements = new List<UIElement> {
                 
@@ -45,8 +49,7 @@ namespace PixelArt {
                 
                 // Name input
                 new UIText("Name:  ", new Vector2(Main.screenCenter.X - 200, Main.screenCenter.Y - 200) , new Vector2(100, 90), true),
-                new UITextInput(new Vector2(Main.screenCenter.X - 200, Main.screenCenter.Y - 200), new Vector2(400, 90), (str) => exportName = str) 
-                    {backColor = Colors.panel, text = exportName},
+                nameInput,
                 
                 // Export Types
                 new ExportTypeButton(ExportType.png, Main.screenCenter + new Vector2(-250, 100)),

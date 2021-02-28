@@ -9,7 +9,6 @@ namespace PixelArt {
         
         public ToolButton(Tool tool, Vector2 pos) : base(() => Main.tool = tool, pos, Vector2.One * 32, tool.ToString()) {
             this.tool = tool;
-            texture = Textures.rect;
             topTexture = Textures.get(tool + "Tool");
             if (topTexture == Textures.nullTexture) topTexture = null;
         }

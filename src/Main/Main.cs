@@ -64,6 +64,9 @@ namespace PixelArt
         public static int secondsPassed;
         public static float timePassed;
         
+        // OTHER
+        public static List<Action> onNextUpdateStart = new List<Action>();
+        
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -111,7 +114,7 @@ namespace PixelArt
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(32);
+            canvas = new Canvas(64);
             //canvas.makeTiled(16);
 
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
@@ -127,6 +130,19 @@ namespace PixelArt
                 Point point = canvas.toPixel(canvas.toCanvas(lastMousePos()));
                 return "(" + point.X + ", " + point.Y + ")";
             }));
+            
+            // Layer Buttons
+            uiElements.Add(new UIButton(() => canvas.addLayerAbove(), new Vector2(screenWidth - 175 / 2F - 60, screenHeight - 100), Vector2.One * 32) {
+                topTexture = Textures.get("NewLayerButton"), colorFunc = () => Color.Gray
+            });
+            
+            uiElements.Add(new UIButton(() => canvas.duplicateLayer(), new Vector2(screenWidth - 175 / 2F, screenHeight - 100), Vector2.One * 32) {
+                topTexture = Textures.get("DuplicateLayerButton"), colorFunc = () => Color.Gray
+            });
+            
+            uiElements.Add(new UIButton(() => canvas.deleteLayer(), new Vector2(screenWidth - 175 / 2F + 60, screenHeight - 100), Vector2.One * 32) {
+                topTexture = Textures.get("DeleteLayerButton"), colorFunc = () => Color.Gray
+            });
             
             const int rows = 4;
             foreach (Tool toolType in Util.GetValues<Tool>()) {
@@ -267,6 +283,13 @@ namespace PixelArt
             float deltaTime = delta(gameTime);
 
             timePassed += deltaTime;
+
+            if (onNextUpdateStart.Count > 0) {
+                foreach (var action in onNextUpdateStart) {
+                    action.Invoke();
+                }
+                onNextUpdateStart.Clear();                
+            }
 
             fpsCounter.update(deltaTime);
             if ((int) gameTime.TotalGameTime.TotalSeconds > secondsPassed) {

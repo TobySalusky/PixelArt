@@ -20,7 +20,7 @@ namespace PixelArt {
 
         public UIButton visibleButton;
         
-        public static Texture2D transBack = Textures.genTrans(96, 54, 6);
+        public static Texture2D transBack = Textures.genTrans(64, 64, 6);
         public static int lastIndex = -1;
 
         public LayerButton(Layer layer, Vector2 pos, string name = "Untitled Layer") : base(null, pos,
@@ -86,10 +86,10 @@ namespace PixelArt {
             base.render(spriteBatch);
 
             Rectangle dr = drawRect();
-            const int width = 96, height = 54;
+            const int width = 64, height = 64;
             Rectangle imageMax = new Rectangle((int) (dr.X + (dimen.X - width) / 2F),
                 (int) (dr.Y + (dimen.Y - height) / 2F), width, height);
-            Rectangle image = Util.useRatio(Util.textureVec(texture), imageMax);
+            Rectangle image = Util.useRatio(Util.textureVec(layer.texture), imageMax);
 
             spriteBatch.Draw(transBack, image, new Rectangle(0, 0, image.Width, image.Height), Color.White);
             spriteBatch.Draw(layer.texture, image, Color.White);
@@ -101,6 +101,7 @@ namespace PixelArt {
 
         public static void drag(LayerButton button, MouseInfo mouse) {
             float y = mouse.pos.Y - button.grabOff;
+            y = Math.Min(y, indexToY(0));
 
             button.pos.Y = y;
             int index = yToIndex(y);
@@ -126,7 +127,7 @@ namespace PixelArt {
         }
 
         public static float indexToY(int index) {
-            return Main.screenHeight - (160 + 90 * index);
+            return Main.screenHeight - (170 + 90 * index);
         }
 
         public static int yToIndex(float y) {

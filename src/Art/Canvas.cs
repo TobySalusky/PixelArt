@@ -117,16 +117,8 @@ namespace PixelArt {
             }
             
             // DELETE LAYER
-            if (keys.pressed(Keys.X) || keys.pressed(Keys.Delete)) {
-                addUndo();
-                if (layers.Count == 1) {
-                    iterBetween(canvasRect, (x, y) => setRGB(x, y, Colors.erased));
-                } else {
-                    layers.RemoveAt(layerIndex);
-                    if (layerIndex >= layers.Count) layerIndex = layers.Count - 1;
-                    layer = layers[layerIndex];
-                    Main.updateLayerButtons = true;
-                }
+            if (!hasSelection && keys.pressed(Keys.X) || keys.pressed(Keys.Delete)) {
+                deleteLayer();
             }
 
             switch (Main.tool) {
@@ -348,6 +340,7 @@ namespace PixelArt {
 
                     // deleting
                     if (hasSelection && (keys.pressed(Keys.X) || keys.pressed(Keys.Delete) || keys.pressed(Keys.Back))) {
+                        addUndo();
                         iterBetween(selectRect, (x, y) => {
                             setRGB(x, y, Colors.erased);
                         });
@@ -412,6 +405,18 @@ namespace PixelArt {
             }
 
             previewTexture = hasPreview ? Textures.toTexture(previewColor, xPix, yPix) : null;
+        }
+
+        public void deleteLayer() {
+            addUndo();
+            if (layers.Count == 1) {
+                iterBetween(canvasRect, (x, y) => setRGB(x, y, Colors.erased));
+            } else {
+                layers.RemoveAt(layerIndex);
+                if (layerIndex >= layers.Count) layerIndex = layers.Count - 1;
+                layer = layers[layerIndex];
+                Main.updateLayerButtons = true;
+            }
         }
 
         public void duplicateLayer() {

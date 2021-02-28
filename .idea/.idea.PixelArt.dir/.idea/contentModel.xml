@@ -18,6 +18,11 @@
           <e p="null.png" t="Include" />
           <e p="UI" t="Include">
             <e p="ExitButton.png" t="Include" />
+            <e p="Layers" t="Include">
+              <e p="DeleteLayerButton.png" t="Include" />
+              <e p="DuplicateLayerButton.png" t="Include" />
+              <e p="NewLayerButton.png" t="Include" />
+            </e>
             <e p="Tools" t="Include">
               <e p="BrushTool.png" t="Include" />
               <e p="ColorPickTool.png" t="Include" />
