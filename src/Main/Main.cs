@@ -1,9 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX;
+using SharpDX.Direct2D1;
+using Color = Microsoft.Xna.Framework.Color;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace PixelArt
 {
@@ -24,6 +33,8 @@ namespace PixelArt
         public static UIElement selectedUI;
         
         public static List<UIElement> uiElements = new List<UIElement>();
+        public static List<UIElement> renderAgain = new List<UIElement>();
+        
         public static ColorWheel colorWheel;
         public static HueSlider hueSlider;
 
@@ -80,7 +91,7 @@ namespace PixelArt
             Window.IsBorderless = false;
             Window.AllowUserResizing = true;
             
-            //Window.Position = new Point(0, 1080);
+            Window.Position = (true) ? new Point(0, 0) : Window.Position = new Point(0, 1080);
 
             graphics.ApplyChanges();
 
@@ -161,6 +172,24 @@ namespace PixelArt
 
             // TOOLS
             toolControls(deltaTime, keys, mouse);
+            
+            // Copying
+            if (keys.pressed(Keys.C) && keys.control) {
+                canvas.copyLayerToClipboard();
+            }
+
+            // Pasting
+            if (keys.pressed(Keys.V) && keys.control) {
+                Layer pasteLayer = Clipboard.getLayer();
+                if (pasteLayer != null) {
+                    canvas.pasteLayer(pasteLayer);
+                }
+                else {
+                    Texture2D pasteTexture = Clipboard.getTexture();
+                    if (pasteTexture != null)
+                        canvas.pasteTexture(pasteTexture);
+                }
+            }
         }
 
         public static void setTool(Tool newTool) {
@@ -180,17 +209,17 @@ namespace PixelArt
             // TOOLS
             if (keys.pressed(Keys.A))
                 tool = Tool.Brush;
-            if (keys.pressed(Keys.S) && !keys.down(Keys.LeftControl))
+            if (keys.pressed(Keys.S) && !keys.control)
                 tool = Tool.Eraser;
             if (keys.pressed(Keys.W))
                 tool = Tool.ColorPick;
-            if (keys.pressed(Keys.D))
+            if (keys.pressed(Keys.D) && !keys.shift)
                 tool = Tool.FillBucket;
             if (keys.pressed(Keys.R))
                 tool = Tool.Rect;
-            if (keys.pressed(Keys.C))
+            if (keys.pressed(Keys.C) && !keys.control)
                 tool = Tool.Ellipse;
-            if (keys.pressed(Keys.Q))
+            if (keys.pressed(Keys.Q) || keys.pressed(Keys.E)) 
                 tool = Tool.RectSelect;
 
             if (tool == Tool.Brush || tool == Tool.Eraser) {
@@ -217,20 +246,24 @@ namespace PixelArt
                         ToolSettings.brush = ToolSettings.brushes[9];
                 }
                 catch (IndexOutOfRangeException e) {
-                    Logger.log("warning: used num-keys to try to change to out-of-range brush");
+                    Warnings.log("warning: used num-keys to try to change to out-of-range brush");
                 }
             }
 
             // SETTINGS
             if (keys.pressed(Keys.L))
-                canvas.grid = !canvas.grid;
+                canvas.grid ^= true;
             if (keys.pressed(Keys.T))
                 if (canvas.tileGridTexture != null)
-                    canvas.tileGrid = !canvas.tileGrid;
+                    canvas.tileGrid ^= true;
         }
 
         protected override void Update(GameTime gameTime)
         {
+            if (renderAgain.Count > 0) {
+                renderAgain.Clear();
+            }
+
             float deltaTime = delta(gameTime);
 
             timePassed += deltaTime;
@@ -275,7 +308,7 @@ namespace PixelArt
                 canvas.input(deltaTime, keys, mouse);
             }
             
-            LayerButton.handleLayerButtons();
+            LayerButton.handleLayerButtons(mouse, keys, deltaTime);
 
             if (lastTool != tool) {
                 setTool(tool);
@@ -305,6 +338,10 @@ namespace PixelArt
             Texture2D rect = Textures.get("rect");
 
             foreach (var uiElement in uiElements) {
+                uiElement.render(spriteBatch);
+            }
+            
+            foreach (var uiElement in renderAgain) {
                 uiElement.render(spriteBatch);
             }
 

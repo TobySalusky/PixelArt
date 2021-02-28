@@ -31,10 +31,6 @@ namespace PixelArt {
             if (!noHit && mouse.leftPressed) {
                 if (mouseOver(mouse.pos) && !Main.uiHit) {
                     clicked(mouse, keys, deltaTime);
-                    Main.uiHit = true;
-                    if (selectable) {
-                        Main.selectedUI = this;
-                    }
                 }
                 else { 
                     notClicked(mouse, keys, deltaTime);
@@ -82,7 +78,10 @@ namespace PixelArt {
 
 
         public virtual void clicked(MouseInfo mouse, KeyInfo keys, float deltaTime) {
-            
+            Main.uiHit = true;
+            if (selectable) {
+                Main.selectedUI = this;
+            }
         }
 
         public virtual void render(SpriteBatch spriteBatch) {

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace PixelArt {
     public class Canvas {
@@ -16,6 +17,7 @@ namespace PixelArt {
         public int xPix, yPix;
         public int area;
         public Vector2 pixDimen;
+        public Rectangle canvasRect;
         
         public List<Layer> layers = new List<Layer>();
         public Layer layer;
@@ -25,7 +27,7 @@ namespace PixelArt {
 
         public List<Undo> undos = new List<Undo>();
 
-        public int selectedLayerIndex = 0;
+        public int layerIndex = 0;
 
         public bool hasPreview;
         public Texture2D previewTexture;
@@ -37,7 +39,8 @@ namespace PixelArt {
         public Point tileDimen;
         public bool tileGrid = false;
         public Texture2D tileGridTexture;
-        
+
+        public int layersCreated = 1;
         
         // SPECIFICS
         
@@ -67,23 +70,26 @@ namespace PixelArt {
 
         public Canvas(Texture2D texture) {
 
-            background = Textures.get("rect");
-            
-            layers.Add(new Layer(texture));
+            layers.Add(new Layer(texture, nameLayer()));
             xPix = texture.Width;
             yPix = texture.Height;
             area = xPix * yPix;
             pixDimen = new Vector2(xPix, yPix);
+
+            canvasRect = new Rectangle(0, 0, xPix, yPix);
             
             pos = Vector2.Zero;
             dimen = new Vector2(1, (float) yPix / xPix) * 100;
 
-            selectedLayerIndex = 0;
+            layerIndex = 0;
+            
+            background = Textures.genRect(Colors.canvasBack);
+            //background = Textures.genTrans(xPix, yPix);
         }
 
         public void input(float deltaTime, KeyInfo keys, MouseInfo mouse) {
 
-            layer = layers[selectedLayerIndex];
+            layer = layers[layerIndex];
             layerColor = Util.colorArray(layer.texture); // very laggy for larger canvases
             Vector2 mousePos = toCanvas(mouse.pos);
             Vector2 lastMousePos = toCanvas(Main.lastMousePos());
@@ -91,6 +97,7 @@ namespace PixelArt {
 
             hasPreview = false;
 
+            // GRABBING
             if (keys.pressed(Keys.G) && !hasSelection) {
                 tempTool = true;
                 selectRect = new Rectangle(0, 0, xPix, yPix);
@@ -98,12 +105,28 @@ namespace PixelArt {
                 switchedToFrom = Main.tool;
                 Main.tool = Tool.RectSelect;
             }
+            
+            // DUPLICATE LAYER
+            if (keys.pressed(Keys.D) && keys.shift) {
+                duplicateLayer();
+            }
 
+            // NEW LAYER
             if (keys.pressed(Keys.N) && !keys.control) {
+                addLayerAbove();
+            }
+            
+            // DELETE LAYER
+            if (keys.pressed(Keys.X) || keys.pressed(Keys.Delete)) {
                 addUndo();
-                layers.Insert(selectedLayerIndex + 1, new Layer(Textures.genRect(Colors.erased, xPix, yPix)));
-                selectedLayerIndex++;
-                Main.updateLayerButtons = true;
+                if (layers.Count == 1) {
+                    iterBetween(canvasRect, (x, y) => setRGB(x, y, Colors.erased));
+                } else {
+                    layers.RemoveAt(layerIndex);
+                    if (layerIndex >= layers.Count) layerIndex = layers.Count - 1;
+                    layer = layers[layerIndex];
+                    Main.updateLayerButtons = true;
+                }
             }
 
             switch (Main.tool) {
@@ -310,6 +333,9 @@ namespace PixelArt {
 
                         if (mouse.leftUnpressed) {
                             hasSelection = !(selectRect.Width == 1 && selectRect.Height == 1);
+                            
+                            
+                            
                             selecting = false;
                         }
                     }
@@ -386,6 +412,84 @@ namespace PixelArt {
             }
 
             previewTexture = hasPreview ? Textures.toTexture(previewColor, xPix, yPix) : null;
+        }
+
+        public void duplicateLayer() {
+            pasteLayer(new Layer(Textures.copy(layer.texture), nameLayer()));
+        }
+
+        public void copyLayerToClipboard() { // TODO: reimplement outside pasting
+
+            Layer copyLayer;
+            //Texture2D copyTexture;
+            if (hasSelection) {
+                var arr = new Color[area];
+                for (int i = 0; i < arr.Length; i++) {
+                    arr[i] = Colors.erased;
+                }
+                
+
+                iterBetween(selectRect, (x, y) => {
+                    arr[x + y * xPix] = getRGB(x, y);
+                });
+                copyLayer = new Layer(Textures.toTexture(arr, xPix, yPix));
+
+                /*var textureArr = new Color[(selectRect.Width) * (selectRect.Height)]; // TODO: extract to func (duped code)
+                int j = 0;
+                iterBetween(selectRect, (x, y) => {
+                    textureArr[j] = getRGB(x, y);
+                    j++;
+                });
+                copyTexture = Textures.toTexture(textureArr, selectRect.Width, selectRect.Height);*/
+            }
+            else {
+                copyLayer = layer.controlC();
+                //copyTexture = layer.texture;
+            }
+
+            // copies layer as ClipboardLayer
+            System.Windows.Forms.Clipboard.Clear();
+            DataFormats.Format format = DataFormats.GetFormat(typeof(ClipboardLayer).FullName);
+
+            IDataObject dataObj = new DataObject();
+            dataObj.SetData(format.Name, false, new ClipboardLayer(copyLayer));
+            System.Windows.Forms.Clipboard.SetDataObject(dataObj, false);
+        }
+
+        public void pasteLayer(Layer pasteLayer) {
+            addUndo();
+
+            pasteLayer.name = nameLayer();
+            
+            layers.Insert(layerIndex + 1, pasteLayer);
+            layerIndex++;
+            layer = pasteLayer;
+            
+            Main.updateLayerButtons = true;
+        }
+
+        public void pasteTexture(Texture2D pasteTexture) {
+            addLayerAbove();
+            selectionTexture = pasteTexture;
+            selectRect = new Rectangle(0, 0, selectionTexture.Width, selectionTexture.Height);
+            bindSelection();
+            selectionTexture = null;
+            hasSelection = false;
+            selecting = false;
+            movingSelection = false;
+        }
+
+        public string nameLayer() {
+            layersCreated++;
+            return "L" + (layersCreated - 1);
+        }
+
+        public void addLayerAbove() {
+            addUndo();
+            layers.Insert(layerIndex + 1, new Layer(Textures.genRect(Colors.erased, xPix, yPix), nameLayer()));
+            layerIndex++;
+            layer = layers[layerIndex];
+            Main.updateLayerButtons = true;
         }
 
         public void switchOff(Tool lastTool) {
@@ -523,7 +627,8 @@ namespace PixelArt {
             
             Rectangle rect = new Rectangle(0, 0, xPix, yPix);
             foreach (var layer in layers) {
-                spriteBatch.Draw(layer.texture, rect, Color.White);
+                if (layer.visible)
+                    spriteBatch.Draw(layer.texture, rect, Color.White);
             }
 
             spriteBatch.End();
@@ -595,9 +700,12 @@ namespace PixelArt {
         public void render(Camera camera, SpriteBatch spriteBatch) {
             Rectangle renderRect = camera.toScreen(pos, dimen);
             
-            spriteBatch.Draw(background, renderRect, Colors.canvasBack);
+            spriteBatch.Draw(background, renderRect, Color.White);
 
             foreach (var layer in layers) {
+                
+                if (!layer.visible) continue;
+                
                 spriteBatch.Draw(layer.texture, renderRect, Color.White);
                 
                 if (layer == this.layer) {

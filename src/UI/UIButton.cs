@@ -17,7 +17,8 @@ namespace PixelArt {
         public Color topColor = Color.White;
 
         public Func<Color> colorFunc;
-        
+
+        public bool trueBorder = false; // true to not draw inside (used for transparency)
         public Color border = Color.Gray;
         public int borderWidth = 0;
         
@@ -38,12 +39,19 @@ namespace PixelArt {
         public UIButton(Action clickFunc, Rectangle rectangle, string name = "Untitiled") : this(clickFunc, Util.toVec(rectangle.Center), Util.toVec(rectangle.Size), name) {}
 
         public override void render(SpriteBatch spriteBatch) {
+            Rectangle dr = drawRect();
+            
             if (borderWidth > 0) {
-                spriteBatch.Draw(Textures.get("rect"), Util.expand(drawRect(), borderWidth), border);
+                if (trueBorder == true) {
+                    Util.renderCutRect(Util.expand(dr, borderWidth), dr, spriteBatch, border);
+                }
+                else {
+                    spriteBatch.Draw(Textures.get("rect"), Util.expand(dr, borderWidth), border);
+                }
             }
             base.render(spriteBatch);
             if (topTexture != null) {
-                spriteBatch.Draw(topTexture, drawRect(), topColor);
+                spriteBatch.Draw(topTexture, dr, topColor);
             }
         }
 
@@ -75,6 +83,7 @@ namespace PixelArt {
         }
         
         public override void clicked(MouseInfo mouse, KeyInfo keys, float deltaTime) {
+            base.clicked(mouse, keys, deltaTime);
             clickFunc?.Invoke();
         }
     }

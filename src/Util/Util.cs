@@ -11,6 +11,10 @@ namespace PixelArt {
 
         private static Random rand = new Random();
 
+        public static bool diffUnder(float diff, float under) {
+            return Math.Abs(diff) < under;
+        }
+
         public static void drawLineScreen(Vector2 from, Vector2 to, SpriteBatch spriteBatch, Color color, float thickness = 1) {
             var (dist, rot) = magAngle(to - from);
 
@@ -326,7 +330,7 @@ namespace PixelArt {
             float ratio = dimen.Y / dimen.X;
 
             Vector2 newDimen;
-            
+
             float height = ratio * rect.Width;
             if (height > rect.Height) {
                 newDimen = new Vector2(rect.Height / ratio, rect.Height);

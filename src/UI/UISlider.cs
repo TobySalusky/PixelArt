@@ -36,6 +36,7 @@ namespace PixelArt {
         }
 
         public override void clicked(MouseInfo mouse, KeyInfo keys, float deltaTime) {
+            base.clicked(mouse, keys, deltaTime);
             held = true;
         }
 

@@ -14,6 +14,7 @@
         </e>
         <e p="Textures" t="Include">
           <e p="bush.png" t="Include" />
+          <e p="longinus.png" t="Include" />
           <e p="null.png" t="Include" />
           <e p="UI" t="Include">
             <e p="ExitButton.png" t="Include" />
@@ -38,6 +39,11 @@
               <e p="Arial.xnb" t="Include" />
             </e>
           </e>
+          <e p="Windows" t="Include">
+            <e p="Content" t="Include">
+              <e p="Arial.xnb" t="Include" />
+            </e>
+          </e>
         </e>
         <e p="Content.mgcb" t="Include" />
         <e p="obj" t="Include">
@@ -48,9 +54,15 @@
               <e p="Arial.mgcontent" t="Include" />
             </e>
           </e>
+          <e p="Windows" t="Include">
+            <e p="Content" t="Include">
+              <e p=".mgcontent" t="Include" />
+              <e p=".mgstats" t="Include" />
+              <e p="Arial.mgcontent" t="Include" />
+            </e>
+          </e>
         </e>
       </e>
-      <e p="Icon.bmp" t="Include" />
       <e p="Icon.ico" t="Include" />
       <e p="Microsoft.Xna.Framework.Content.ContentTypeReader" t="Include" />
       <e p="obj" t="ExcludeRecursive">
@@ -62,7 +74,6 @@
       </e>
       <e p="packages" t="ExcludeRecursive" />
       <e p="PixelArt.csproj" t="IncludeRecursive" />
-      <e p="README.md" t="Include" />
       <e p="src" t="Include">
         <e p="Art" t="Include">
           <e p="Brush.cs" t="Include" />
@@ -105,6 +116,7 @@
           <e p="UITransition.cs" t="Include" />
         </e>
         <e p="Util" t="Include">
+          <e p="Clipboard.cs" t="Include" />
           <e p="Colors.cs" t="Include" />
           <e p="FileUtil.cs" t="Include" />
           <e p="Fonts.cs" t="Include" />
@@ -117,6 +129,7 @@
           <e p="PngIconConverter.cs" t="Include" />
           <e p="Textures.cs" t="Include" />
           <e p="Util.cs" t="Include" />
+          <e p="Warnings.cs" t="Include" />
         </e>
       </e>
     </e>

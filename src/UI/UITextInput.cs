@@ -59,7 +59,7 @@ namespace PixelArt {
                 Main.selectedUI = null;
             }
             else {
-                Logger.log("ERROR in UITextInput");
+                Warnings.log("ERROR in UITextInput");
             }
         }
 
@@ -106,8 +106,13 @@ namespace PixelArt {
                         char c = str[0];
 
                         if (single && c >= 'A' && c <= 'Z') {
-                            if (shift || newState.CapsLock) text += c;
-                            else text += (char) (c + 32);
+                            if (c == 'V' && control) {
+                                text += System.Windows.Forms.Clipboard.GetText();
+                            }
+                            else {
+                                if (shift || newState.CapsLock) text += c;
+                                else text += (char) (c + 32);
+                            }
                         } 
                         else if (str.Length == 2 && c == 'D' && str[1] >= '0' && str[1] <= '9') {
                             text += (shift) ? (shiftNum[int.Parse("" + str[1])]) : str[1];

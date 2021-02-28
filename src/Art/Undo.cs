@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 
 namespace PixelArt {
     public class Undo {
+
+        public int layersCreated;
         public List<Layer> layers = new List<Layer>();
         public int selectedLayerIndex;
 
@@ -11,15 +13,18 @@ namespace PixelArt {
                 layers.Add(layer.copy());
             }
 
-            selectedLayerIndex = canvas.selectedLayerIndex;
+            layersCreated = canvas.layersCreated;
+            selectedLayerIndex = canvas.layerIndex;
         }
 
         public void apply(Canvas canvas) {
             // TODO: multilayer
             canvas.layers = layers;
-            canvas.selectedLayerIndex = selectedLayerIndex;
+            canvas.layerIndex = selectedLayerIndex;
             canvas.layer = canvas.layers[selectedLayerIndex];
             Main.updateLayerButtons = true;
+
+            canvas.layersCreated = layersCreated;
         }
     }
 }

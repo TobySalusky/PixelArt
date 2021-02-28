@@ -32,6 +32,7 @@ namespace PixelArt {
                 new UIButton(exportImage, Main.screenCenter + Vector2.UnitY * 250, new Vector2(800, 150), "Export as PNG") {
                     texture = Textures.get("PanelSide"), borderWidth = 1
                 },
+                new UIText("Export", Main.screenCenter + Vector2.UnitY * 250) {center = true},
                 
                 // Path input
                 new UIText("Path:  ", tl + new Vector2(200, 100), new Vector2(100, 30), true), 

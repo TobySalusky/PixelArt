@@ -1,10 +1,11 @@
 ﻿﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+ using System.Drawing;
+ using System.IO;
+ using Microsoft.Xna.Framework.Graphics;
  using PixelArt;
+ using Color = Microsoft.Xna.Framework.Color;
 
  namespace PixelArt {
     public class Textures {
@@ -22,7 +23,7 @@ using Microsoft.Xna.Framework.Graphics;
             textures["ToolButton"] = genRect(Color.Gray);
             textures["PanelSide"] = genRect(Colors.panel);
             textures["UIBack"] = genRect(Colors.exportBack);
-            textures["Darken"] = genRect(new Color(Color.Black, 0.5F));
+            textures["Darken"] = genRect(new Color(Color.Black, 0.7F));
             textures["invis"] = genRect(new Color(1F,1F,1F,0F));
 
             processFolder(Paths.texturePath);
@@ -32,12 +33,24 @@ using Microsoft.Xna.Framework.Graphics;
             
             nullTexture = textures["null"];
         }
-        
+
+        public static Image toImage(Texture2D texture) {
+            
+            MemoryStream mem = new MemoryStream();
+            texture.SaveAsPng(mem, texture.Width, texture.Height);
+
+            return Image.FromStream(mem);
+        }
+
         public static Dictionary<string, Texture2D> debugTexturesGrab() {
             return textures;
         }
 
-        public static Texture2D genTrans(int width, int height, int squareSize) {
+        public static Texture2D empty(int width, int height) {
+            return genRect(Colors.erased, width, height);
+        }
+        
+        public static Texture2D genTrans(int width, int height, int squareSize = 1) {
             Texture2D texture = new Texture2D(Main.getGraphicsDevice(), width, height);
             
             var arr = new Color[width * height];
@@ -45,7 +58,7 @@ using Microsoft.Xna.Framework.Graphics;
                 for (int y = 0; y < height; y++) {
                     bool dark = (x / squareSize % 2 == 0);
                     if (y / squareSize % 2 == 0) {
-                        dark = !dark;
+                        dark ^= true;
                     }
 
                     arr[x + y * width] = (dark) ? Color.LightGray : Color.White;
