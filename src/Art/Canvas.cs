@@ -89,8 +89,28 @@ namespace PixelArt {
 
         public void input(float deltaTime, KeyInfo keys, MouseInfo mouse) {
 
+            // DUPLICATE LAYER
+            if (keys.pressed(Keys.D) && keys.shift) {
+                duplicateLayer();
+            }
+            
+            // MERGE LAYER
+            if (keys.pressed(Keys.M)) {
+                mergeLayerDown(); // must occur before layerColor is set
+            }
+
+            // NEW LAYER
+            if (keys.pressed(Keys.N) && !keys.control) {
+                addLayerAbove();
+            }
+            
+            // DELETE LAYER
+            if (!hasSelection && keys.pressed(Keys.X) || keys.pressed(Keys.Delete)) {
+                deleteLayer();
+            }
+            
             layer = layers[layerIndex];
-            layerColor = Util.colorArray(layer.texture); // very laggy for larger canvases
+            layerColor = Util.colorArray(layer.texture); // very laggy for larger canvases TODO: figure out system of referencing (don't need to get each frame!!)
             Vector2 mousePos = toCanvas(mouse.pos);
             Vector2 lastMousePos = toCanvas(Main.lastMousePos());
             Point pixel = toPixel(mousePos);
@@ -104,21 +124,6 @@ namespace PixelArt {
                 hasSelection = true;
                 switchedToFrom = Main.tool;
                 Main.tool = Tool.RectSelect;
-            }
-            
-            // DUPLICATE LAYER
-            if (keys.pressed(Keys.D) && keys.shift) {
-                duplicateLayer();
-            }
-
-            // NEW LAYER
-            if (keys.pressed(Keys.N) && !keys.control) {
-                addLayerAbove();
-            }
-            
-            // DELETE LAYER
-            if (!hasSelection && keys.pressed(Keys.X) || keys.pressed(Keys.Delete)) {
-                deleteLayer();
             }
 
             switch (Main.tool) {
@@ -164,7 +169,7 @@ namespace PixelArt {
                 case Tool.FillBucket:
                     if (mouse.leftPressed) {
                         addUndo();
-                        fillAt(pixel);
+                        fillAt(pixel, (keys.shift) ? Colors.erased : Main.brushColor);
                     }
                     break;
                 
@@ -173,7 +178,6 @@ namespace PixelArt {
                     if (mouse.leftPressed) {
                         usingTool = true;
                         beginPixel = pixel;
-                        addUndo();
                     }
 
                     if (mouse.leftDown && usingTool) {
@@ -211,6 +215,7 @@ namespace PixelArt {
                     }
 
                     if (mouse.leftUnpressed && usingTool) {
+                        addUndo();
                         bindPreview();
                         usingTool = false;
                     }
@@ -221,7 +226,6 @@ namespace PixelArt {
                     if (mouse.leftPressed) {
                         beginPixel = pixel;
                         usingTool = true;
-                        addUndo();
                     }
 
                     if (mouse.leftDown && usingTool) {
@@ -264,6 +268,7 @@ namespace PixelArt {
                     }
 
                     if (mouse.leftUnpressed && usingTool) {
+                        addUndo();
                         bindPreview();
                         usingTool = false;
                     }
@@ -293,11 +298,7 @@ namespace PixelArt {
                         }
 
                         if (mouse.rightPressed) {
-                            hasSelection = false;
-                            movingSelection = false;
-                            selectionTexture = null;
-
-                            useUndo();
+                            cancelSelectMove();
                             
                             if (tempTool) {
                                 Main.tool = switchedToFrom;
@@ -407,6 +408,34 @@ namespace PixelArt {
             previewTexture = hasPreview ? Textures.toTexture(previewColor, xPix, yPix) : null;
         }
 
+        public void cancelSelectMove() {
+            if (movingSelection) { 
+                hasSelection = false;
+                movingSelection = false;
+                selectionTexture = null;
+
+                useUndo();
+            }
+        }
+
+        public void mergeLayerDown() {
+
+            if (layerIndex > 0) { 
+                addUndo();
+
+                var top = layer.texture;
+                layers.RemoveAt(layerIndex);
+                layerIndex--;
+                layer = layers[layerIndex];
+                Main.updateLayerButtons = true;
+
+                var store = previewTexture;
+                previewTexture = top;
+                bindPreview();
+                previewTexture = store;
+            }
+        }
+        
         public void deleteLayer() {
             addUndo();
             if (layers.Count == 1) {
@@ -502,6 +531,8 @@ namespace PixelArt {
             usingTool = false;
             switch (lastTool) {
                 case Tool.RectSelect:
+                    cancelSelectMove();
+                    
                     selecting = false;
                     hasSelection = false;
                     movingSelection = false;
@@ -642,7 +673,7 @@ namespace PixelArt {
             return renderTarget;
         }
 
-        public void fillAt(Point pixel) {
+        public void fillAt(Point pixel, Color newColor) {
             
             if (!inBounds(pixel)) return;
 
@@ -652,33 +683,33 @@ namespace PixelArt {
             
             var points = new List<Point> {pixel};
 
-            setRGB(pixel, Main.brushColor);
+            setRGB(pixel, newColor);
             while (points.Count > 0) {
                 Point point = points[^1];
                 points.RemoveAt(points.Count - 1);
 
                 Point test = new Point(point.X - 1, point.Y);
-                if (test.X >= 0 && getRGB(test, full) == onColor && getRGB(test) != Main.brushColor) {
+                if (test.X >= 0 && getRGB(test, full) == onColor && getRGB(test) != newColor) {
                     points.Add(test);
-                    setRGB(test, Main.brushColor);
+                    setRGB(test, newColor);
                 }
                 
                 test = new Point(point.X + 1, point.Y);
-                if (test.X < xPix && getRGB(test, full) == onColor && getRGB(test) != Main.brushColor) {
+                if (test.X < xPix && getRGB(test, full) == onColor && getRGB(test) != newColor) {
                     points.Add(test);
-                    setRGB(test, Main.brushColor);
+                    setRGB(test, newColor);
                 }
                 
                 test = new Point(point.X, point.Y - 1);
-                if (test.Y >= 0 && getRGB(test, full) == onColor && getRGB(test) != Main.brushColor) {
+                if (test.Y >= 0 && getRGB(test, full) == onColor && getRGB(test) != newColor) {
                     points.Add(test);
-                    setRGB(test, Main.brushColor);
+                    setRGB(test, newColor);
                 }
                 
                 test = new Point(point.X, point.Y + 1);
-                if (test.Y < yPix && getRGB(test, full) == onColor && getRGB(test) != Main.brushColor) {
+                if (test.Y < yPix && getRGB(test, full) == onColor && getRGB(test) != newColor) {
                     points.Add(test);
-                    setRGB(test, Main.brushColor);
+                    setRGB(test, newColor);
                 }
             }
         }

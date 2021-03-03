@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {}
+    "C:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt\\PixelArt.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {
+    "C:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt\\PixelArt.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
+        "projectUniqueName": "C:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt\\PixelArt.csproj",
         "projectName": "PixelArt",
-        "projectPath": "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
-        "packagesPath": "C:\\Users\\Toby\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\obj\\",
+        "projectPath": "C:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt\\PixelArt.csproj",
+        "packagesPath": "C:\\Users\\Tobafett\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet"
+          "C:\\Microsoft\\Xamarin\\NuGet",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Toby\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Tobafett\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -30,7 +31,6 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -42,7 +42,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "MonoGame.Content.Builder.Task": {
               "target": "Package",
@@ -71,7 +70,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.406\\RuntimeIdentifierGraph.json"
         }
       }
     }

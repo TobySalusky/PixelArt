@@ -17,7 +17,7 @@ namespace PixelArt {
         }
 
         public static void exportPopUp() {
-            Main.exportOpen = true;
+            Main.popupOpen = true;
 
             Vector2 tl = Main.screenCenter - Main.screenDimen * 0.35F;
 
@@ -28,9 +28,9 @@ namespace PixelArt {
             List<UIElement> elements = new List<UIElement> {
                 
                 // Backdrop and buttons
-                new UIBack(Main.screenCenter, Main.screenDimen) {texture = Textures.get("Darken"), clickFunc = () => Main.exportOpen = false},
+                new UIBack(Main.screenCenter, Main.screenDimen) {texture = Textures.get("Darken"), clickFunc = () => Main.popupOpen = false},
                 new UIBack(Main.screenCenter, Main.screenDimen * 0.7F) {color = Colors.exportBack, border = Color.LightGray, borderWidth = 5},
-                new UIButton(() => Main.exportOpen = false, Main.screenCenter + new Vector2(580, -320), Vector2.One * 60, "Exit Export") {
+                new UIButton(() => Main.popupOpen = false, Main.screenCenter + new Vector2(580, -320), Vector2.One * 60, "Exit Export") {
                     texture = Textures.get("PanelSide"), topTexture = Textures.get("ExitButton"), topColor = Colors.exportMid
                 },
                 new UIButton(exportImage, Main.screenCenter + Vector2.UnitY * 250, new Vector2(800, 150), "Export as PNG") {
@@ -65,7 +65,7 @@ namespace PixelArt {
 
 
             foreach (var element in elements) {
-                element.deleteCondition = () => !Main.exportOpen;
+                element.deleteCondition = () => !Main.popupOpen;
             }
             Main.uiElements.AddRange(elements);
         }
@@ -77,7 +77,7 @@ namespace PixelArt {
         public static void exportImage() {
             
             if (isValidPath(exportPath)) {
-                Main.exportOpen = false;
+                Main.popupOpen = false;
 
 
                 string name = (exportName == "") ? "Untitled " + Util.randInt(100000000) : exportName;

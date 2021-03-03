@@ -38,7 +38,7 @@ namespace PixelArt
         public static ColorWheel colorWheel;
         public static HueSlider hueSlider;
 
-        public static bool exportOpen;
+        public static bool popupOpen;
 
         public static bool updateLayerButtons = true;
 
@@ -79,6 +79,10 @@ namespace PixelArt
 
             instance = this;
 
+            var form = (Form)Form.FromHandle(Window.Handle);
+            form.WindowState = FormWindowState.Maximized;
+            
+
             screenDimen = new Vector2(1920, 1080);
             screenCenter = screenDimen / 2;
             screenWidth = (int) screenDimen.X;
@@ -117,18 +121,20 @@ namespace PixelArt
             canvas = new Canvas(64);
             //canvas.makeTiled(16);
 
+            resetCameraPosition();
+
             colorWheel = new ColorWheel(new Vector2(120, 100), new Vector2(130, 150));
             hueSlider = new HueSlider(new Vector2(205, 100), new Vector2(20, 150));
 
-            uiElements.Add(new PanelSide(new Rectangle(0, 0, 225, screenHeight)));
+            uiElements.Add(new PanelSide(new Rectangle(0, 0, 225, screenHeight), 1));
             
-            uiElements.Add(new PanelSide(new Rectangle(screenWidth - 175, 0, 175, screenHeight)));
+            uiElements.Add(new PanelSide(new Rectangle(screenWidth - 175, 0, 175 + 1, screenHeight), -1));
             uiElements.Add(colorWheel);
             uiElements.Add(hueSlider);
             
             uiElements.Add(new UIText(new Vector2(235, 10), () => {
                 Point point = canvas.toPixel(canvas.toCanvas(lastMousePos()));
-                return "(" + point.X + ", " + point.Y + ")";
+                return canvas.xPix + "x" + canvas.yPix +"   (" + point.X + ", " + point.Y + ")";
             }));
             
             // Layer Buttons
@@ -136,14 +142,18 @@ namespace PixelArt
                 topTexture = Textures.get("NewLayerButton"), colorFunc = () => Color.Gray
             });
             
-            uiElements.Add(new UIButton(() => canvas.duplicateLayer(), new Vector2(screenWidth - 175 / 2F, screenHeight - 100), Vector2.One * 32) {
+            uiElements.Add(new UIButton(() => canvas.duplicateLayer(), new Vector2(screenWidth - 175 / 2F - 20, screenHeight - 100), Vector2.One * 32) {
                 topTexture = Textures.get("DuplicateLayerButton"), colorFunc = () => Color.Gray
+            });
+            
+            uiElements.Add(new UIButton(() => canvas.mergeLayerDown(), new Vector2(screenWidth - 175 / 2F + 20, screenHeight - 100), Vector2.One * 32) {
+                topTexture = Textures.get("MergeLayerButton"), colorFunc = () => Color.Gray
             });
             
             uiElements.Add(new UIButton(() => canvas.deleteLayer(), new Vector2(screenWidth - 175 / 2F + 60, screenHeight - 100), Vector2.One * 32) {
                 topTexture = Textures.get("DeleteLayerButton"), colorFunc = () => Color.Gray
             });
-            
+
             const int rows = 4;
             foreach (Tool toolType in Util.GetValues<Tool>()) {
                 int i = (int) toolType;
@@ -155,6 +165,21 @@ namespace PixelArt
 
         private float delta(GameTime gameTime) {
             return (float) gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        public void resetCameraPosition() { 
+            camera.pos = Vector2.Zero;
+            Vector2 dimen = canvas.dimen;
+            Rectangle target = Util.useRatio(dimen, new Rectangle(0, 0, screenWidth - 400 - 50, screenHeight - 150));
+
+            camera.scale = target.Width / dimen.X;
+            
+            // offsets for x-panels
+            camera.pos.X -= 50 / 2F / camera.scale;
+            
+            
+            // TODO: remove once variable screen size is in
+            camera.pos.Y += 30 / camera.scale;
         }
 
         public void globalControls(float deltaTime, KeyInfo keys, MouseInfo mouse) {
@@ -176,13 +201,29 @@ namespace PixelArt
             }
 
             if (mouse.scroll != 0) {
+                Vector2 worldFrom = camera.toWorld(mouse.pos);
                 camera.scale *= 1 + mouse.scroll / 5F;
+                Vector2 worldTo = camera.toWorld(mouse.pos);
+
+                Vector2 diff = worldTo - worldFrom;
+
+                camera.pos -= diff;
+            }
+
+            if (keys.pressed(Keys.R) && (keys.shift || keys.control)) {
+                resetCameraPosition();
+            }
+
+            // Saving
+            if (keys.pressed(Keys.S) && keys.control) {
+                if (!popupOpen)
+                    Exporting.exportPopUp();
             }
             
-            // Saving
-            if (keys.pressed(Keys.S) && keys.down(Keys.LeftControl)) {
-                if (!exportOpen)
-                    Exporting.exportPopUp();
+            // Canvas Creation
+            if (keys.pressed(Keys.N) && keys.control) {
+                if (!popupOpen)
+                    ProjectCreation.createPopup();
             }
 
 
@@ -231,7 +272,7 @@ namespace PixelArt
                 tool = Tool.ColorPick;
             if (keys.pressed(Keys.D) && !keys.shift)
                 tool = Tool.FillBucket;
-            if (keys.pressed(Keys.R))
+            if (keys.pressed(Keys.R) && (!keys.shift && !keys.control))
                 tool = Tool.Rect;
             if (keys.pressed(Keys.C) && !keys.control)
                 tool = Tool.Ellipse;
