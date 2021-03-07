@@ -95,7 +95,7 @@ namespace PixelArt {
             }
             
             // MERGE LAYER
-            if (keys.pressed(Keys.M)) {
+            if (keys.pressed(Keys.D) && keys.control) {
                 mergeLayerDown(); // must occur before layerColor is set
             }
 
@@ -103,12 +103,7 @@ namespace PixelArt {
             if (keys.pressed(Keys.N) && !keys.control) {
                 addLayerAbove();
             }
-            
-            // DELETE LAYER
-            if (!hasSelection && keys.pressed(Keys.X) || keys.pressed(Keys.Delete)) {
-                deleteLayer();
-            }
-            
+
             layer = layers[layerIndex];
             layerColor = Util.colorArray(layer.texture); // very laggy for larger canvases TODO: figure out system of referencing (don't need to get each frame!!)
             Vector2 mousePos = toCanvas(mouse.pos);
@@ -117,6 +112,11 @@ namespace PixelArt {
 
             hasPreview = false;
 
+            // DELETE LAYER
+            if (!hasSelection && keys.pressed(Keys.X) || keys.pressed(Keys.Delete)) {
+                deleteLayer(); // must occur after layerColor is set
+            }
+            
             // GRABBING
             if (keys.pressed(Keys.G) && !hasSelection) {
                 tempTool = true;

@@ -346,6 +346,10 @@ namespace PixelArt {
             return new Vector2(rect.X + rect.Width / 2F, rect.Y + rect.Height / 2F);
         }
 
+        public static Vector2 dimen(Rectangle rect) { 
+            return new Vector2(rect.Width, rect.Height);
+        }
+
         // FROM: https://stackoverflow.com/questions/972307/how-to-loop-through-all-enum-values-in-c
         public static IEnumerable<T> GetValues<T>() {
             return Enum.GetValues(typeof(T)).Cast<T>();

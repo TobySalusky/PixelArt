@@ -137,22 +137,24 @@ namespace PixelArt
                 return canvas.xPix + "x" + canvas.yPix +"   (" + point.X + ", " + point.Y + ")";
             }));
             
-            // Layer Buttons
-            uiElements.Add(new UIButton(() => canvas.addLayerAbove(), new Vector2(screenWidth - 175 / 2F - 60, screenHeight - 100), Vector2.One * 32) {
-                topTexture = Textures.get("NewLayerButton"), colorFunc = () => Color.Gray
-            });
+            // Layer Util Buttons
+            List<UIElement> layerUtilButtons = new List<UIElement> {
+                new UIButton(() => canvas.addLayerAbove(), Vector2.Zero, Vector2.One * 32) {
+                    topTexture = Textures.get("NewLayerButton"), colorFunc = () => Color.Gray
+                },
+                new UIButton(() => canvas.duplicateLayer(), Vector2.Zero, Vector2.One * 32) {
+                    topTexture = Textures.get("DuplicateLayerButton"), colorFunc = () => Color.Gray
+                },
+                new UIButton(() => canvas.mergeLayerDown(), Vector2.Zero, Vector2.One * 32) {
+                    topTexture = Textures.get("MergeLayerButton"), colorFunc = () => Color.Gray
+                },
+                new UIButton(() => canvas.deleteLayer(), Vector2.Zero, Vector2.One * 32) {
+                    topTexture = Textures.get("DeleteLayerButton"), colorFunc = () => Color.Gray
+                }
+            };
             
-            uiElements.Add(new UIButton(() => canvas.duplicateLayer(), new Vector2(screenWidth - 175 / 2F - 20, screenHeight - 100), Vector2.One * 32) {
-                topTexture = Textures.get("DuplicateLayerButton"), colorFunc = () => Color.Gray
-            });
-            
-            uiElements.Add(new UIButton(() => canvas.mergeLayerDown(), new Vector2(screenWidth - 175 / 2F + 20, screenHeight - 100), Vector2.One * 32) {
-                topTexture = Textures.get("MergeLayerButton"), colorFunc = () => Color.Gray
-            });
-            
-            uiElements.Add(new UIButton(() => canvas.deleteLayer(), new Vector2(screenWidth - 175 / 2F + 60, screenHeight - 100), Vector2.One * 32) {
-                topTexture = Textures.get("DeleteLayerButton"), colorFunc = () => Color.Gray
-            });
+            new FlexBox(layerUtilButtons, new Rectangle(screenWidth - 175, screenHeight - 100, 175, 0)).apply();
+            uiElements.AddRange(layerUtilButtons);
 
             const int rows = 4;
             foreach (Tool toolType in Util.GetValues<Tool>()) {
@@ -270,7 +272,7 @@ namespace PixelArt
                 tool = Tool.Eraser;
             if (keys.pressed(Keys.W))
                 tool = Tool.ColorPick;
-            if (keys.pressed(Keys.D) && !keys.shift)
+            if (keys.pressed(Keys.D) && !keys.shift && !keys.control)
                 tool = Tool.FillBucket;
             if (keys.pressed(Keys.R) && (!keys.shift && !keys.control))
                 tool = Tool.Rect;
