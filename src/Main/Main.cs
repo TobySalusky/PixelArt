@@ -174,6 +174,11 @@ namespace PixelArt
             setTool(Tool.Brush);
         }
 
+        public static void setCanvas(Canvas newCanvas) {
+            canvas = newCanvas;
+            updateLayerButtons = true;
+        }
+
         private float delta(GameTime gameTime) {
             return (float) gameTime.ElapsedGameTime.TotalSeconds;
         }
@@ -329,6 +334,16 @@ namespace PixelArt
             if (keys.pressed(Keys.T) && !keys.control)
                 if (canvas.tileGridTexture != null)
                     canvas.tileGrid ^= true;
+            
+            // DEBUG
+            if (keys.pressed(Keys.K)) {
+                if (keys.shift) {
+                    setCanvas(XnaSerializer.Deserialize<CanvasSave>(Paths.exportPath + "canvas.pxl").toCanvas());
+                }
+                else { 
+                    XnaSerializer.Serialize(Paths.exportPath + "canvas.pxl", new CanvasSave(canvas));
+                }
+            }
         }
 
         protected override void Update(GameTime gameTime)

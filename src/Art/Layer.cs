@@ -7,7 +7,7 @@ namespace PixelArt {
     
     public class Layer {
 
-        public static int nextID;
+        public static int nextID; // TODO: unused + resets when file is loaded = fix pls
         
         public Texture2D texture;
         
