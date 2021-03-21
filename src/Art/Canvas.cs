@@ -118,7 +118,7 @@ namespace PixelArt {
             }
             
             // GRABBING
-            if (keys.pressed(Keys.G) && !hasSelection) {
+            if ((keys.pressed(Keys.G) || (keys.pressed(Keys.T) && keys.control)) && !hasSelection) {
                 tempTool = true;
                 selectRect = new Rectangle(0, 0, xPix, yPix);
                 hasSelection = true;
@@ -351,7 +351,7 @@ namespace PixelArt {
                     }
 
                     // grab
-                    if (hasSelection && keys.pressed(Keys.G)) {
+                    if (hasSelection && (keys.pressed(Keys.G) || (keys.pressed(Keys.T) && keys.control))) {
                         // snaps to bounds of image
                         int minX = selectRect.X + selectRect.Width - 1, maxX = selectRect.X;
                         int minY = selectRect.Y + selectRect.Height - 1, maxY = selectRect.Y;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,6 +27,9 @@ namespace PixelArt
         // INPUT
         public static KeyboardState lastKeyState;
         public static MouseState lastMouseState;
+        
+        public static KeyInfo latestKeys;
+        public static MouseInfo latestMouse;
 
         // UI
         public static bool uiHit;
@@ -41,7 +45,12 @@ namespace PixelArt
         public static bool popupOpen;
 
         public static bool updateLayerButtons = true;
+        
+        // UI SCREENS
+        public static UIScreen uiScreen;
 
+        public static FileOpenScreen fileOpenScreen;
+        
         // SCREEN
         public static Vector2 screenDimen;
         public static Vector2 screenCenter;
@@ -249,6 +258,11 @@ namespace PixelArt
                         canvas.pasteTexture(pasteTexture);
                 }
             }
+
+            if (keys.pressed(Keys.M)) {
+                fileOpenScreen ??= new FileOpenScreen();
+                uiScreen = fileOpenScreen;
+            }
         }
 
         public static void setTool(Tool newTool) {
@@ -312,13 +326,14 @@ namespace PixelArt
             // SETTINGS
             if (keys.pressed(Keys.L))
                 canvas.grid ^= true;
-            if (keys.pressed(Keys.T))
+            if (keys.pressed(Keys.T) && !keys.control)
                 if (canvas.tileGridTexture != null)
                     canvas.tileGrid ^= true;
         }
 
         protected override void Update(GameTime gameTime)
         {
+            // starting stuff
             if (renderAgain.Count > 0) {
                 renderAgain.Clear();
             }
@@ -346,6 +361,9 @@ namespace PixelArt
             KeyInfo keys = new KeyInfo(keyState, lastKeyState);
             MouseInfo mouse = new MouseInfo(mouseState, lastMouseState);
 
+            latestKeys = keys;
+            latestMouse = mouse;
+
             if (selectedUI != null && selectedUI.delete) {
                 selectedUI = null;
             }
@@ -356,6 +374,24 @@ namespace PixelArt
                 Exit();
             }
             
+            // main logic
+            if (uiScreen != null) { 
+                uiScreen.update(mouse, keys, deltaTime);
+            }
+            else {
+                screenUpdate(deltaTime, keys, mouse, keyInputOverride);
+            }
+
+            // end stuff
+            lastKeyState = keyState;
+            lastMouseState = mouseState;
+            
+            if (mouse.leftUnpressed) uiHit = false;
+            
+            base.Update(gameTime);
+        }
+
+        public void screenUpdate(float deltaTime, KeyInfo keys, MouseInfo mouse, bool keyInputOverride) { 
             if (!keyInputOverride) 
                 globalControls(deltaTime, keys, mouse);
 
@@ -380,19 +416,17 @@ namespace PixelArt
                 setTool(tool);
                 lastTool = tool;
             }
-
-            // end stuff
-            lastKeyState = keyState;
-            lastMouseState = mouseState;
-            
-            if (mouse.leftUnpressed) uiHit = false;
-            
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            
+
+            if (uiScreen != null) { 
+                uiScreen.render(this, spriteBatch);
+                return;
+            }
+
+
             GraphicsDevice.Clear(Colors.background);
 
             spriteBatch.Begin(SpriteSortMode.Deferred,

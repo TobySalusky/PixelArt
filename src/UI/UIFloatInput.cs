@@ -46,7 +46,7 @@ namespace PixelArt {
             return text == "" ? defaultVal : float.Parse(text);
         }
 
-        public override void changeAction() {
+        public override void changeAction(bool enter = false) {
             float val = asFloat();
             if (limiter != null) {
                 float newVal = limiter.Invoke(val);

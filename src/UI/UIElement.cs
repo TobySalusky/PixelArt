@@ -9,6 +9,26 @@ namespace PixelArt {
         public Vector2 startPos, startDimen;
         public Texture2D texture;
 
+        public float X {
+            get => pos.X;
+            set => pos.X = value;
+        }
+        
+        public float Y {
+            get => pos.Y;
+            set => pos.Y = value;
+        }
+        
+        public float Width {
+            get => dimen.X;
+            set => dimen.X = value;
+        }
+        
+        public float Height {
+            get => dimen.Y;
+            set => dimen.Y = value;
+        }
+
         public Func<bool> deleteCondition;
         public bool delete;
 

@@ -53,7 +53,7 @@ namespace PixelArt {
             return text == "" ? defaultVal : int.Parse(text);
         }
 
-        public override void changeAction() {
+        public override void changeAction(bool enter = false) {
             int val = asInt();
             if (limiter != null) {
                 int newVal = limiter.Invoke(val);

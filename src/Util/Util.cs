@@ -354,5 +354,25 @@ namespace PixelArt {
         public static IEnumerable<T> GetValues<T>() {
             return Enum.GetValues(typeof(T)).Cast<T>();
         }
+        
+        public static string cutoffString(string str, SpriteFont font, float width, string end = "...") {
+            try {
+                if (!(font.MeasureString(str).X > width)) return str;
+            
+                for (int i = str.Length - 1; i >= 1; i--) {
+                    string temp = str.Substring(0, i) + end;
+                    if (font.MeasureString(temp).X <= width) {
+                        str = temp;
+                        break;
+                    }
+                }
+            }
+            catch (Exception e) {
+                Warnings.log("FAILED TO CUT STRING!!!");
+                Warnings.log(e);
+            }
+
+            return str;
+        }
     }
 }

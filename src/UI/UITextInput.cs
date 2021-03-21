@@ -16,9 +16,12 @@ namespace PixelArt {
         public Color selectBorder = Color.LightGray;
 
         public Action<string> stringAction;
+        public bool enterOnly = false;
 
         public float timeSinceActive;
-        
+
+        public UITextInput(Rectangle rect, Action<string> stringAction = null) : this(new Vector2(rect.X, rect.Y), new Vector2(rect.Width, rect.Height), stringAction) { }
+
         public UITextInput(Vector2 pos, Vector2 dimen, Action<string> stringAction = null) : base(pos, dimen, null) {
             noHit = false;
             selectable = true;
@@ -48,14 +51,15 @@ namespace PixelArt {
                 Util.drawLineScreen(linePos, linePos + Vector2.UnitY * fontHeight, spriteBatch, color);
         }
 
-        public virtual void changeAction() { 
-            stringAction?.Invoke(text);
+        public virtual void changeAction(bool enter = false) { 
+            if (!enterOnly || enter)
+                stringAction?.Invoke(text);
             timeSinceActive = 0;
         }
 
         public virtual void enterAction() {
             if (Main.selectedUI == this) { 
-                changeAction();
+                changeAction(true);
                 Main.selectedUI = null;
             }
             else {

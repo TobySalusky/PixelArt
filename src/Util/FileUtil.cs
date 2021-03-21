@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace PixelArt {
@@ -29,6 +30,27 @@ namespace PixelArt {
             }
 
             return path + identifier;
+        }
+
+        public static string fileName(string path, bool withExtension = false) {
+            string name = path.Substring(Math.Max(path.LastIndexOf("\\"), path.LastIndexOf("/")) + 1);
+            if (!withExtension && name.Contains(".")) {
+                name = name.Substring(0, name.LastIndexOf("."));
+            }
+
+            return name;
+        }
+
+        public static string withoutTrailingSlash(string path) {
+            return lastSlash(path) == path.Length - 1 ? path.Substring(0, path.Length - 1) : path;
+        }
+
+        public static int lastSlash(string path) {
+            return Math.Max(path.LastIndexOf("\\"), path.LastIndexOf("/"));
+        }
+
+        public static string dirIn(string filePath) {
+            return filePath.Substring(0, lastSlash(filePath));
         }
     }
 }

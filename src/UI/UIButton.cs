@@ -9,8 +9,8 @@ namespace PixelArt {
 
         public bool hoverGrow;
         public float hoverTime;
-        public const float hoverSpeed = 5;
-        public const float hoverMult = 1.1F;
+        public const float hoverSpeed = 7.5F;
+        public float hoverMult = 1.1F;
         public string name;
 
         public Texture2D topTexture;
