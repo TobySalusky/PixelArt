@@ -58,7 +58,7 @@ namespace PixelArt {
             int y = yInput.asInt();
 
             if (x > 0 && y > 0) { 
-                Main.setCanvas(new Canvas(x, y));
+                Main.addActiveProject(new Project(new Canvas(x, y)));
                 
                 Main.popupOpen = false;
             }

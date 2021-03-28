@@ -98,7 +98,7 @@ namespace PixelArt {
                         });
                     }
                     else {
-                        Main.setCanvas(new Canvas(Textures.copy(tab.image)));
+                        Main.addActiveProject(new Project(new Canvas(Textures.copy(tab.image))));
                         returnToMain();
                     }
 

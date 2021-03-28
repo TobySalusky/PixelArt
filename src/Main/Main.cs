@@ -58,7 +58,11 @@ namespace PixelArt
         
         // OBJECTS
         public static Camera camera;
+        
         public static Canvas canvas;
+        public static Project project;
+
+        public static List<Project> projects = new List<Project>();
 
         // settings
         public static Tool tool = Tool.Brush;
@@ -127,8 +131,12 @@ namespace PixelArt
 
             // var Init
             camera = new Camera(Vector2.Zero, 5);
-            canvas = new Canvas(64);
+            
+            Project initProj = new Project(new Canvas(64));
             //canvas.makeTiled(16);
+
+            projects.Add(initProj);
+            setProject(initProj);
 
             resetCameraPosition();
 
@@ -174,9 +182,23 @@ namespace PixelArt
             setTool(Tool.Brush);
         }
 
-        public static void setCanvas(Canvas newCanvas) {
-            canvas = newCanvas;
+        public static void setProject(Project project) {
+            
+            // TODO: switch off/autosave prev project if not null
+            
+            Main.project = project;
+            canvas = project.canvas;
             updateLayerButtons = true;
+        }
+
+        public static void addProject(Project project) {
+            projects.Add(project);
+            
+        }
+
+        public static void addActiveProject(Project project) {
+            addProject(project);
+            setProject(project);
         }
 
         private float delta(GameTime gameTime) {
@@ -338,10 +360,10 @@ namespace PixelArt
             // DEBUG
             if (keys.pressed(Keys.K)) {
                 if (keys.shift) {
-                    setCanvas(XnaSerializer.Deserialize<CanvasSave>(Paths.exportPath + "canvas.pxl").toCanvas());
+                    addActiveProject(new Project(XnaSerializer.Deserialize<ProjectSave>(Paths.exportPath + "project.pxl")));
                 }
                 else { 
-                    XnaSerializer.Serialize(Paths.exportPath + "canvas.pxl", new CanvasSave(canvas));
+                    XnaSerializer.Serialize(Paths.exportPath + "project.pxl", new ProjectSave(project));
                 }
             }
         }

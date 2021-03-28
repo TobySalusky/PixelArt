@@ -8,19 +8,29 @@
       <e p="app.manifest" t="Include" />
       <e p="Assets" t="Include">
         <e p="Exports" t="Include">
-          <e p="e.png" t="Include" />
-          <e p="icon maybe.png" t="Include" />
-          <e p="weird lines.png" t="Include" />
+          <e p="project.pxl" t="Include" />
+          <e p="red goose.png" t="Include" />
+          <e p="sad.png" t="Include" />
+        </e>
+        <e p="Installers" t="Include">
+          <e p="Installer_v1.0.iss" t="Include" />
+          <e p="Output" t="Include">
+            <e p="mysetup.exe" t="Include" />
+          </e>
         </e>
         <e p="Textures" t="Include">
           <e p="bush.png" t="Include" />
           <e p="longinus.png" t="Include" />
           <e p="null.png" t="Include" />
+          <e p="tree.png" t="Include" />
           <e p="UI" t="Include">
             <e p="ExitButton.png" t="Include" />
+            <e p="FileTabBack.png" t="Include" />
+            <e p="FileTabFolder.png" t="Include" />
             <e p="Layers" t="Include">
               <e p="DeleteLayerButton.png" t="Include" />
               <e p="DuplicateLayerButton.png" t="Include" />
+              <e p="MergeLayerButton.png" t="Include" />
               <e p="NewLayerButton.png" t="Include" />
             </e>
             <e p="Tools" t="Include">
@@ -85,6 +95,8 @@
           <e p="Canvas.cs" t="Include" />
           <e p="HSV.cs" t="Include" />
           <e p="Layer.cs" t="Include" />
+          <e p="Project.cs" t="Include" />
+          <e p="RGBA.cs" t="Include" />
           <e p="Tool.cs" t="Include" />
           <e p="ToolSettings.cs" t="Include" />
           <e p="ToolUtil.cs" t="Include" />
@@ -103,11 +115,23 @@
           <e p="Main.cs" t="Include" />
           <e p="Program.cs" t="Include" />
         </e>
+        <e p="Outside" t="Include">
+          <e p="XnaSerializer.cs" t="Include" />
+        </e>
+        <e p="Saving" t="Include">
+          <e p="CanvasSave.cs" t="Include" />
+          <e p="LayerSave.cs" t="Include" />
+          <e p="ProjectSave.cs" t="Include" />
+        </e>
         <e p="UI" t="Include">
           <e p="Exporting.cs" t="Include" />
+          <e p="FileTab.cs" t="Include" />
+          <e p="FlexBox.cs" t="Include" />
           <e p="PanelSide.cs" t="Include" />
+          <e p="PanelTop.cs" t="Include" />
           <e p="ProjectCreation.cs" t="Include" />
           <e p="Screens" t="Include">
+            <e p="FileOpenScreen.cs" t="Include" />
             <e p="UIScreen.cs" t="Include" />
           </e>
           <e p="UI.cs" t="Include" />
@@ -115,6 +139,7 @@
           <e p="UIButton.cs" t="Include" />
           <e p="UIElement.cs" t="Include" />
           <e p="UIFloatInput.cs" t="Include" />
+          <e p="UIIntInput.cs" t="Include" />
           <e p="UISlider.cs" t="Include" />
           <e p="UIText.cs" t="Include" />
           <e p="UITextInput.cs" t="Include" />
