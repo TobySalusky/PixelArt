@@ -116,6 +116,8 @@ namespace PixelArt
             graphics.ApplyChanges();
 
             base.Initialize();
+
+            TestScript.test(); // DEBUG
         }
 
         protected override void LoadContent()

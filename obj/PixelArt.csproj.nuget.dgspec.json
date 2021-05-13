@@ -1,23 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {}
+    "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {
+    "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
+        "projectUniqueName": "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
         "projectName": "PixelArt",
-        "projectPath": "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
-        "packagesPath": "C:\\Users\\Toby\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Toby\\Documents\\GitHub\\PixelArt\\obj\\",
+        "projectPath": "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
+        "packagesPath": "C:\\Users\\tobys\\.nuget\\packages\\",
+        "outputPath": "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet"
         ],
         "configFilePaths": [
-          "C:\\Users\\Toby\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\tobys\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -30,7 +32,6 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -42,8 +43,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "Microsoft.CodeAnalysis.Scripting": {
+              "target": "Package",
+              "version": "[3.10.0-2.final, )"
+            },
             "MonoGame.Content.Builder.Task": {
               "target": "Package",
               "version": "[3.8.0.1641, )"
@@ -71,7 +75,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

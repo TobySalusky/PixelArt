@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Toby\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_.19.00" t="ExcludeRecursive" />
-    <e p="C:\Users\Toby\Documents\GitHub\PixelArt" t="IncludeRecursive">
+    <e p="C:\Users\tobys\AppData\Local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\tobys\AppData\Local\JetBrains\Rider2020.1\resharper-host\Local\Transient\ReSharperHost\v201\SolutionCaches\_.19.00" t="ExcludeRecursive" />
+    <e p="D:\Users\Tobafett\Documents\GitHub\PixelArt" t="IncludeRecursive">
       <e p=".gitattributes" t="Include" />
       <e p="app.manifest" t="Include" />
       <e p="Assets" t="Include">
@@ -111,6 +111,10 @@
           <e p="Undo.cs" t="Include" />
         </e>
         <e p="Camera.cs" t="Include" />
+        <e p="Html" t="Include">
+          <e p="HtmlNode.cs" t="Include" />
+          <e p="TestScript.cs" t="Include" />
+        </e>
         <e p="Main" t="Include">
           <e p="Main.cs" t="Include" />
           <e p="Program.cs" t="Include" />
