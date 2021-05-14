@@ -64,6 +64,9 @@ namespace PixelArt
 
         public static List<Project> projects = new List<Project>();
 
+        // HTML UI
+        public static HtmlNode htmlNode;
+        
         // settings
         public static Tool tool = Tool.Brush;
         public static Tool lastTool;
@@ -116,8 +119,6 @@ namespace PixelArt
             graphics.ApplyChanges();
 
             base.Initialize();
-
-            TestScript.test(); // DEBUG
         }
 
         protected override void LoadContent()
@@ -182,6 +183,29 @@ namespace PixelArt
             }
             
             setTool(Tool.Brush);
+
+
+            startHTML();
+        }
+
+        public static async void startHTML() { 
+            // HTML TESTING
+            const string html = @"
+<div>
+	<div>
+		<p width={$a*3} height={100} title='test'>Hi</p>
+		<p>Hi2</p>
+		<p/>
+		<p></p>
+	</div>
+
+	<h1 width={$a*300} height={50}>
+		what?
+	</h1>
+</div>
+";
+
+            htmlNode = await HtmlProcessor.genHTML(html, new StatePack("a", 7));
         }
 
         public static void setProject(Project project) {
@@ -487,7 +511,9 @@ namespace PixelArt
             spriteBatch.Draw(rect, new Rectangle(7, 37, 36, 56), Color.Black);
             spriteBatch.Draw(rect, new Rectangle(8, 38, 34, 54), Color.LightGray);
             spriteBatch.Draw(rect, new Rectangle(10, 40, 30, 50), brushColor);
-            
+
+            htmlNode?.render(spriteBatch);
+
             spriteBatch.End();
 
             base.Draw(gameTime);

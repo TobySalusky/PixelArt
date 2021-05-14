@@ -11,6 +11,17 @@ namespace PixelArt {
 
         private static Random rand = new Random();
 
+        public static string stringifyDict<T, K>(Dictionary<T, K> dict) {
+            string str = "{";
+            string startsWith = "";
+            foreach (var key in dict.Keys) {
+                str += $"{startsWith}{key}: {dict[key]}";
+                startsWith = ", ";
+            }
+
+            return str + "}";
+        }
+
         public static bool diffUnder(float diff, float under) {
             return Math.Abs(diff) < under;
         }

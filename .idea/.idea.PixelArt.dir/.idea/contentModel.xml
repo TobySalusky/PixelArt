@@ -112,8 +112,10 @@
         </e>
         <e p="Camera.cs" t="Include" />
         <e p="Html" t="Include">
+          <e p="DelimPair.cs" t="Include" />
           <e p="HtmlNode.cs" t="Include" />
-          <e p="TestScript.cs" t="Include" />
+          <e p="HtmlProcessor.cs" t="Include" />
+          <e p="StatePack.cs" t="Include" />
         </e>
         <e p="Main" t="Include">
           <e p="Main.cs" t="Include" />
