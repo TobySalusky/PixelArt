@@ -203,3 +203,7 @@ D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\ru\Microsoft
 D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
+D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\Cyotek.Drawing.BitmapFont.dll
+D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\SpriteFontPlus.dll
+D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\StbImageSharp.dll
+D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\StbTrueTypeSharp.dll

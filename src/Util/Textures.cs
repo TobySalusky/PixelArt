@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
  using System.Drawing;
  using System.IO;
+ using Microsoft.Xna.Framework;
  using Microsoft.Xna.Framework.Graphics;
  using PixelArt;
  using Color = Microsoft.Xna.Framework.Color;
@@ -11,7 +12,7 @@ using System.Collections.Generic;
     public class Textures {
 
         private static Dictionary<string, Texture2D> textures;
-        public static Texture2D nullTexture, rect, invis;
+        public static Texture2D nullTexture, rect, invis, circle;
 
         public static void loadTextures() {
 
@@ -32,6 +33,8 @@ using System.Collections.Generic;
             invis = textures["invis"];
             
             nullTexture = textures["null"];
+
+            circle = genCircle(500); // TODO: optimise, circle is slow and also kind of small/big
         }
 
         public static Image toImage(Texture2D texture) {
@@ -44,6 +47,22 @@ using System.Collections.Generic;
 
         public static Dictionary<string, Texture2D> debugTexturesGrab() {
             return textures;
+        }
+
+        public static Texture2D genCircle(int size) {
+            Texture2D texture = new Texture2D(Main.getGraphicsDevice(), size, size);
+
+            var arr = new Color[size * size];
+            for (int i = 0; i < size; i++) { 
+                for (int j = 0; j < size; j++) {
+                    if (Util.mag(new Vector2(size / 2F - i, size / 2F - j)) <= size / 2F) {
+                        arr[i + j * size] = Color.White;
+                    }
+                }
+            }
+            texture.SetData(arr);
+
+            return texture;
         }
 
         public static Texture2D empty(int width, int height) {

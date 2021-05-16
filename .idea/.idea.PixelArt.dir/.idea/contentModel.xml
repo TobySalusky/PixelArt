@@ -12,6 +12,9 @@
           <e p="red goose.png" t="Include" />
           <e p="sad.png" t="Include" />
         </e>
+        <e p="Fonts" t="Include">
+          <e p="JetBrainsMono.ttf" t="Include" />
+        </e>
         <e p="Installers" t="Include">
           <e p="Installer_v1.0.iss" t="Include" />
           <e p="Output" t="Include">
@@ -115,7 +118,9 @@
           <e p="DelimPair.cs" t="Include" />
           <e p="HtmlNode.cs" t="Include" />
           <e p="HtmlProcessor.cs" t="Include" />
+          <e p="NodeUtil.cs" t="Include" />
           <e p="StatePack.cs" t="Include" />
+          <e p="TestStuff.cs" t="Include" />
         </e>
         <e p="Main" t="Include">
           <e p="Main.cs" t="Include" />

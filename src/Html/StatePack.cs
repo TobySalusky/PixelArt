@@ -7,12 +7,18 @@ namespace PixelArt {
 		public Dictionary<string, object> vars;
 		public Dictionary<string, string> types;
 
-		public HtmlNode newNode(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) { 
+		public static HtmlNode newNode(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) { 
 			return new HtmlNode(tag, props, textContent, children);
 		}
 
-		public HtmlNode[] nodeArr(params HtmlNode[] nodes) {
+		public static HtmlNode[] nodeArr(params HtmlNode[] nodes) {
 			return nodes;
+		}
+
+		public static void setupNode(object node) {
+			HtmlNode htmlNode = ((HtmlNode) node);
+			htmlNode.topDownInit();
+			htmlNode.layoutDown();
 		}
 
 		public StatePack(params object[] varList) {

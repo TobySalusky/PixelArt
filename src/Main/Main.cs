@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX;
-using SharpDX.Direct2D1;
 using Color = Microsoft.Xna.Framework.Color;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Point = Microsoft.Xna.Framework.Point;
@@ -66,6 +62,7 @@ namespace PixelArt
 
         // HTML UI
         public static HtmlNode htmlNode;
+        public static float htmlTestVal;
         
         // settings
         public static Tool tool = Tool.Brush;
@@ -98,7 +95,8 @@ namespace PixelArt
             var form = (Form)Form.FromHandle(Window.Handle);
             form.WindowState = FormWindowState.Maximized;
             
-
+            Logger.log("size", form.Size);
+            
             screenDimen = new Vector2(1920, 1080);
             screenCenter = screenDimen / 2;
             screenWidth = (int) screenDimen.X;
@@ -190,22 +188,28 @@ namespace PixelArt
 
         public static async void startHTML() { 
             // HTML TESTING
-            const string html = @"
-<div>
-	<div>
-		<p width={$a*3} height={100} title='test'>Hi</p>
-		<p>Hi2</p>
-		<p/>
-		<p></p>
-	</div>
 
-	<h1 width={$a*300} height={50}>
-		what?
-	</h1>
+            Action<string> testRef = str => Logger.log("reffing:", str);
+
+            // DIRECTIVE ERROR FROM LACK OF HtmlNode IMPORT!
+            
+            const string html = @"
+<div flexDirection='column' justifyContent='spaceAround' alignItems='center' width='100%' height='100%' backgroundColor='black'>
+    <p fontSize={70} backgroundColor='black' color='lightgreen' borderColor='lightgreen' borderRadius={20} borderWidth={2}>TEXT</p>
+    <p fontSize={70} backgroundColor='black' color='lightgreen' borderColor='lightgreen' borderRadius={20} borderWidth={2}>TEXT</p>
+    <p fontSize={70} backgroundColor='black' color='lightgreen' borderColor='lightgreen' borderRadius={20} borderWidth={2}>TEXT</p>
 </div>
 ";
 
-            htmlNode = await HtmlProcessor.genHTML(html, new StatePack("a", 7));
+            var watch = new System.Diagnostics.Stopwatch();
+            watch.Start();
+            
+            htmlNode = await HtmlProcessor.genHTML(html, new StatePack(
+                "themeCol", "lightgreen"
+                ));
+            
+            watch.Stop();
+            Logger.log("compiling HTML took:", watch.Elapsed.TotalSeconds);
         }
 
         public static void setProject(Project project) {
@@ -479,6 +483,9 @@ namespace PixelArt
                 setTool(tool);
                 lastTool = tool;
             }
+
+            htmlTestVal += deltaTime;
+            htmlNode?.update(deltaTime);
         }
 
         protected override void Draw(GameTime gameTime)

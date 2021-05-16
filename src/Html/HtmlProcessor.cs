@@ -12,27 +12,6 @@ namespace PixelArt {
 
 	
 	public static class HtmlProcessor {
-		
-		public static async void process(string code, StatePack pack) {
-			foreach (string key in pack.vars.Keys) {
-				code = code.Replace($"${key}", $"(({pack.types[key]})vars[\"{key}\"])");
-			}
-
-			//code = Regex.Replace(code, @"[^\\]'", "\"");
-			//code = code.Replace("\\'", "'");
-			code = code.Replace("'", "\"");
-			
-			/*var lines = code.Split('\r', '\n');
-			code = "";
-			foreach (string line in lines) {
-				string newLine = line.Trim();
-			}*/
-			
-			Logger.log(code);
-			var hi = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System"), pack);
-			
-			Logger.log(hi);
-		}
 
 		public static string stringifyNode(string node) {
 			node = node.Trim();
@@ -133,7 +112,7 @@ namespace PixelArt {
 		}
 
 		public static async Task<HtmlNode> genHTML(string code, StatePack pack) {
-
+			
 			removeOpenClosed: {
 				string newCode = "";
 				int lastIndex = 0;
@@ -155,7 +134,9 @@ namespace PixelArt {
 			Logger.log("OUTPUT HTML===============\n\n" + code);
 
 
-			code = "return " + stringifyNode(code) + ";";
+			code = "object node = " + stringifyNode(code) + ";";
+			code += "\nsetupNode(node);";
+			code += "\nreturn node;";
 
 
 			foreach (string key in pack.vars.Keys) {
@@ -164,34 +145,10 @@ namespace PixelArt {
 			code = code.Replace("'", "\"");
 			
 			Logger.log("OUTPUT C#===============\n\n" + code);
-			
+
 			object htmlObj = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System", "System.Collections.Generic"), pack);
-			/*
-			Logger.log("\n");
-			Logger.log(hi);*/
-
-			return (HtmlNode) htmlObj;
-		}
-
-		public static void test() {
-
-			const string html = @"
-<div>
-	<div>
-		<p width={$a*3} height={100} title='test'>Hi</p>
-		<p>Hi2</p>
-		<p/>
-		<p></p>
-	</div>
-
-	<h1>
-		what?
-	</h1>
-</div>
-";
-			const int a = 107;
 			
-			genHTML(html, new StatePack("a", a));
+			return (HtmlNode) htmlObj;
 		}
 	}
 }
