@@ -9,7 +9,30 @@ using Microsoft.Xna.Framework.Graphics;
 namespace PixelArt {
     public static class Util {
 
-        private static Random rand = new Random();
+        private static readonly Random rand = new Random();
+
+        public static string noSpaces(string str) {
+            var chars = str.ToCharArray();
+            string newStr = "";
+            foreach (char c in chars) {
+                if (c != ' ') newStr += c;
+            }
+
+            return newStr;
+        }
+
+        public static List<int> allIndices(string mainStr, string subStr) {
+            List<int> list = new List<int>();
+
+            int subLen = subStr.Length;
+            for (int i = 0; i < mainStr.Length - subStr.Length + 1; i++) {
+                if (mainStr.Substring(i, subLen) == subStr) { 
+                    list.Add(i);
+                }
+            }
+
+            return list;
+        }
 
         public static string stringifyDict<T, K>(Dictionary<T, K> dict) {
             string str = "{";

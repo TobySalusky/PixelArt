@@ -96,8 +96,9 @@ namespace PixelArt
             form.WindowState = FormWindowState.Maximized;
             
             Logger.log("size", form.Size);
-            
+
             screenDimen = new Vector2(1920, 1080);
+            Logger.log(screenDimen);
             screenCenter = screenDimen / 2;
             screenWidth = (int) screenDimen.X;
             screenHeight = (int) screenDimen.Y;
@@ -106,9 +107,25 @@ namespace PixelArt
         protected override void Initialize()
         {
 
+            //Logger.log(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            Logger.log(GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height);
+            
+            var form = (Form)Form.FromHandle(Window.Handle);
+            System.Drawing.Rectangle screenRectangle = form.RectangleToScreen(form.ClientRectangle);
+            int titleHeight = screenRectangle.Top - form.Top;
+            const int taskBarHeight = 32;
+            // TODO: https://stackoverflow.com/questions/1264406/how-do-i-get-the-taskbars-position-and-size
+            // actually make task bar work properly
+            screenDimen = new Vector2(GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height - taskBarHeight - titleHeight);
+            Logger.log(screenDimen);
+            screenCenter = screenDimen / 2;
+            screenWidth = (int) screenDimen.X;
+            screenHeight = (int) screenDimen.Y;
+            
+            
             // Graphics stuff and setup
-            graphics.PreferredBackBufferHeight = 1080;
-            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferWidth = screenWidth;
+            graphics.PreferredBackBufferHeight = screenHeight;
             Window.IsBorderless = false;
             Window.AllowUserResizing = true;
             
@@ -189,25 +206,36 @@ namespace PixelArt
         public static async void startHTML() { 
             // HTML TESTING
 
-            Action<string> testRef = str => Logger.log("reffing:", str);
+            Action<HtmlNode> testRef = node => {
+                Logger.log(node);
+            };
 
-            // DIRECTIVE ERROR FROM LACK OF HtmlNode IMPORT!
+            string color = "white";
+            Func<string> col = () => color;
+            Action<string> setCol = (str) => color = str;
             
             const string html = @"
-<div flexDirection='column' justifyContent='spaceAround' alignItems='center' width='100%' height='100%' backgroundColor='black'>
-    <p fontSize={70} backgroundColor='black' color='lightgreen' borderColor='lightgreen' borderRadius={20} borderWidth={2}>TEXT</p>
-    <p fontSize={70} backgroundColor='black' color='lightgreen' borderColor='lightgreen' borderRadius={20} borderWidth={2}>TEXT</p>
-    <p fontSize={70} backgroundColor='black' color='lightgreen' borderColor='lightgreen' borderRadius={20} borderWidth={2}>TEXT</p>
-</div>
+<a flexDirection='column' justifyContent='spaceAround' alignItems='center' width='100%' height='100%' backgroundColor='black'>
+    <e flex={1} width='100%' alignX='spaceAround' alignY='center'>
+        <div borderRadius='10%' @share(red)></div>
+        <div borderRadius='20%' @share(green)></div>
+        <div borderRadius='30%' @share(lightgreen)></div>
+        <div borderRadius='40%' @share(yellow)></div>
+        <div borderRadius='50%' @share(black)></div>
+    </e>
+</a>
 ";
+            var macros = Macros.create(
+                "share(a)", "-backgroundColor={string: $col()} dimens={100} onPress={()=^$setCol('$$a')}"
+            );
 
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             
             htmlNode = await HtmlProcessor.genHTML(html, new StatePack(
-                "themeCol", "lightgreen"
-                ));
-            
+                "col", col, "setCol", setCol
+                ), macros);
+
             watch.Stop();
             Logger.log("compiling HTML took:", watch.Elapsed.TotalSeconds);
         }
@@ -486,6 +514,10 @@ namespace PixelArt
 
             htmlTestVal += deltaTime;
             htmlNode?.update(deltaTime);
+            
+            if (mouse.leftPressed) {
+                htmlNode?.clickRecurse(mouse.pos);
+            }
         }
 
         protected override void Draw(GameTime gameTime)

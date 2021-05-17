@@ -118,6 +118,7 @@
           <e p="DelimPair.cs" t="Include" />
           <e p="HtmlNode.cs" t="Include" />
           <e p="HtmlProcessor.cs" t="Include" />
+          <e p="Macros.cs" t="Include" />
           <e p="NodeUtil.cs" t="Include" />
           <e p="StatePack.cs" t="Include" />
           <e p="TestStuff.cs" t="Include" />

@@ -46,6 +46,9 @@ namespace PixelArt {
 		public AlignType alignX, alignY;
 		public DirectionType flexDirection = DirectionType.column;
 
+		// FUNCTIONS
+		public Action onPress;
+		
 		// ENUMS
 		public enum PositionType { // TODO: implement absolute, relative, and others
 			normal, absolute, relative
@@ -151,6 +154,31 @@ namespace PixelArt {
 					}
 				}
 
+				if (props.ContainsKey("-dimens")) { 
+					object funcProp = props["-dimens"];
+					switch (funcProp) {
+						case Func<string> strFunc:
+							bindAction(() => {
+								int initWidth = width;
+								int initHeight = height;
+								string val = strFunc();
+								width = NodeUtil.widthFromProp(val, parent);
+								height = NodeUtil.heightFromProp(val, parent);
+								if (width != initWidth || height != initHeight) onResize();
+							});
+							break;
+						case Func<int> intFunc:
+							bindAction(() => {
+								int initWidth = width;
+								int initHeight = height;
+								int val = intFunc();
+								width = val;
+								height = val;
+								if (width != initWidth || height != initHeight) onResize();
+							});
+							break;
+					}
+				}
 
 				if (props.ContainsKey("-flex")) {
 					object flexFuncProp = props["-flex"];
@@ -207,12 +235,47 @@ namespace PixelArt {
 					}
 				}
 				
+				if (props.ContainsKey("onPress")) onPress = (Action) props["onPress"];
+				
+				
 				if (props.ContainsKey("borderWidth")) borderWidth = (int) props["borderWidth"];
 				if (props.ContainsKey("borderColor")) borderColor = NodeUtil.colorFromProp(props["borderColor"]);
 
 				if (props.ContainsKey("backgroundColor")) backgroundColor = NodeUtil.colorFromProp(props["backgroundColor"]);
 				if (props.ContainsKey("color")) color = NodeUtil.colorFromProp(props["color"]);
-				
+
+				if (props.ContainsKey("-backgroundColor")) {
+					object funcProp = props["-backgroundColor"];
+
+					switch (funcProp) {
+						case Func<Color> colorFunc:
+							bindAction(() => {
+								backgroundColor = colorFunc();
+							});
+							break;
+						case Func<string> stringFunc:
+							bindAction(() => {
+								backgroundColor = NodeUtil.colorFromProp(stringFunc());
+							});
+							break;
+					}
+				}
+				if (props.ContainsKey("-color")) {
+					object funcProp = props["-color"];
+					switch (funcProp) {
+						case Func<Color> colorFunc:
+							bindAction(() => {
+								color = colorFunc();
+							});
+							break;
+						case Func<string> stringFunc:
+							bindAction(() => {
+								color = NodeUtil.colorFromProp(stringFunc());
+							});
+							break;
+					}
+				}
+
 				align: { 
 					if (props.ContainsKey("flexDirection")) flexDirection = Enum.Parse<DirectionType>((string) props["flexDirection"]);
 
@@ -245,7 +308,7 @@ namespace PixelArt {
 				}
 
 				if (props.ContainsKey("ref")) {
-					((Action<string>) props["ref"])($"testing ref! here is some width for your troubles {width}.");
+					((Action<HtmlNode>) props["ref"])(this);
 				}
 
 			} finishProps: { }
@@ -502,6 +565,34 @@ namespace PixelArt {
 					child.update(deltaTime);
 				}
 			}
+		}
+
+		public bool posInside(Vector2 vec) {
+			return vec.X > x && vec.Y > y && vec.X < x + width && vec.Y < y + height;
+		}
+
+		public void clicked(Vector2 vec) { 
+			Logger.log(this);
+			onPress?.Invoke();
+		}
+
+		public bool clickRecurse(Vector2 vec) {
+
+			if (posInside(vec)) { // TODO: redo? def not how this works
+				bool final = true;
+				if (children != null) { 
+					foreach (HtmlNode child in children) {
+						if (child.clickRecurse(vec)) {
+							final = false;
+						}
+					}
+				}
+				if (final) clicked(vec);
+
+				return true;
+			}
+
+			return false;
 		}
 
 		public void tryRenderText(SpriteBatch spriteBatch) {

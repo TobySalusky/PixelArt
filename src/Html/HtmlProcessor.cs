@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using SharpDX.Direct3D11;
+using Microsoft.Xna.Framework;
 
 namespace PixelArt {
 
@@ -68,7 +67,19 @@ namespace PixelArt {
 
 						if (chars[i] == '{') {
 							int fin = bracketDict[i].closeIndex;
-							string jsx = data.Substring(i + 1, fin - (i + 1));
+							string jsx = data.Substring(i + 1, fin - (i + 1)).Trim();
+
+							if (currLabel.StartsWith("-")) { // dynamic value (auto generate Func)
+								int sep = jsx.IndexOf(":");
+								string returnType = jsx.Substring(0, sep);
+								jsx = jsx.Substring(sep + 1).Trim();
+								jsx = $"(Func^^{returnType}^)(() =^ ({jsx}))";
+							} else if (Util.noSpaces(jsx).StartsWith("()=^")) {
+								int sep = jsx.IndexOf("=^");
+								jsx = jsx.Substring(sep + 2).Trim();
+								jsx = $"(Action)(()=^{jsx})";
+							}
+
 							props[currLabel] = $"({jsx})";
 							lastFin = fin + 1;
 							i = fin;
@@ -111,7 +122,45 @@ namespace PixelArt {
 				(carrotDict[htmlPair.closeIndex].closeIndex + 1) - htmlPair.openIndex);
 		}
 
-		public static async Task<HtmlNode> genHTML(string code, StatePack pack) {
+		public static async Task<HtmlNode> genHTML(string code, StatePack pack, Dictionary<string, string> macros = null) {
+			
+			applyMacros: { // TODO: make function macros work when inner parenthesis are present!!!
+				if (macros != null) {
+					foreach (string macroID in macros.Keys) {
+						if (macroID.Contains("(")) {
+
+							int openInd = macroID.IndexOf("(");
+							string paramString = macroID.Substring(openInd + 1, macroID.LastIndexOf(")") - openInd - 1);
+
+							var paramNames = paramString.Split(",").Select(str => str.Trim()).ToArray();
+
+							string find = "@" + macroID.Substring(0, openInd) + "(";
+							int currIndex = code.IndexOf(find);
+							while (currIndex != -1) {
+								var pair = DelimPair.genPairDict(code, "(", ")")[currIndex+macroID.Substring(0, openInd).Length+1];
+
+								string content = pair.contents(code);
+								var valStrs = content.Split(",").Select(str => str.Trim()).ToArray();
+								
+								Logger.log(valStrs.Length);
+								
+								string macroStr = macros[macroID];
+								for (int i = 0; i < paramNames.Length; i++) {
+									Logger.log("hello",paramNames[i], valStrs[i]);
+									macroStr = macroStr.Replace($"$${paramNames[i]}", valStrs[i]);
+								}
+
+								code = code.Substring(0, currIndex) + macroStr + code.Substring(pair.closeIndex + 1);
+
+								currIndex = code.IndexOf(find);
+							}
+							
+						} else {
+							code = code.Replace($"@{macroID}", macros[macroID]);
+						}
+					}
+				}
+			}
 			
 			removeOpenClosed: {
 				string newCode = "";
@@ -131,22 +180,28 @@ namespace PixelArt {
 			
 				code = newCode;
 			}
+
 			Logger.log("OUTPUT HTML===============\n\n" + code);
 
 
-			code = "object node = " + stringifyNode(code) + ";";
+			code = "HtmlNode node = " + stringifyNode(code) + ";";
 			code += "\nsetupNode(node);";
 			code += "\nreturn node;";
 
+			code = "using PixelArt;\nusing Microsoft.Xna.Framework;\n" + code;
 
 			foreach (string key in pack.vars.Keys) {
 				code = code.Replace($"${key}", $"(({pack.types[key]})vars[\"{key}\"])");
 			}
 			code = code.Replace("'", "\"");
+			code = code.Replace("^^", "<");
+			code = code.Replace("^", ">");
 			
 			Logger.log("OUTPUT C#===============\n\n" + code);
 
-			object htmlObj = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System", "System.Collections.Generic"), pack);
+			object htmlObj = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System", "System.Collections.Generic").AddReferences(
+				typeof(HtmlNode).Assembly
+				), pack);
 			
 			return (HtmlNode) htmlObj;
 		}
