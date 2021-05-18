@@ -213,27 +213,28 @@ namespace PixelArt
             string color = "white";
             Func<string> col = () => color;
             Action<string> setCol = (str) => color = str;
+
+            Func<int> widthFunc = () => 20 + (int) (80 + 80 * Math.Sin(timePassed*5));
             
             const string html = @"
-<a flexDirection='column' justifyContent='spaceAround' alignItems='center' width='100%' height='100%' backgroundColor='black'>
-    <e flex={1} width='100%' alignX='spaceAround' alignY='center'>
-        <div borderRadius='10%' @share(red)></div>
-        <div borderRadius='20%' @share(green)></div>
-        <div borderRadius='30%' @share(lightgreen)></div>
-        <div borderRadius='40%' @share(yellow)></div>
-        <div borderRadius='50%' @share(black)></div>
-    </e>
-</a>
+<div alignX='center' alignY='center' dimens='100%' backgroundColor='transparent'>
+        @macro(yellow, 2)
+        @macro(green, 7)
+        @macro(red, 10)
+        @macro(green, 7)
+        @macro(yellow, 2)
+</div>
 ";
             var macros = Macros.create(
-                "share(a)", "-backgroundColor={string: $col()} dimens={100} onPress={()=^$setCol('$$a')}"
+                "share(a)", "-backgroundColor={string: $col()} dimens={100} onPress={()=^$setCol('$$a')}",
+                "macro(a,b)", "<div borderRadius='50%' backgroundColor='$$a' height='10%' -width={int: $widthFunc()*$$b}></div>"
             );
 
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             
             htmlNode = await HtmlProcessor.genHTML(html, new StatePack(
-                "col", col, "setCol", setCol
+                "col", col, "setCol", setCol, "widthFunc", widthFunc
                 ), macros);
 
             watch.Stop();

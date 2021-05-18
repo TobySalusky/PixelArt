@@ -23,16 +23,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c742f77-da5b-4ff1-9600-6aa6b2bad433" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Html/Macros.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/PixelArt/DesignTimeBuild/.dtbcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/PixelArt/DesignTimeBuild/.dtbcache.v2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/PixelArt/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/PixelArt/v16/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Folder.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Folder.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csprojAssemblyReference.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
@@ -40,10 +34,7 @@
       <change beforePath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.g.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Html/HtmlNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Main.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Util/Util.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Util.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +74,6 @@
     <setting file="file://$PROJECT_DIR$/src/UI/PanelSide.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/UIBack.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/Exporting.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///C# Console" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/UIIntInput.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/ProjectCreation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/FileTab.cs" root0="FORCE_HIGHLIGHTING" />
@@ -225,7 +215,8 @@
       <workItem from="1621010984965" duration="1281000" />
       <workItem from="1621020897575" duration="25532000" />
       <workItem from="1621115483647" duration="9080000" />
-      <workItem from="1621195684843" duration="26300000" />
+      <workItem from="1621195684843" duration="26332000" />
+      <workItem from="1621294999779" duration="2086000" />
     </task>
     <servers />
   </component>
@@ -254,22 +245,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="636" y="256" width="648" height="428" key="#Context_Actions/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621203502917" />
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1621240953997">
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1621301119668">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621240953997" />
-    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1621240953997">
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621301119668" />
+    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1621301119668">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621240953997" />
-    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1621240953997">
+    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621301119668" />
+    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1621301119668">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621240953997" />
-    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1621240953997">
+    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621301119668" />
+    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1621301119668">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621240953997" />
+    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621301119668" />
     <state width="1877" height="375" key="GridCell.Tab.1.bottom" timestamp="1621132540063">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -346,10 +337,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="566" y="130" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621238969529" />
-    <state x="638" y="253" width="644" height="534" key="find.popup" timestamp="1621237369057">
+    <state x="638" y="253" width="644" height="534" key="find.popup" timestamp="1621296483882">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="638" y="253" width="644" height="534" key="find.popup/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621237369057" />
+    <state x="638" y="253" width="644" height="534" key="find.popup/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621296483882" />
     <state x="616" y="240" key="run.anything.popup" timestamp="1620769924642">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
