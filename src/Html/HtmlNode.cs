@@ -27,11 +27,14 @@ namespace PixelArt {
 		public int x, y;
 		public int width, height;
 
+		public Vector2 PosVec => new Vector2(x, y);
+		public Vector2 DimenVec => new Vector2(width, height);
+
 		// Text
 		public string fontFamily = "JetbrainsMono";
 		public int fontSize = 18;
 		public SpriteFont font;
-		//public Vector2 textDimens = Vector2.Zero;
+		public Vector2 textDimens = Vector2.Zero;
 		// TODO: font weight
 
 		// Appearance
@@ -45,11 +48,15 @@ namespace PixelArt {
 		public float flex;
 		public AlignType alignX, alignY;
 		public DirectionType flexDirection = DirectionType.column;
+		public TextAlignType textAlign = TextAlignType.topLeft;
 
 		// FUNCTIONS
 		public Action onPress;
 		
 		// ENUMS
+		public enum TextAlignType {
+			topLeft, center
+		}
 		public enum PositionType { // TODO: implement absolute, relative, and others
 			normal, absolute, relative
 		}
@@ -96,13 +103,21 @@ namespace PixelArt {
 				}
 			}
 		}
-
+		
 		public void onFontChange() {
 			font = Fonts.getFontSafe(fontFamily, fontSize);
-			Vector2 textDimens = font.MeasureString(textContent);
-			width = (int) textDimens.X;
-			height = (int) textDimens.Y;
+			textDimens = font.MeasureString(textContent);
+			if (!propHasAny("width") && !(flexDirection == DirectionType.row && flex > 0)) width = (int) textDimens.X;
+			if (!propHasAny("height") && !(flexDirection == DirectionType.column && flex > 0)) height = (int) textDimens.Y;
 			onResize();
+		}
+
+		public bool propHasAny(string propName) {
+			return props.ContainsKey("-" + propName) || props.ContainsKey(propName);
+		}
+
+		public T prop<T>(string propIdentifier) {
+			return (T) props[propIdentifier];
 		}
 
 		public void topDownInit() {
@@ -112,10 +127,10 @@ namespace PixelArt {
 				
 				if (props == null) goto finishProps;
 				
-				if (props.ContainsKey("position")) position = Enum.Parse<PositionType>((string)props["position"]);
+				if (props.ContainsKey("position")) position = Enum.Parse<PositionType>(prop<string>("position"));
 				
-				if (props.ContainsKey("x")) x = (int) props["x"];
-				if (props.ContainsKey("y")) y = (int) props["y"];
+				if (props.ContainsKey("x")) x = prop<int>("x");
+				if (props.ContainsKey("y")) y = prop<int>("y");
 
 				if (props.ContainsKey("dimens")) { 
 					width = NodeUtil.widthFromProp(props["dimens"], parent);
@@ -128,11 +143,12 @@ namespace PixelArt {
 				
 				if (props.ContainsKey("fontFamily")) fontFamily = (string) props["fontFamily"];
 				if (props.ContainsKey("fontSize")) fontSize = (int) props["fontSize"];
+				if (props.ContainsKey("textAlign")) textAlign = Enum.Parse<TextAlignType>((string) props["textAlign"]);
 
 				if (textContent != null) {
 					onFontChange();
 				}
-				
+
 				if (props.ContainsKey("-fontSize")) {
 					object funcProp = props["-fontSize"];
 					if (funcProp is Func<int> intFunc) { 
@@ -271,6 +287,21 @@ namespace PixelArt {
 						case Func<string> stringFunc:
 							bindAction(() => {
 								color = NodeUtil.colorFromProp(stringFunc());
+							});
+							break;
+					}
+				}
+				if (props.ContainsKey("-borderColor")) {
+					object funcProp = props["-borderColor"];
+					switch (funcProp) {
+						case Func<Color> colorFunc:
+							bindAction(() => {
+								borderColor = colorFunc();
+							});
+							break;
+						case Func<string> stringFunc:
+							bindAction(() => {
+								borderColor = NodeUtil.colorFromProp(stringFunc());
 							});
 							break;
 					}
@@ -600,7 +631,8 @@ namespace PixelArt {
 			if (textContent == null) return;
 			if (color == Color.Transparent) return;
 			
-			spriteBatch.DrawString(font, textContent, new Vector2(x, y), color);
+			spriteBatch.DrawString(font, textContent, 
+				(textAlign == TextAlignType.topLeft) ? PosVec : PosVec + DimenVec/2F - textDimens/2F, color);
 		}
 
 		public void renderSelf(SpriteBatch spriteBatch) {

@@ -214,20 +214,16 @@ namespace PixelArt
             Func<string> col = () => color;
             Action<string> setCol = (str) => color = str;
 
-            Func<int> widthFunc = () => 20 + (int) (80 + 80 * Math.Sin(timePassed*5));
+            Func<int> widthFunc = () => 40 + (int) (80 + 80 * Math.Sin(timePassed*5));
             
             const string html = @"
-<div alignX='center' alignY='center' dimens='100%' backgroundColor='transparent'>
-        @macro(yellow, 2)
-        @macro(green, 7)
-        @macro(red, 10)
-        @macro(green, 7)
-        @macro(yellow, 2)
+<div alignX='center' alignY='center' dimens='100%' backgroundColor='black'>
+        @macro(Pete bad, 4)
 </div>
 ";
             var macros = Macros.create(
-                "share(a)", "-backgroundColor={string: $col()} dimens={100} onPress={()=^$setCol('$$a')}",
-                "macro(a,b)", "<div borderRadius='50%' backgroundColor='$$a' height='10%' -width={int: $widthFunc()*$$b}></div>"
+                "macro(a,b)", 
+                @"<div fontSize={30} color='lightgreen' textAlign='center' borderRadius='50%' borderColor='lightgreen' borderWidth={2} backgroundColor='black' height='10%' -width={int: $widthFunc()*$$b}>$$a</div>"
             );
 
             var watch = new System.Diagnostics.Stopwatch();
