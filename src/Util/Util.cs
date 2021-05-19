@@ -11,6 +11,10 @@ namespace PixelArt {
 
         private static readonly Random rand = new Random();
 
+        public static float sin01(float rad) {
+            return (float) (0.5F + 0.5F * Math.Sin(rad));
+        }
+
         public static string noSpaces(string str) {
             var chars = str.ToCharArray();
             string newStr = "";

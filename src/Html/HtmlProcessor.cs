@@ -71,9 +71,29 @@ namespace PixelArt {
 
 							if (currLabel.StartsWith("-")) { // dynamic value (auto generate Func)
 								int sep = jsx.IndexOf(":");
-								string returnType = jsx.Substring(0, sep);
-								jsx = jsx.Substring(sep + 1).Trim();
-								jsx = $"(Func^^{returnType}^)(() =^ ({jsx}))";
+								bool typeless = false;
+								if (sep != -1) { 
+									string returnType = jsx.Substring(0, sep).Trim();
+
+									if (new Regex("^[a-zA-z<>~]+$").IsMatch(returnType)) { 
+										jsx = jsx.Substring(sep + 1).Trim();
+										if (returnType.EndsWith("~")) {
+											returnType = returnType.Substring(0, returnType.Length - 1);
+											jsx = $"({returnType})({jsx})"; // auto-cast
+										}
+
+										jsx = $"(Func^^{returnType}^)(() =^ ({jsx}))";
+									} else {
+										typeless = true;
+									}
+								} else {
+									typeless = true;
+								}
+
+								if (typeless) { 
+									jsx = $"(Func^^object^)(() =^ ({jsx.Trim()}))";
+								}
+
 							} else if (Util.noSpaces(jsx).StartsWith("()=^")) {
 								int sep = jsx.IndexOf("=^");
 								jsx = jsx.Substring(sep + 2).Trim();

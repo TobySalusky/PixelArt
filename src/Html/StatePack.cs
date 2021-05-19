@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace PixelArt {
@@ -6,6 +7,11 @@ namespace PixelArt {
 
 		public Dictionary<string, object> vars;
 		public Dictionary<string, string> types;
+
+		public Func<float, float> sin = (rad) => (float) Math.Sin(rad);
+		public Func<float, float> cos = (rad) => (float) Math.Cos(rad);
+		public Func<float> timePassed = () => Main.timePassed;
+		public Func<float> deltaTime = () => Main.currentDeltaTime;
 
 		public static HtmlNode newNode(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) { 
 			return new HtmlNode(tag, props, textContent, children);

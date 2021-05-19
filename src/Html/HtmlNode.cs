@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D11;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
+#pragma warning disable 8509
 
 namespace PixelArt {
 	public class HtmlNode {
@@ -51,7 +52,8 @@ namespace PixelArt {
 		public TextAlignType textAlign = TextAlignType.topLeft;
 
 		// FUNCTIONS
-		public Action onPress;
+		public bool hover;
+		public Action onPress, onMouseEnter, onMouseExit, onHover;
 		
 		// ENUMS
 		public enum TextAlignType {
@@ -107,8 +109,10 @@ namespace PixelArt {
 		public void onFontChange() {
 			font = Fonts.getFontSafe(fontFamily, fontSize);
 			textDimens = font.MeasureString(textContent);
-			if (!propHasAny("width") && !(flexDirection == DirectionType.row && flex > 0)) width = (int) textDimens.X;
-			if (!propHasAny("height") && !(flexDirection == DirectionType.column && flex > 0)) height = (int) textDimens.Y;
+			if (!propHasAny("dimens")) { 
+				if (!propHasAny("width") && !(flexDirection == DirectionType.row && flex > 0)) width = (int) textDimens.X;
+				if (!propHasAny("height") && !(flexDirection == DirectionType.column && flex > 0)) height = (int) textDimens.Y;
+			}
 			onResize();
 		}
 
@@ -118,6 +122,14 @@ namespace PixelArt {
 
 		public T prop<T>(string propIdentifier) {
 			return (T) props[propIdentifier];
+		}
+
+		public Func<Color> toColorFunc(object func) { 
+			return func switch {
+				Func<Color> colorFunc => colorFunc,
+				Func<string> strFunc => () => NodeUtil.colorFromProp(strFunc()),
+				Func<object> objFunc => () => NodeUtil.colorFromProp(objFunc()),
+			};
 		}
 
 		public void topDownInit() {
@@ -225,20 +237,17 @@ namespace PixelArt {
 				}
 				
 				if (props.ContainsKey("-height")) {
-					object heightFuncProp = props["-height"];
-					if (heightFuncProp is Func<string> strFunc) {
-						bindAction(() => {
-							int initHeight = height;
-							height = NodeUtil.heightFromProp(strFunc(), parent);
-							if (initHeight != height) onHeightChange();
-						});
-					} else if (heightFuncProp is Func<int> intFunc) { 
-						bindAction(() => {
-							int initHeight = height;
-							height = intFunc();
-							if (initHeight != height) onHeightChange();
-						});
-					}
+					object funcProp = props["-height"];
+					Func<int> func = funcProp switch {
+						Func<int> intFunc => intFunc,
+						Func<string> strFunc => () => NodeUtil.heightFromProp(strFunc(), parent),
+						Func<object> objFunc => () => NodeUtil.heightFromProp(objFunc(), parent),
+					};
+					bindAction(() => {
+						int initHeight = height;
+						height = func();
+						if (initHeight != height) onHeightChange();
+					});
 				}
 
 
@@ -250,61 +259,30 @@ namespace PixelArt {
 						borderRadius = (int) props["borderRadius"];
 					}
 				}
-				
-				if (props.ContainsKey("onPress")) onPress = (Action) props["onPress"];
-				
-				
-				if (props.ContainsKey("borderWidth")) borderWidth = (int) props["borderWidth"];
-				if (props.ContainsKey("borderColor")) borderColor = NodeUtil.colorFromProp(props["borderColor"]);
 
+				if (props.ContainsKey("onPress")) onPress = prop<Action>("onPress");
+				if (props.ContainsKey("onMouseEnter")) onMouseEnter = prop<Action>("onMouseEnter");
+				if (props.ContainsKey("onMouseExit")) onMouseExit = prop<Action>("onMouseExit");
+				if (props.ContainsKey("onHover")) onHover = prop<Action>("onHover");
+
+
+				if (props.ContainsKey("borderWidth")) borderWidth = prop<int>("borderWidth");
+				
+				if (props.ContainsKey("borderColor")) borderColor = NodeUtil.colorFromProp(props["borderColor"]);
 				if (props.ContainsKey("backgroundColor")) backgroundColor = NodeUtil.colorFromProp(props["backgroundColor"]);
 				if (props.ContainsKey("color")) color = NodeUtil.colorFromProp(props["color"]);
 
 				if (props.ContainsKey("-backgroundColor")) {
-					object funcProp = props["-backgroundColor"];
-
-					switch (funcProp) {
-						case Func<Color> colorFunc:
-							bindAction(() => {
-								backgroundColor = colorFunc();
-							});
-							break;
-						case Func<string> stringFunc:
-							bindAction(() => {
-								backgroundColor = NodeUtil.colorFromProp(stringFunc());
-							});
-							break;
-					}
+					var func = toColorFunc(props["-backgroundColor"]);
+					bindAction(() => backgroundColor = func());
 				}
 				if (props.ContainsKey("-color")) {
-					object funcProp = props["-color"];
-					switch (funcProp) {
-						case Func<Color> colorFunc:
-							bindAction(() => {
-								color = colorFunc();
-							});
-							break;
-						case Func<string> stringFunc:
-							bindAction(() => {
-								color = NodeUtil.colorFromProp(stringFunc());
-							});
-							break;
-					}
+					var func = toColorFunc(props["-color"]);
+					bindAction(() => color = func());
 				}
 				if (props.ContainsKey("-borderColor")) {
-					object funcProp = props["-borderColor"];
-					switch (funcProp) {
-						case Func<Color> colorFunc:
-							bindAction(() => {
-								borderColor = colorFunc();
-							});
-							break;
-						case Func<string> stringFunc:
-							bindAction(() => {
-								borderColor = NodeUtil.colorFromProp(stringFunc());
-							});
-							break;
-					}
+					var func = toColorFunc(props["-borderColor"]);
+					bindAction(() => borderColor = func());
 				}
 
 				align: { 
@@ -583,7 +561,7 @@ namespace PixelArt {
 			actionList.Add(action);
 		}
 
-		public void update(float deltaTime) {
+		public void update(float deltaTime, MouseInfo mouse) {
 
 			if (actionList != null) {
 				foreach (Action action in actionList) {
@@ -591,9 +569,20 @@ namespace PixelArt {
 				}
 			}
 
+			if (posInside(mouse.pos)) {
+				bool diff = !hover;
+				hover = true;
+				if (diff) onMouseEnter?.Invoke();
+				
+				onHover?.Invoke();
+			} else if (hover) {
+				hover = false;
+				onMouseExit?.Invoke();
+			}
+
 			if (children != null) { 
 				foreach (HtmlNode child in children) {
-					child.update(deltaTime);
+					child.update(deltaTime, mouse);
 				}
 			}
 		}

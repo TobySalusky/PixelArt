@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\815328\\Documents\\PixelArt\\PixelArt.csproj": {}
+    "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {}
   },
   "projects": {
-    "C:\\Users\\815328\\Documents\\PixelArt\\PixelArt.csproj": {
+    "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\815328\\Documents\\PixelArt\\PixelArt.csproj",
+        "projectUniqueName": "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
         "projectName": "PixelArt",
-        "projectPath": "C:\\Users\\815328\\Documents\\PixelArt\\PixelArt.csproj",
-        "packagesPath": "C:\\Users\\815328\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\815328\\Documents\\PixelArt\\obj\\",
+        "projectPath": "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\PixelArt.csproj",
+        "packagesPath": "C:\\Users\\tobys\\.nuget\\packages\\",
+        "outputPath": "D:\\Users\\Tobafett\\Documents\\GitHub\\PixelArt\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet"
         ],
         "configFilePaths": [
-          "C:\\Users\\815328\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\tobys\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -32,7 +32,6 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -44,7 +43,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.CodeAnalysis.Scripting": {
               "target": "Package",
@@ -81,7 +79,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -76,6 +76,7 @@ namespace PixelArt
         public static FrameCounter fpsCounter = new FrameCounter();
         public static int secondsPassed;
         public static float timePassed;
+        public static float currentDeltaTime;
         
         // OTHER
         public static List<Action> onNextUpdateStart = new List<Action>();
@@ -209,28 +210,30 @@ namespace PixelArt
             Action<HtmlNode> testRef = node => {
                 Logger.log(node);
             };
-
-            string color = "white";
-            Func<string> col = () => color;
-            Action<string> setCol = (str) => color = str;
-
-            Func<int> widthFunc = () => 40 + (int) (80 + 80 * Math.Sin(timePassed*5));
+            
+            float[] size = {0, 0, 0};
+            Action<int, float> setSize = (i, f) => size[i] = f;
             
             const string html = @"
-<div alignX='center' alignY='center' dimens='100%' backgroundColor='black'>
-        @macro(Pete bad, 4)
+<div alignX='center' alignY='spaceAround' dimens='100%' backgroundColor='black'>
+        @m(0)
+        @m(1)
+        @m(2)
 </div>
 ";
             var macros = Macros.create(
-                "macro(a,b)", 
-                @"<div fontSize={30} color='lightgreen' textAlign='center' borderRadius='50%' borderColor='lightgreen' borderWidth={2} backgroundColor='black' height='10%' -width={int: $widthFunc()*$$b}>$$a</div>"
+                "m(i)",
+                @"<div -backgroundColor={Color: new Color(0.5F + 0.5F * sin($size($$i)), 0.5F + 0.5F * sin($size($$i)*3), 0.5F + 0.5F * sin($size($$i)*2))} 
+        dimens={200} borderRadius='25%' onHover={() =^ $setSize($$i, $size($$i) + @dt * ($$i + 1))} textAlign='center'>
+            HI
+        </div>"
             );
 
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             
             htmlNode = await HtmlProcessor.genHTML(html, new StatePack(
-                "col", col, "setCol", setCol, "widthFunc", widthFunc
+                "size", (Func<int, float>) ((i) => size[i]), "setSize", setSize
                 ), macros);
 
             watch.Stop();
@@ -432,6 +435,7 @@ namespace PixelArt
 
             float deltaTime = delta(gameTime);
 
+            currentDeltaTime = deltaTime;
             timePassed += deltaTime;
 
             if (onNextUpdateStart.Count > 0) {
@@ -510,7 +514,7 @@ namespace PixelArt
             }
 
             htmlTestVal += deltaTime;
-            htmlNode?.update(deltaTime);
+            htmlNode?.update(deltaTime, mouse);
             
             if (mouse.leftPressed) {
                 htmlNode?.clickRecurse(mouse.pos);
