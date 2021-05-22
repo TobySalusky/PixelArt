@@ -207,34 +207,55 @@ namespace PixelArt
         public static async void startHTML() { 
             // HTML TESTING
 
-            Action<HtmlNode> testRef = node => {
-                Logger.log(node);
-            };
-            
-            float[] size = {0, 0, 0};
-            Action<int, float> setSize = (i, f) => size[i] = f;
+            const string Apple = @"
+const Counter = () => {
+    
+    int [count, setCount] = useState(0);
+    string [color, setColor] = useState('black');
+    string [textColor, setTextColor] = useState('white');
+    float [speed, setSpeed] = useState(random(10) + 1);
+    
+    return (
+        <div height='100%' width={300} flexDirection='column'>
+            <div -flex={float: cos(@t * speed) * 0.5F + 0.5F}></div>
+            <div -backgroundColor={string: color} onMouseEnter={()=^{
+                setColor('white');
+                setTextColor('black');
+            }} onMouseExit={()=^{
+                setColor('black');
+                setTextColor('white');
+            }} borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ setCount(count+1)} align='center'>
+                <h3 -color={string: textColor}>Count: {count}</h3>
+            </div>
+            <div -flex={float: 1 - (cos(@t * speed) * 0.5F + 0.5F)}></div>
+        </div>
+    );
+}
+";
             
             const string html = @"
-<div alignX='center' alignY='spaceAround' dimens='100%' backgroundColor='black'>
-        @m(0)
-        @m(1)
-        @m(2)
+<div flexDirection='row' dimens='100%' backgroundColor='black'>
+    <div -flex={float: cos(@t) * 0.5F + 0.5F}></div>
+    <Counter/>
+    <div -flex={float: 1 - (cos(@t) * 0.5F + 0.5F)}></div>
 </div>
 ";
+            var statePack = new StatePack(
+                
+            );
+            
             var macros = Macros.create(
-                "m(i)",
-                @"<div -backgroundColor={Color: new Color(0.5F + 0.5F * sin($size($$i)), 0.5F + 0.5F * sin($size($$i)*3), 0.5F + 0.5F * sin($size($$i)*2))} 
-        dimens={200} borderRadius='25%' onHover={() =^ $setSize($$i, $size($$i) + @dt * ($$i + 1))} textAlign='center'>
-            HI
-        </div>"
+                "div(html)", "<div>$$html</div>"
+            );
+
+            var components = PixelArt.Components.create(
+                Apple
             );
 
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             
-            htmlNode = await HtmlProcessor.genHTML(html, new StatePack(
-                "size", (Func<int, float>) ((i) => size[i]), "setSize", setSize
-                ), macros);
+            htmlNode = await HtmlProcessor.genHTML(html, statePack, macros, components);
 
             watch.Stop();
             Logger.log("compiling HTML took:", watch.Elapsed.TotalSeconds);

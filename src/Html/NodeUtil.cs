@@ -26,8 +26,19 @@ namespace PixelArt {
 		}
 
 		public static Color strToColor(string str) {
+
+			string lower = str.ToLower();
+			if (colorDict.ContainsKey(lower)) return colorDict[lower];
+
+			if (str.StartsWith("#")) {
+				byte r = Convert.ToByte(str.Substring(1, 2), 16);
+				byte g = Convert.ToByte(str.Substring(3, 2), 16);
+				byte b = Convert.ToByte(str.Substring(5, 2), 16);
+				
+				return new Color(r,g,b);
+			}
 			
-			return colorDict[str.ToLower()];
+			return Color.Red;
 		}
 
 

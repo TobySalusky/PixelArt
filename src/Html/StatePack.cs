@@ -13,7 +13,11 @@ namespace PixelArt {
 		public Func<float> timePassed = () => Main.timePassed;
 		public Func<float> deltaTime = () => Main.currentDeltaTime;
 
-		public static HtmlNode newNode(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) { 
+		public static float random(float max = 1F) {
+			return Util.random(max);
+		}
+
+		public static HtmlNode newNode(string tag, Dictionary<string, object> props = null, object textContent = null, HtmlNode[] children = null) { 
 			return new HtmlNode(tag, props, textContent, children);
 		}
 
@@ -24,6 +28,7 @@ namespace PixelArt {
 		public static void setupNode(object node) {
 			HtmlNode htmlNode = ((HtmlNode) node);
 			htmlNode.topDownInit();
+			htmlNode.bottomUpInit();
 			htmlNode.layoutDown();
 		}
 

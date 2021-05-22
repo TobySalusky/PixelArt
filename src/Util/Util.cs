@@ -11,6 +11,14 @@ namespace PixelArt {
 
         private static readonly Random rand = new Random();
 
+        public static int minValidIndex(this string str, string a, string b) {
+            int indexA = str.IndexOf(a);
+            int indexB = str.IndexOf(b);
+
+            if (indexB == -1 || (indexA < indexB && indexA != -1)) return indexA;
+            return indexB;
+        }
+
         public static float sin01(float rad) {
             return (float) (0.5F + 0.5F * Math.Sin(rad));
         }

@@ -15,6 +15,10 @@ namespace PixelArt {
 			this.nestCount = nestCount;
 		}
 
+		public static DelimPair searchPairs(string str, string open, string close, int searchIndex) {
+			return genPairDict(str, open, close)[searchIndex];
+		}
+
 		public string whole(string str) {
 			return str.Substring(openIndex, closeIndex - openIndex + 1);
 		}

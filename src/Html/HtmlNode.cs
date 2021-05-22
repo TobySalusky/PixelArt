@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,6 +24,9 @@ namespace PixelArt {
 
 		public List<Action> actionList;
 
+		// STATIC
+		public static readonly Dictionary<string, object> nullProps = new Dictionary<string, object>();
+		
 		// Position
 		public PositionType position;
 		public int x, y;
@@ -70,11 +74,37 @@ namespace PixelArt {
 		public enum AlignType { 
 			flexStart, flexEnd, start, end, center, spaceBetween, spaceAround, spaceEvenly
 		}
+		
+		// DEFAULTS
+		public Dictionary<string, int> fontSizeDefaults = new Dictionary<string, int> {
+			["p"] = 18,
+			["h1"] = 100,
+			["h2"] = 80,
+			["h3"] = 60,
+			["h4"] = 40,
+			["h5"] = 30,
+			["h6"] = 26,
+		};
 
-		public HtmlNode(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {
+		public HtmlNode(string tag, Dictionary<string, object> props = null, object textContent = null, HtmlNode[] children = null) {
 			this.tag = tag;
 			this.props = props;
-			this.textContent = textContent;
+			if (props == null) this.props = nullProps;
+
+			if (textContent != null) {
+				switch (textContent) {
+					case string str:
+						this.textContent = str;
+						break;
+					case Func<string> strFunc:
+						bindAction(() => {
+							string initText = this.textContent;
+							this.textContent = strFunc();
+							if (initText != this.textContent) onFontChange();
+						});
+						break;
+				}
+			}
 			this.children = children;
 
 			if (children != null) {
@@ -92,9 +122,13 @@ namespace PixelArt {
 			onResize();
 		}
 
+		public HtmlNode findBase() {
+			return (parent == null) ? this : parent.findBase();
+		}
+
 		public void onResize() {
 			// TODO:
-			parent?.layoutDown();
+			findBase().layoutDown();
 
 			if (props.ContainsKey("borderRadius")) { // TODO: abstract to method
 				if (props["borderRadius"] is string str) {
@@ -109,15 +143,15 @@ namespace PixelArt {
 		public void onFontChange() {
 			font = Fonts.getFontSafe(fontFamily, fontSize);
 			textDimens = font.MeasureString(textContent);
-			if (!propHasAny("dimens")) { 
-				if (!propHasAny("width") && !(flexDirection == DirectionType.row && flex > 0)) width = (int) textDimens.X;
-				if (!propHasAny("height") && !(flexDirection == DirectionType.column && flex > 0)) height = (int) textDimens.Y;
-			}
+			
+			if (DynamicWidth) width = (int) textDimens.X;
+			if (DynamicHeight) height = (int) textDimens.Y;
+			
 			onResize();
 		}
 
 		public bool propHasAny(string propName) {
-			return props.ContainsKey("-" + propName) || props.ContainsKey(propName);
+			return (props.ContainsKey("-" + propName) || props.ContainsKey(propName));
 		}
 
 		public T prop<T>(string propIdentifier) {
@@ -132,12 +166,38 @@ namespace PixelArt {
 			};
 		}
 
+		public bool DynamicWidth => !propHasAny("dimens") && !propHasAny("width") && !(flexDirection == DirectionType.row && propHasAny("flex"));
+		public bool DynamicHeight => !propHasAny("dimens") && !propHasAny("height") && !(flexDirection == DirectionType.column && propHasAny("flex"));
+
+		public void bottomUpInit() {
+			if (children != null) {
+				foreach (HtmlNode child in children) {
+					child.bottomUpInit();
+				}
+			}
+
+			if (children != null) { 
+				if (DynamicWidth) {
+					width = children.Select(child => child.width).Sum();
+				}
+				if (DynamicHeight) {
+					height = children.Select(child => child.height).Sum();
+				}
+			}
+		}
+
 		public void topDownInit() {
+
+			if (fontSizeDefaults.ContainsKey(tag)) {
+				fontSize = fontSizeDefaults[tag];
+				if (textContent != null) onFontChange();
+			}
+
 			processProps: {
 				if (textContent == "") textContent = null;
 				if (textContent != null) font = Fonts.getFontSafe(fontFamily, fontSize); // default
 				
-				if (props == null) goto finishProps;
+				if (props == nullProps) goto finishProps;
 				
 				if (props.ContainsKey("position")) position = Enum.Parse<PositionType>(prop<string>("position"));
 				
@@ -151,15 +211,25 @@ namespace PixelArt {
 
 				if (props.ContainsKey("width")) width = NodeUtil.widthFromProp(props["width"], parent);
 				if (props.ContainsKey("height")) height = NodeUtil.heightFromProp(props["height"], parent);
-				if (props.ContainsKey("flex")) flex = (int) props["flex"];
-				
+				if (props.ContainsKey("flex")) {
+					if (parent.flexDirection == DirectionType.column) {
+						if (!propHasAny("width") && !propHasAny("dimens")) {
+							width = NodeUtil.widthFromProp("100%", parent);
+						}
+					} else if (parent.flexDirection == DirectionType.row) {
+						if (!propHasAny("height") && !propHasAny("dimens")) {
+							height = NodeUtil.heightFromProp("100%", parent);
+						}
+					}
+					flex = (int) props["flex"];
+				}
+
 				if (props.ContainsKey("fontFamily")) fontFamily = (string) props["fontFamily"];
 				if (props.ContainsKey("fontSize")) fontSize = (int) props["fontSize"];
 				if (props.ContainsKey("textAlign")) textAlign = Enum.Parse<TextAlignType>((string) props["textAlign"]);
 
-				if (textContent != null) {
-					onFontChange();
-				}
+				if (textContent != null) onFontChange();
+				
 
 				if (props.ContainsKey("-fontSize")) {
 					object funcProp = props["-fontSize"];
@@ -214,7 +284,18 @@ namespace PixelArt {
 						bindAction(() => {
 							float initFlex = flex;
 							flex = floatFunc();
-							if (initFlex != flex) onResize();
+							if (initFlex != flex) {
+								if (parent.flexDirection == DirectionType.column) {
+									if (!propHasAny("width") && !propHasAny("dimens")) {
+										width = NodeUtil.widthFromProp("100%", parent);
+									}
+								} else if (parent.flexDirection == DirectionType.row) {
+									if (!propHasAny("height") && !propHasAny("dimens")) {
+										height = NodeUtil.heightFromProp("100%", parent);
+									}
+								}
+								onResize();
+							}
 						});
 					}
 				}
@@ -301,15 +382,21 @@ namespace PixelArt {
 						alignY = alignSub;
 					}
 
+					if (props.ContainsKey("align")) { 
+						var val = Enum.Parse<AlignType>(prop<string>("align"));
+						alignX = val;
+						alignY = val;
+					}
+					
 					if (props.ContainsKey("alignX")) { 
-						alignX = Enum.Parse<AlignType>((string) props["alignX"]);
+						alignX = Enum.Parse<AlignType>(prop<string>("alignX"));
 						if (alignX != AlignType.start && alignX != AlignType.center && alignX != AlignType.end) { 
 							flexDirection = DirectionType.row;
 						}
 					}
 					
 					if (props.ContainsKey("alignY")) { 
-						alignY = Enum.Parse<AlignType>((string) props["alignY"]);
+						alignY = Enum.Parse<AlignType>(prop<string>("alignY"));
 						if (alignY != AlignType.start && alignY != AlignType.center && alignY != AlignType.end) {
 							flexDirection = DirectionType.column;
 						}
@@ -591,8 +678,11 @@ namespace PixelArt {
 			return vec.X > x && vec.Y > y && vec.X < x + width && vec.Y < y + height;
 		}
 
+		public void topClicked(Vector2 vec) { 
+			// TODO:
+		}
+		
 		public void clicked(Vector2 vec) { 
-			Logger.log(this);
 			onPress?.Invoke();
 		}
 
@@ -607,8 +697,9 @@ namespace PixelArt {
 						}
 					}
 				}
-				if (final) clicked(vec);
+				if (final) topClicked(vec);
 
+				clicked(vec);
 				return true;
 			}
 

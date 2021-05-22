@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Microsoft.Xna.Framework;
 namespace PixelArt {
 
 	
+	[SuppressMessage("ReSharper", "StringIndexOfIsCultureSpecific.1")]
 	public static class HtmlProcessor {
 
 		public static string stringifyNode(string node) {
@@ -28,10 +30,11 @@ namespace PixelArt {
 					childNodes.Add(subNode);
 				}
 			}
-
-			string output = "newNode(";
+			
 
 			string headerContent = carrotDict[mainPair.openIndex].contents(node);
+
+			string output = "";
 			
 			processHeader: {
 				
@@ -39,6 +42,9 @@ namespace PixelArt {
 				string tag = (firstSpace == -1) ? headerContent : headerContent.Substring(0, firstSpace);
 				string data = (firstSpace == -1) ? null : headerContent.Substring(firstSpace + 1).Trim();
 
+				char firstTagLetter = tag.ToCharArray()[0];
+				output = (firstTagLetter >= 'A' && firstTagLetter <= 'Z') ? $"Create{tag}(" : "newNode(";
+				
 				output += $"'{tag}', ";
 				
 				processData: {
@@ -129,9 +135,14 @@ namespace PixelArt {
 				}
 
 				output += ")";
-			}
-			else {
-				output += $"textContent: '{mainPair.htmlContents(node).Trim()}'";
+			} else {
+				string text = mainPair.htmlContents(node).Trim();
+				
+				if (text.Contains("{")) {
+					output += $"textContent: (Func<string>)(()=^ $'{text}')";
+				} else { 
+					output += $"textContent: '{text}'";
+				}
 			}
 
 			return output + ")";
@@ -142,63 +153,105 @@ namespace PixelArt {
 				(carrotDict[htmlPair.closeIndex].closeIndex + 1) - htmlPair.openIndex);
 		}
 
-		public static async Task<HtmlNode> genHTML(string code, StatePack pack, Dictionary<string, string> macros = null) {
-			
-			applyMacros: { // TODO: make function macros work when inner parenthesis are present!!!
-				if (macros != null) {
-					foreach (string macroID in macros.Keys) {
-						if (macroID.Contains("(")) {
+		public static string defineComponent(string code) {
 
-							int openInd = macroID.IndexOf("(");
-							string paramString = macroID.Substring(openInd + 1, macroID.LastIndexOf(")") - openInd - 1);
+			string before = "const ";
+			string tagEtc = code.Substring(code.IndexOf(before) + before.Length);
+			string tag = tagEtc.sub(0, tagEtc.minValidIndex(" ", "="));
 
-							var paramNames = paramString.Split(",").Select(str => str.Trim()).ToArray();
+			before = "return";
+			string afterReturn = code.Substring(code.IndexOf(before) + before.Length).Trim();
+			DelimPair pair = DelimPair.genPairDict(afterReturn, "(", ")")[0];
+			string returnContents = pair.contents(afterReturn).Trim();
 
-							string find = "@" + macroID.Substring(0, openInd) + "(";
-							int currIndex = code.IndexOf(find);
-							while (currIndex != -1) {
-								var pair = DelimPair.genPairDict(code, "(", ")")[currIndex+macroID.Substring(0, openInd).Length+1];
+			string stateStr = "";
+			state: { 
+				string stateDefinitions = code.sub(code.IndexOf("{") + 1, code.IndexOf(before));
+				string[] lines = stateDefinitions.Split(new [] { '\r', '\n' });
+				foreach (string str in lines) {
+					string line = str.Trim();
+					const string stateOpen = "useState(";
+					int stateIndex = line.IndexOf(stateOpen);
+					
+					if (stateIndex != -1) {
+						string type = line.Substring(0, line.IndexOf(" "));
+						string varNameContents = DelimPair.searchPairs(line, "[", "]", line.IndexOf("[")).contents(line);
+						string[] varNames = varNameContents.Split(",").Select(s => s.Trim()).ToArray();
+						
+						string initValue = DelimPair.searchPairs(line, "(", ")", line.IndexOf("(")).contents(line);
 
-								string content = pair.contents(code);
-								var valStrs = content.Split(",").Select(str => str.Trim()).ToArray();
-								
-								Logger.log(valStrs.Length);
-								
-								string macroStr = macros[macroID];
-								for (int i = 0; i < paramNames.Length; i++) {
-									Logger.log("hello",paramNames[i], valStrs[i]);
-									macroStr = macroStr.Replace($"$${paramNames[i]}", valStrs[i]);
-								}
-
-								code = code.Substring(0, currIndex) + macroStr + code.Substring(pair.closeIndex + 1);
-
-								currIndex = code.IndexOf(find);
-							}
-							
-						} else {
-							code = code.Replace($"@{macroID}", macros[macroID]);
-						}
+						stateStr += $@"
+{type} {varNames[0]} = {initValue};
+Action<{type}> {varNames[1]} = (val) => {varNames[0]} = val;
+";
 					}
 				}
 			}
+			return @$"
+public HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {{
+	{stateStr}
+	return {stringifyNode(returnContents)};
+}}
+";
+		}
+
+		public static string applyMacros(string str, Dictionary<string, string> macros) { // TODO: allow recursive macros!
+			Logger.log("hi");
+			
+			foreach (string macroID in macros.Keys) {
+				if (macroID.Contains("(")) {
+
+					int openInd = macroID.IndexOf("(");
+					string paramString = macroID.Substring(openInd + 1, macroID.LastIndexOf(")") - openInd - 1);
+
+					var paramNames = paramString.Split(",").Select(str => str.Trim()).ToArray();
+
+					string find = "@" + macroID.Substring(0, openInd) + "(";
+					int currIndex = str.IndexOf(find);
+					while (currIndex != -1) {
+						var pair = DelimPair.genPairDict(str, "(", ")")[currIndex+macroID.Substring(0, openInd).Length+1];
+
+						string content = pair.contents(str);
+						var valStrs = content.Split(",").Select(str => str.Trim()).ToArray();
+								
+						Logger.log(valStrs.Length);
+								
+						string macroStr = macros[macroID];
+						for (int i = 0; i < paramNames.Length; i++) {
+							Logger.log("hello",paramNames[i], valStrs[i]);
+							macroStr = macroStr.Replace($"$${paramNames[i]}", valStrs[i]);
+						}
+
+						str = str.Substring(0, currIndex) + macroStr + str.Substring(pair.closeIndex + 1);
+
+						currIndex = str.IndexOf(find);
+					}
+							
+				} else {
+					str = str.Replace($"@{macroID}", macros[macroID]);
+				}
+			}
+
+			return str;
+		}
+
+		public static async Task<HtmlNode> genHTML(string code, StatePack pack, Dictionary<string, string> macros = null, string[] components = null) {
+
+			if (macros != null) code = applyMacros(code, macros);
 			
 			removeOpenClosed: {
-				string newCode = "";
-				int lastIndex = 0;
-				var matches = Regex.Matches(code, @"\<([a-zA-Z0-9]+)(\s([a-zA-Z0-9${}:=\[\]\'\s]+))?(/?)\>");
+				while (code.Contains("/>")) {
+					int endIndex = code.IndexOf("/>");
+					DelimPair pair = DelimPair.genPairDict(code, "<", ">")[endIndex + 1];
+					int startIndex = pair.openIndex;
 
-				foreach (Match match in matches) {
+					string str = pair.whole(code);
+					string tag = (str.Contains(" ")) ? str.sub(1, str.IndexOf(" ")) :  str.sub(1, str.IndexOf("/"));
 
-					string str = $"<{match.Groups[1].Value}{(match.Groups[3].Value == "" ? "" : " " + match.Groups[3].Value.Trim())}>";
-					if (match.Groups[4].Value == "/") str += $"</{match.Groups[1].Value}>";
+					str = str.Substring(0, str.Length - 2) + $"></{tag}>";
 
-					newCode += code.Substring(lastIndex, match.Index - lastIndex) + str;
-					lastIndex = match.Index + match.Length;
+					code = code.Substring(0, startIndex) + str + code.Substring(endIndex + 2);
 				}
-
-				newCode += code.Substring(lastIndex);
-			
-				code = newCode;
 			}
 
 			Logger.log("OUTPUT HTML===============\n\n" + code);
@@ -208,7 +261,24 @@ namespace PixelArt {
 			code += "\nsetupNode(node);";
 			code += "\nreturn node;";
 
-			code = "using PixelArt;\nusing Microsoft.Xna.Framework;\n" + code;
+			string preHTML = @"
+using PixelArt;
+using Microsoft.Xna.Framework;
+
+int a = 5;
+Func<int> test = () => a;
+Action<int> setTest = (i) => a = i;
+
+
+
+";
+			if (components != null) { 
+				foreach (string component in components) {
+					preHTML += defineComponent((macros == null) ? component : applyMacros(component, macros));
+				}
+			}
+
+			code = preHTML + code;
 
 			foreach (string key in pack.vars.Keys) {
 				code = code.Replace($"${key}", $"(({pack.types[key]})vars[\"{key}\"])");
