@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -139,7 +140,7 @@ namespace PixelArt {
 				string text = mainPair.htmlContents(node).Trim();
 				
 				if (text.Contains("{")) {
-					output += $"textContent: (Func<string>)(()=^ $'{text}')";
+					output += $"textContent: (Func<string>)(()=^ $'{text}')"; // TODO: don't use special string, it screws up turnaries
 				} else { 
 					output += $"textContent: '{text}'";
 				}
@@ -175,7 +176,8 @@ namespace PixelArt {
 					
 					if (stateIndex != -1) {
 						string type = line.Substring(0, line.IndexOf(" "));
-						string varNameContents = DelimPair.searchPairs(line, "[", "]", line.IndexOf("[")).contents(line);
+						string afterType = line.Substring(line.IndexOf(" ") + 1);
+						string varNameContents = DelimPair.searchPairs(afterType, "[", "]", afterType.IndexOf("[")).contents(afterType);
 						string[] varNames = varNameContents.Split(",").Select(s => s.Trim()).ToArray();
 						
 						string initValue = DelimPair.searchPairs(line, "(", ")", line.IndexOf("(")).contents(line);
@@ -287,6 +289,29 @@ Action<int> setTest = (i) => a = i;
 			code = code.Replace("^^", "<");
 			code = code.Replace("^", ">");
 			
+			
+			inlineArray: {
+
+				int minIndex() => code.minValidIndex("arr(", "arr[");
+
+				while (minIndex() != -1) {
+					int index = minIndex();
+
+					string type = "";
+					int bracketIndex = index + 3;
+					if (code.Substring(bracketIndex, 1) == "(") {
+						DelimPair pair = DelimPair.searchPairs(code, "(", ")", bracketIndex);
+						bracketIndex = pair.closeIndex + 1;
+						type = pair.contents(code);
+					}
+
+					DelimPair contentPair = DelimPair.searchPairs(code, "[", "]", bracketIndex);
+					string arrContents = contentPair.contents(code);
+					code = code.Substring(0, index) + $"(new {type}[]{{{arrContents}}})" + code.Substring(contentPair.closeIndex + 1);
+				}
+			}
+
+
 			Logger.log("OUTPUT C#===============\n\n" + code);
 
 			object htmlObj = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System", "System.Collections.Generic").AddReferences(

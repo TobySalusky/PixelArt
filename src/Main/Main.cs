@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -211,28 +212,26 @@ namespace PixelArt
 const Counter = () => {
     
     int [count, setCount] = useState(0);
-    string [color, setColor] = useState('black');
-    string [textColor, setTextColor] = useState('white');
-    float [speed, setSpeed] = useState(random(10) + 1);
+    string[] [color, setColor] = useState(arr['black', 'white']);
+    float [speed, setSpeed] = useState(3);
     
     return (
         <div height='100%' width={300} flexDirection='column'>
             <div -flex={float: cos(@t * speed) * 0.5F + 0.5F}></div>
-            <div -backgroundColor={string: color} onMouseEnter={()=^{
-                setColor('white');
-                setTextColor('black');
+            <div -backgroundColor={string: color[0]} onMouseEnter={()=^{
+                setColor(arr['white', 'black']);
             }} onMouseExit={()=^{
-                setColor('black');
-                setTextColor('white');
+                setColor(arr['black', 'white']);
             }} borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ setCount(count+1)} align='center'>
-                <h3 -color={string: textColor}>Count: {count}</h3>
+                <h3 -color={string: color[1]}>Count: {count}</h3>
+                <p>{((count ^ 10) ? 'danny is bad' : '')}</p>
             </div>
             <div -flex={float: 1 - (cos(@t * speed) * 0.5F + 0.5F)}></div>
         </div>
     );
 }
 ";
-            
+
             const string html = @"
 <div flexDirection='row' dimens='100%' backgroundColor='black'>
     <div -flex={float: cos(@t) * 0.5F + 0.5F}></div>

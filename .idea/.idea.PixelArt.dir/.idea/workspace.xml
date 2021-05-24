@@ -23,21 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c742f77-da5b-4ff1-9600-6aa6b2bad433" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Html/Components.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Str.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Html/DelimPair.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/DelimPair.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Html/HtmlNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlNode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Html/NodeUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/NodeUtil.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Html/StatePack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/StatePack.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Main.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Util/Util.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Util.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,11 +101,11 @@
         <option value="$PROJECT_DIR$/src/Html/Components.cs" />
         <option value="$PROJECT_DIR$/src/Util/Util.cs" />
         <option value="$PROJECT_DIR$/src/Html/DelimPair.cs" />
-        <option value="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" />
         <option value="$PROJECT_DIR$/src/Html/NodeUtil.cs" />
         <option value="$PROJECT_DIR$/src/Html/HtmlNode.cs" />
         <option value="$PROJECT_DIR$/src/Html/StatePack.cs" />
         <option value="$PROJECT_DIR$/src/Main/Main.cs" />
+        <option value="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" />
       </list>
     </option>
   </component>
@@ -225,6 +217,7 @@
       <workItem from="1621556706792" duration="1205000" />
       <workItem from="1621624496841" duration="14051000" />
       <workItem from="1621657362927" duration="6695000" />
+      <workItem from="1621706274478" duration="5433000" />
     </task>
     <servers />
   </component>
@@ -253,22 +246,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="636" y="256" width="648" height="524" key="#Context_Actions/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621627411649" />
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1621664097013">
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1621714502088">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621664097013" />
-    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1621664097013">
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621714502088" />
+    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1621714502088">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621664097013" />
-    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1621664097012">
+    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621714502088" />
+    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1621714502088">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621664097012" />
-    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1621664097013">
+    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621714502088" />
+    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1621714502088">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621664097013" />
+    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1621714502088" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1621657746429">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
