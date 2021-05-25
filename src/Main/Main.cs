@@ -208,23 +208,28 @@ namespace PixelArt
         public static async void startHTML() { 
             // HTML TESTING
 
+            // TODO: masking
+            // https://medium.com/@sfranks/i-originally-wrote-this-for-the-best-way-to-mask-2d-sprites-in-xna-game-development-stack-949cf7bd7421
+            
             const string Apple = @"
 const Counter = () => {
     
     int [count, setCount] = useState(0);
-    string[] [color, setColor] = useState(arr['black', 'white']);
+    
+    var inactive = arr['black', 'white'];
+    var active = arr['white', 'black'];
+    string[] color = inactive;
     float [speed, setSpeed] = useState(3);
     
     return (
         <div height='100%' width={300} flexDirection='column'>
             <div -flex={float: cos(@t * speed) * 0.5F + 0.5F}></div>
             <div -backgroundColor={string: color[0]} onMouseEnter={()=^{
-                setColor(arr['white', 'black']);
+                color = active;
             }} onMouseExit={()=^{
-                setColor(arr['black', 'white']);
-            }} borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ setCount(count+1)} align='center'>
+                color = inactive;
+            }} borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ count += 1} align='center'>
                 <h3 -color={string: color[1]}>Count: {count}</h3>
-                <p>{((count ^ 10) ? 'danny is bad' : '')}</p>
             </div>
             <div -flex={float: 1 - (cos(@t * speed) * 0.5F + 0.5F)}></div>
         </div>
@@ -232,10 +237,22 @@ const Counter = () => {
 }
 ";
 
+            const string Grape = @"
+const Test = () => {
+    
+    return (
+        <div backgroundColor='purple' dimens={300}>
+            <Counter></Counter>
+        </div>
+    );
+}
+";
+            
             const string html = @"
 <div flexDirection='row' dimens='100%' backgroundColor='black'>
     <div -flex={float: cos(@t) * 0.5F + 0.5F}></div>
     <Counter/>
+    <Test/>
     <div -flex={float: 1 - (cos(@t) * 0.5F + 0.5F)}></div>
 </div>
 ";
@@ -248,7 +265,7 @@ const Counter = () => {
             );
 
             var components = PixelArt.Components.create(
-                Apple
+                Apple, Grape
             );
 
             var watch = new System.Diagnostics.Stopwatch();

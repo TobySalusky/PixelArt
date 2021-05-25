@@ -7,12 +7,28 @@ namespace PixelArt {
 		public int closeIndex, closeLen;
 		public int nestCount;
 
+		public int AfterClose => closeIndex + closeLen;
+
+		public static readonly (string, string) Parens = ("(", ")"), Carrots = ("<", ">"),
+			SquareBrackets = ("[", "]"), CurlyBrackets = ("{", "}"), 
+			Quotes = ("\"", "\""), SingleQuotes = ("'", "'");
+		
 		public DelimPair(int openIndex, int closeIndex, int openLen = 1, int closeLen = 1, int nestCount = 0) {
 			this.openIndex = openIndex;
 			this.closeIndex = closeIndex;
 			this.openLen = openLen;
 			this.closeLen = closeLen;
 			this.nestCount = nestCount;
+		}
+
+		public static Dictionary<(string, string), List<DelimPair>> searchAll(string str, params (string, string)[] delimTypes) {
+			var output = new Dictionary<(string, string), List<DelimPair>>();
+
+			foreach ((string open, string close) in delimTypes) {
+				output[(open, close)] = genPairs(str, open, close);
+			}
+			
+			return output;
 		}
 
 		public static DelimPair searchPairs(string str, string open, string close, int searchIndex) {

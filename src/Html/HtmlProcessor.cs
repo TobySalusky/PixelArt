@@ -140,7 +140,19 @@ namespace PixelArt {
 				string text = mainPair.htmlContents(node).Trim();
 				
 				if (text.Contains("{")) {
-					output += $"textContent: (Func<string>)(()=^ $'{text}')"; // TODO: don't use special string, it screws up turnaries
+					string textExpression = "";
+					while (text.Contains("{")) {
+						int index = text.IndexOf("{");
+						DelimPair pair = text.searchPairs("{", "}", index);
+						if (textExpression != "") textExpression += "+";
+						textExpression += $"'{text.Substring(0, index)}'+({pair.contents(text)})";
+						text = text.Substring(pair.AfterClose);
+					}
+
+					textExpression += $"+'{text}'";
+
+					string dynamicText = $"(Func<string>)(()=^ {textExpression})";
+					output += $"textContent: {dynamicText}";
 				} else { 
 					output += $"textContent: '{text}'";
 				}
@@ -177,7 +189,7 @@ namespace PixelArt {
 					if (stateIndex != -1) {
 						string type = line.Substring(0, line.IndexOf(" "));
 						string afterType = line.Substring(line.IndexOf(" ") + 1);
-						string varNameContents = DelimPair.searchPairs(afterType, "[", "]", afterType.IndexOf("[")).contents(afterType);
+						string varNameContents = afterType.searchPairs("[", "]", afterType.IndexOf("[")).contents(afterType);
 						string[] varNames = varNameContents.Split(",").Select(s => s.Trim()).ToArray();
 						
 						string initValue = DelimPair.searchPairs(line, "(", ")", line.IndexOf("(")).contents(line);
@@ -186,6 +198,8 @@ namespace PixelArt {
 {type} {varNames[0]} = {initValue};
 Action<{type}> {varNames[1]} = (val) => {varNames[0]} = val;
 ";
+					} else if (line != "") {
+						stateStr += $"\n{line}";
 					}
 				}
 			}
@@ -264,14 +278,9 @@ public HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null,
 			code += "\nreturn node;";
 
 			string preHTML = @"
+using System.Linq;
 using PixelArt;
 using Microsoft.Xna.Framework;
-
-int a = 5;
-Func<int> test = () => a;
-Action<int> setTest = (i) => a = i;
-
-
 
 ";
 			if (components != null) { 
@@ -284,6 +293,15 @@ Action<int> setTest = (i) => a = i;
 
 			foreach (string key in pack.vars.Keys) {
 				code = code.Replace($"${key}", $"(({pack.types[key]})vars[\"{key}\"])");
+			}
+
+			mapToSelect: {
+				while (code.Contains(".map(")) {
+					int index = code.IndexOf(".map(");
+					DelimPair pair = code.searchPairs("(", ")", index + 4);
+
+					code = code.Substring(0, index) + $".Select({pair.contents(code)}).ToArray()" + code.Substring(pair.closeIndex + 1);
+				}
 			}
 			code = code.Replace("'", "\"");
 			code = code.Replace("^^", "<");
@@ -300,12 +318,12 @@ Action<int> setTest = (i) => a = i;
 					string type = "";
 					int bracketIndex = index + 3;
 					if (code.Substring(bracketIndex, 1) == "(") {
-						DelimPair pair = DelimPair.searchPairs(code, "(", ")", bracketIndex);
+						DelimPair pair = code.searchPairs("(", ")", bracketIndex);
 						bracketIndex = pair.closeIndex + 1;
 						type = pair.contents(code);
 					}
 
-					DelimPair contentPair = DelimPair.searchPairs(code, "[", "]", bracketIndex);
+					DelimPair contentPair = code.searchPairs("[", "]", bracketIndex);
 					string arrContents = contentPair.contents(code);
 					code = code.Substring(0, index) + $"(new {type}[]{{{arrContents}}})" + code.Substring(contentPair.closeIndex + 1);
 				}

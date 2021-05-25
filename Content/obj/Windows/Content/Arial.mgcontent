@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>D:/Users/Tobafett/Documents/GitHub/PixelArt/Content/Arial.spritefont</SourceFile>
-  <SourceTime>2021-04-02T13:29:25.1689315-04:00</SourceTime>
-  <DestFile>D:/Users/Tobafett/Documents/GitHub/PixelArt/Content/bin/Windows/Content/Arial.xnb</DestFile>
-  <DestTime>2021-05-18T19:17:22.4111939-04:00</DestTime>
+  <SourceFile>C:/Users/815328/Documents/PixelArt/Content/Arial.spritefont</SourceFile>
+  <SourceTime>2021-05-11T11:20:24.9297992-04:00</SourceTime>
+  <DestFile>C:/Users/815328/Documents/PixelArt/Content/bin/Windows/Content/Arial.xnb</DestFile>
+  <DestTime>2021-05-25T10:34:30.7327283-04:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-04:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
