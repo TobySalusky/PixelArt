@@ -216,8 +216,7 @@ const Counter = () => {
     
     int [count, setCount] = useState(0);
     
-    var inactive = arr['black', 'white'];
-    var active = arr['white', 'black'];
+    var inactive = arr['black', 'white'], active = arr['white', 'black'];
     string[] color = inactive;
     float [speed, setSpeed] = useState(3);
     

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PixelArt {
 		public class DelimPair { // TODO: gen ordered list
@@ -19,6 +20,10 @@ namespace PixelArt {
 			this.openLen = openLen;
 			this.closeLen = closeLen;
 			this.nestCount = nestCount;
+		}
+
+		public static bool allNestOf(int targetNest, Dictionary<(string, string), int> dict) {
+			return dict.Values.All(val => val == targetNest);
 		}
 
 		public static Dictionary<(string, string), List<DelimPair>> searchAll(string str, params (string, string)[] delimTypes) {

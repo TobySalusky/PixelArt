@@ -145,8 +145,8 @@ namespace PixelArt {
 						int index = text.IndexOf("{");
 						DelimPair pair = text.searchPairs("{", "}", index);
 						if (textExpression != "") textExpression += "+";
-						textExpression += $"'{text.Substring(0, index)}'+({pair.contents(text)})";
-						text = text.Substring(pair.AfterClose);
+						textExpression += $"'{text.beforePair(pair)}'+({pair.contents(text)})";
+						text = text.afterPair(pair);
 					}
 
 					textExpression += $"+'{text}'";
@@ -199,6 +199,24 @@ namespace PixelArt {
 Action<{type}> {varNames[1]} = (val) => {varNames[0]} = val;
 ";
 					} else if (line != "") {
+						if (line.StartsWith("var")) { // multi-inline var declarations
+							var commas = line.allIndices(",").Where((index) => DelimPair.allNestOf(0,
+								line.nestAmountsLen(index, 1,
+									DelimPair.Parens, DelimPair.CurlyBrackets, DelimPair.SquareBrackets,
+									DelimPair.Quotes, DelimPair.SingleQuotes, DelimPair.Carrots)));
+
+							if (commas.Any()) {
+								var declarations = line.splitWithout(commas);
+								line = "";
+								foreach (string declaration in declarations) {
+									string varDeclaration = declaration.Trim();
+									if (!varDeclaration.StartsWith("var ")) varDeclaration = "var " + varDeclaration;
+									if (!varDeclaration.EndsWith(";")) varDeclaration += ";";
+									line += varDeclaration + "\n";
+								}
+							}
+						}
+
 						stateStr += $"\n{line}";
 					}
 				}
