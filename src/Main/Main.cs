@@ -212,24 +212,14 @@ namespace PixelArt
             // https://medium.com/@sfranks/i-originally-wrote-this-for-the-best-way-to-mask-2d-sprites-in-xna-game-development-stack-949cf7bd7421
             
             const string Apple = @"
-const Counter = () => {
-    
-    int [count, setCount] = useState(0);
-    
-    var inactive = arr['black', 'white'], active = arr['white', 'black'];
-    string[] color = inactive;
+const CounterColumn = () => {
+
     float [speed, setSpeed] = useState(3);
     
     return (
         <div height='100%' width={300} flexDirection='column'>
             <div -flex={float: cos(@t * speed) * 0.5F + 0.5F}></div>
-            <div -backgroundColor={string: color[0]} onMouseEnter={()=^{
-                color = active;
-            }} onMouseExit={()=^{
-                color = inactive;
-            }} borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ count += 1} align='center'>
-                <h3 -color={string: color[1]}>Count: {count}</h3>
-            </div>
+            <Counter/>
             <div -flex={float: 1 - (cos(@t * speed) * 0.5F + 0.5F)}></div>
         </div>
     );
@@ -237,21 +227,33 @@ const Counter = () => {
 ";
 
             const string Grape = @"
-const Test = () => {
+const Counter = () => {
+    
+    int count = 0;
+    
+    var colorSets{active, inactive} = arr[
+        arr['white', 'black'], 
+        arr['black', 'white']
+    ];
+    string[] color{back, text} = colorSets.inactive;
     
     return (
-        <div backgroundColor='purple' dimens={300}>
-            <Counter></Counter>
+        <div -backgroundColor={string: color.back} onMouseEnter={()=^{
+                color = colorSets.active;
+            }} onMouseExit={()=^{
+                color = colorSets.inactive;
+            }} borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ count += 1} align='center'
+        >
+            <h3 -color={string: color.text}>Count: {count}</h3>
         </div>
     );
 }
 ";
-            
+
             const string html = @"
 <div flexDirection='row' dimens='100%' backgroundColor='black'>
     <div -flex={float: cos(@t) * 0.5F + 0.5F}></div>
-    <Counter/>
-    <Test/>
+    <CounterColumn/>
     <div -flex={float: 1 - (cos(@t) * 0.5F + 0.5F)}></div>
 </div>
 ";

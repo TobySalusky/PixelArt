@@ -167,18 +167,19 @@ namespace PixelArt {
 		}
 
 		public static string defineComponent(string code) {
-
+			
 			string before = "const ";
 			string tagEtc = code.Substring(code.IndexOf(before) + before.Length);
 			string tag = tagEtc.sub(0, tagEtc.minValidIndex(" ", "="));
 
-			before = "return";
+			before = "return"; // TODO: check nesting b/c returns in functions are possible
 			string afterReturn = code.Substring(code.IndexOf(before) + before.Length).Trim();
 			DelimPair pair = DelimPair.genPairDict(afterReturn, "(", ")")[0];
 			string returnContents = pair.contents(afterReturn).Trim();
+			returnContents = removeOpenClosed(returnContents);
 
 			string stateStr = "";
-			state: { 
+			state: {
 				string stateDefinitions = code.sub(code.IndexOf("{") + 1, code.IndexOf(before));
 				string[] lines = stateDefinitions.Split(new [] { '\r', '\n' });
 				foreach (string str in lines) {
@@ -221,12 +222,56 @@ Action<{type}> {varNames[1]} = (val) => {varNames[0]} = val;
 					}
 				}
 			}
-			return @$"
+			
+			var namedArrayElements = new Dictionary<string, string>();
+			generateNamedArrayElements: {
+				const string namedElRegex = @"}\s*=";
+
+
+				var match = Regex.Match(stateStr, namedElRegex);
+				while (match.Success) {
+
+					DelimPair bracketPair = stateStr.searchPairs("{", "}", match.Index);
+
+					string content = bracketPair.contents(stateStr);
+					string[] elementNames = content.Split(",");
+
+					int nameEnd = -1;
+					string arrName = "";
+					var chars = stateStr.ToCharArray();
+					for (int i = bracketPair.openIndex - 1; i >= 0; i--) {
+						if (nameEnd == -1) {
+							if (chars[i] != ' ') nameEnd = i;
+						}
+						else if (chars[i] == ' ') {
+							arrName = stateStr.sub(i + 1, nameEnd + 1);
+							break;
+						}
+					}
+
+					for (int i = 0; i < elementNames.Length; i++) {
+						namedArrayElements[$"{arrName}.{elementNames[i].Trim()}"] = $"{arrName}[{i}]";
+					}
+
+					stateStr = bracketPair.removeFrom(stateStr);
+					match = Regex.Match(stateStr, namedElRegex);
+				}
+			}
+
+			string output = @$"
 public HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {{
 	{stateStr}
 	return {stringifyNode(returnContents)};
 }}
 ";
+			
+			applyNamedArrayElements: {
+				foreach (string key in namedArrayElements.Keys) {
+					output = output.Replace(key, namedArrayElements[key]);
+				}
+			}
+
+			return output;
 		}
 
 		public static string applyMacros(string str, Dictionary<string, string> macros) { // TODO: allow recursive macros!
@@ -269,24 +314,28 @@ public HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null,
 			return str;
 		}
 
+		public static string removeOpenClosed(string code) {
+			while (code.Contains("/>")) {
+				int endIndex = code.IndexOf("/>");
+				DelimPair pair = DelimPair.genPairDict(code, "<", ">")[endIndex + 1];
+				int startIndex = pair.openIndex;
+
+				string str = pair.whole(code);
+				string tag = (str.Contains(" ")) ? str.sub(1, str.IndexOf(" ")) :  str.sub(1, str.IndexOf("/"));
+
+				str = str.Substring(0, str.Length - 2) + $"></{tag}>";
+
+				code = code.Substring(0, startIndex) + str + code.Substring(endIndex + 2);
+			}
+
+			return code;
+		}
+
 		public static async Task<HtmlNode> genHTML(string code, StatePack pack, Dictionary<string, string> macros = null, string[] components = null) {
 
 			if (macros != null) code = applyMacros(code, macros);
-			
-			removeOpenClosed: {
-				while (code.Contains("/>")) {
-					int endIndex = code.IndexOf("/>");
-					DelimPair pair = DelimPair.genPairDict(code, "<", ">")[endIndex + 1];
-					int startIndex = pair.openIndex;
 
-					string str = pair.whole(code);
-					string tag = (str.Contains(" ")) ? str.sub(1, str.IndexOf(" ")) :  str.sub(1, str.IndexOf("/"));
-
-					str = str.Substring(0, str.Length - 2) + $"></{tag}>";
-
-					code = code.Substring(0, startIndex) + str + code.Substring(endIndex + 2);
-				}
-			}
+			code = removeOpenClosed(code);
 
 			Logger.log("OUTPUT HTML===============\n\n" + code);
 

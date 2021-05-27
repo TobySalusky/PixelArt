@@ -26,6 +26,10 @@ namespace PixelArt {
 			return dict.Values.All(val => val == targetNest);
 		}
 
+		public string removeFrom(string str) {
+			return str.Substring(0, openIndex) + str.Substring(closeIndex + closeLen);
+		}
+
 		public static Dictionary<(string, string), List<DelimPair>> searchAll(string str, params (string, string)[] delimTypes) {
 			var output = new Dictionary<(string, string), List<DelimPair>>();
 

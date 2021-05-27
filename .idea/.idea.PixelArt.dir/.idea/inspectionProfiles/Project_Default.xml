@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="19">
+          <list size="22">
             <item index="0" class="java.lang.String" itemvalue="fontsize" />
             <item index="1" class="java.lang.String" itemvalue="backgroundcolor" />
             <item index="2" class="java.lang.String" itemvalue="bordercolor" />
@@ -24,6 +24,9 @@
             <item index="16" class="java.lang.String" itemvalue="-dimens" />
             <item index="17" class="java.lang.String" itemvalue="onpress" />
             <item index="18" class="java.lang.String" itemvalue="textalign" />
+            <item index="19" class="java.lang.String" itemvalue="onmouseexit" />
+            <item index="20" class="java.lang.String" itemvalue="-color" />
+            <item index="21" class="java.lang.String" itemvalue="-flex" />
           </list>
         </value>
       </option>
