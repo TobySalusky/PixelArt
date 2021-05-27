@@ -225,7 +225,7 @@ const CounterColumn = () => {
     );
 }
 ";
-
+            
             const string Grape = @"
 const Counter = () => {
     
@@ -238,11 +238,8 @@ const Counter = () => {
     string[] color{back, text} = colorSets.inactive;
     
     return (
-        <div -backgroundColor={string: color.back} onMouseEnter={()=^{
-                color = colorSets.active;
-            }} onMouseExit={()=^{
-                color = colorSets.inactive;
-            }} borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ count += 1} align='center'
+        <div -backgroundColor={string: color.back} onMouseEnter={()=^color = colorSets.active} onMouseExit={()=^color = colorSets.inactive}
+         borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ count += 1} align='center'
         >
             <h3 -color={string: color.text}>Count: {count}</h3>
         </div>
@@ -252,9 +249,9 @@ const Counter = () => {
 
             const string html = @"
 <div flexDirection='row' dimens='100%' backgroundColor='black'>
-    <div -flex={float: cos(@t) * 0.5F + 0.5F}></div>
+    <div -flex={float: cos(@t) * 0.5F + 0.5F}/>
     <CounterColumn/>
-    <div -flex={float: 1 - (cos(@t) * 0.5F + 0.5F)}></div>
+    <div -flex={float: 1 - (cos(@t) * 0.5F + 0.5F)}/>
 </div>
 ";
             var statePack = new StatePack(
