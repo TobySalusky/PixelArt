@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -57,34 +57,61 @@ namespace PixelArt {
 		public static class CacheData {
 
 			public static string[] CachedInput() {
-				return new []{""};
+				return new string[]{ @"
+<div flexDirection='row' dimens='100%' backgroundColor='black' alignX='flexEnd' alignY='center'>
+    <div dimens={200} backgroundColor='red'/>
+    <Test/>
+</div>
+", @"
+const Test = () => {
+    
+    bool [val, setVal] = useState(false);
+
+
+    return (
+        <div onTick={()=^{
+            if (val != ((int)@t % 2 == 0)) {
+                setVal(!val);    
+            }
+        }}>
+            {(val) ? 
+                    null :
+                    <div align='center'>
+                        <div backgroundColor='yellow' dimens={150} />
+                        <div backgroundColor='lightblue' dimens={75} />
+                    </div>}
+        </div>
+    );
+}
+" };
 			}
 
 			public static HtmlNode CachedNode() {
-				HtmlNode CreateTest(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {
-					HtmlNode ___node = null;
+				/*IMPORTS_DONE*/
 
-					bool val = false;
-					Action<bool> setVal = (___val) => {
-						val = ___val;
-						___node.stateChangeDown();
-					};
+HtmlNode CreateTest(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {
+	HtmlNode ___node = null;
+	
+bool val = false;
+Action<bool> setVal = (___val) => {
+	val = ___val;
+	___node.stateChangeDown();
+};
 
-					___node = newNode("div", props: new Dictionary<string, object> {["onTick"]=((Action)(()=>{
-						if (val != ((int)timePassed() % 2 == 0)) {
-							setVal(!val);
-						}
-					}))}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr(((val) ?
-						null :
-						newNode("div", props: new Dictionary<string, object> {["align"]="center"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="yellow", ["dimens"]=(150)}, textContent:
-							""), newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="lightblue", ["dimens"]=(75)}, textContent: "")))))));
-					return ___node;
-				}
-				HtmlNode node = newNode("div", props: new Dictionary<string, object> {["flexDirection"]="row", ["dimens"]="100%", ["backgroundColor"]="black", ["alignX"]="flexEnd", ["alignY"]="center"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["dimens"]=(200), ["backgroundColor"]="red"}, textContent: ""), CreateTest("Test", textContent: "")));
-				setupNode(node);
-				return node;
+	___node = newNode("div", props: new Dictionary<string, object> {["onTick"]=((Action)(()=>{
+            if (val != ((int)timePassed() % 2 == 0)) {
+                setVal(!val);    
+            }
+        }))}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr(((val) ? 
+                    null :
+                    newNode("div", props: new Dictionary<string, object> {["align"]="center"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="yellow", ["dimens"]=(150)}, textContent: ""), newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="lightblue", ["dimens"]=(75)}, textContent: "")))))));
+	return ___node;
+}
+HtmlNode node = newNode("div", props: new Dictionary<string, object> {["flexDirection"]="row", ["dimens"]="100%", ["backgroundColor"]="black", ["alignX"]="flexEnd", ["alignY"]="center"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["dimens"]=(200), ["backgroundColor"]="red"}, textContent: ""), CreateTest("Test", textContent: "")));
+setupNode(node);
+return node;
 			}
 		}
-		/*CACHE_END*/
+/*CACHE_END*/
 	}
 }

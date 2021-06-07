@@ -418,7 +418,13 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 		public static async Task<HtmlNode> genHTML(string code, StatePack pack, Dictionary<string, string> macros = null, string[] components = null) {
 
 			string inputString = code;
-			
+			string[] inputArr = new List<string> {inputString}.Concat(components ?? new string[]{}).ToArray();
+
+			if (HtmlSettings.useCache && HtmlCache.IsCached(inputArr)) {
+				Logger.log("Using Cached HTML");
+				return HtmlCache.UseCache();
+			}
+
 			if (macros != null) code = applyMacros(code, macros);
 
 			code = removeOpenClosed(code);
@@ -487,8 +493,7 @@ using Microsoft.Xna.Framework;
 
 			if (HtmlSettings.useCache) {
 				string toCache = code.Substring(code.IndexOf("/*IMPORTS_DONE*/"));
-				string[] input = new List<string> {inputString}.Concat(components ?? new string[]{}).ToArray();
-				HtmlCache.CacheHtml(input, toCache);
+				HtmlCache.CacheHtml(inputArr, toCache);
 			}
 
 			object htmlObj = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System", "System.Collections.Generic").AddReferences(

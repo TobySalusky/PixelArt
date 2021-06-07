@@ -97,10 +97,7 @@ namespace PixelArt
             var form = (Form)Form.FromHandle(Window.Handle);
             form.WindowState = FormWindowState.Maximized;
             
-            Logger.log("size", form.Size);
-
             screenDimen = new Vector2(1920, 1080);
-            Logger.log(screenDimen);
             screenCenter = screenDimen / 2;
             screenWidth = (int) screenDimen.X;
             screenHeight = (int) screenDimen.Y;
@@ -108,9 +105,6 @@ namespace PixelArt
 
         protected override void Initialize()
         {
-
-            //Logger.log(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-            Logger.log(GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height);
             
             var form = (Form)Form.FromHandle(Window.Handle);
             System.Drawing.Rectangle screenRectangle = form.RectangleToScreen(form.ClientRectangle);
@@ -119,7 +113,6 @@ namespace PixelArt
             // TODO: https://stackoverflow.com/questions/1264406/how-do-i-get-the-taskbars-position-and-size
             // actually make task bar work properly
             screenDimen = new Vector2(GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height - taskBarHeight - titleHeight);
-            Logger.log(screenDimen);
             screenCenter = screenDimen / 2;
             screenWidth = (int) screenDimen.X;
             screenHeight = (int) screenDimen.Y;
@@ -211,45 +204,11 @@ namespace PixelArt
             // TODO: masking
             // https://medium.com/@sfranks/i-originally-wrote-this-for-the-best-way-to-mask-2d-sprites-in-xna-game-development-stack-949cf7bd7421
             
-            /*const string Apple = @"
-const CounterColumn = () => {
-
-    float [speed, setSpeed] = useState(3);
-    
-    return (
-        <div height='100%' width={300} flexDirection='column'>
-            <div -flex={float: cos(@t * speed) * 0.5F + 0.5F}></div>
-            <Counter/>
-            <div -flex={float: 1 - (cos(@t * speed) * 0.5F + 0.5F)}></div>
-        </div>
-    );
-}
-";
-            
-            const string Grape = @"
-const Counter = () => {
-    
-    int count = 0;
-    
-    var colorSets{active, inactive} = arr[
-        arr['white', 'black'], 
-        arr['black', 'white']
-    ];
-    string[] color{back, text} = colorSets.inactive;
-    
-    return (
-        <div -backgroundColor={string: color.back} onMouseEnter={()=^color = colorSets.active} onMouseExit={()=^color = colorSets.inactive}
-         borderColor='#0F0F8B' borderWidth={3} borderRadius='50%' dimens={300} onPress={()=^ count += 1} align='center'
-        >
-            <h3 -color={string: color.text}>Count: {count}</h3>
-        </div>
-    );
-}
-";*/
             const string stateTest = @"
 const Test = () => {
     
     bool [val, setVal] = useState(false);
+
 
     return (
         <div onTick={()=^{
