@@ -491,7 +491,7 @@ using Microsoft.Xna.Framework;
 
 			Logger.log("OUTPUT C#===============\n\n" + code);
 
-			if (HtmlSettings.useCache) {
+			if (HtmlSettings.generateCache) {
 				string toCache = code.Substring(code.IndexOf("/*IMPORTS_DONE*/"));
 				HtmlCache.CacheHtml(inputArr, toCache);
 			}

@@ -39,7 +39,7 @@
 		}
 
 		public static async void UpdateCache(string[] input, string outputCode) {
-			string path = @"D:\Users\Tobafett\Documents\GitHub\PixelArt\src\Html\StatePack.cs";
+			string path = StatePack.StatePackAbsolutePath();
 			string text = await System.IO.File.ReadAllTextAsync(path);
 			Logger.log(text);
 

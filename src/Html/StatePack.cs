@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace PixelArt {
@@ -51,6 +53,15 @@ namespace PixelArt {
 				
 				Logger.log($"{name}({type}): {obj}");
 			}
+		}
+
+		public static string StatePackAbsolutePath() {
+			return TraceFilePath();
+		}
+
+		private static string TraceFilePath([CallerFilePath] string sourceFilePath = "")
+		{
+			return sourceFilePath;
 		}
 
 		/*CACHE_START*/
