@@ -4,6 +4,11 @@ using System.Linq;
 namespace PixelArt {
     public static class StringUtil {
 
+        public static string ReplaceFirst(this string str, string oldStr, string newStr) { // NOTE: should crash if no instance exists
+            int index = str.IndexOf(oldStr);
+            return str.Substring(0, index) + newStr + str.Substring(index + oldStr.Length);
+        }
+
         public static (string, string) splitWithout(this string str, int index) {
             return (str.Substring(0, index), str.Substring(index + 1));
         }

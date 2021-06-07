@@ -22,16 +22,27 @@ namespace PixelArt {
 			var carrotDict = DelimPair.genPairDict(node, "<", ">");
 
 			
-			DelimPair mainPair = htmlPairs[htmlPairs.Count - 1];
+			DelimPair mainPair = htmlPairs[^1];
 			
 			List<string> childNodes = new List<string>();
+			List<int> childNodesIndices = new List<int>();
+			string mainInnerContents = "";
+			int mainStartIndex = 0;
 			foreach (var pair in htmlPairs) {
 				if (pair.nestCount == 1) {
 					string subNode = pairToNodeStr(node, pair, carrotDict);
 					childNodes.Add(subNode);
+					childNodesIndices.Add(pair.openIndex);
+				} else if (pair.nestCount == 0) {
+					mainStartIndex = carrotDict[pair.openIndex].closeIndex + 1;
+					mainInnerContents = node.sub(mainStartIndex, pair.closeIndex);
 				}
 			}
-			
+			childNodesIndices = childNodesIndices.Select(i => i - mainStartIndex).ToList();
+			Dictionary<int, string> childNodesIndicesDict = new Dictionary<int, string>();
+			for (int i = 0; i < childNodes.Count; i++) {
+				childNodesIndicesDict[childNodesIndices[i]] = childNodes[i];
+			}
 
 			string headerContent = carrotDict[mainPair.openIndex].contents(node);
 
@@ -130,12 +141,77 @@ namespace PixelArt {
 			}
 
 			if (childNodes.Count > 0) {
-				output += "children: nodeArr(";
-				for (int i = 0; i < childNodes.Count; i++) {
-					output += stringifyNode(childNodes[i]) + ((i + 1 < childNodes.Count) ? ", " : "");
+
+				bool staticChildren = true;
+
+				var bracketPairs = DelimPair.genPairs(mainInnerContents, "{", "}");
+				List<DelimPair> jsxPairs = new List<DelimPair>();
+
+				foreach (DelimPair bracketPair in bracketPairs) {
+					var dict = mainInnerContents.nestAmountsRange((bracketPair.openIndex, bracketPair.closeIndex), 
+						DelimPair.Carrots, DelimPair.CurlyBrackets, DelimPair.SquareBrackets, DelimPair.Parens, ("<", "</"));
+					if (DelimPair.nestsAll(dict, 0)) {
+						jsxPairs.Add(bracketPair);
+						staticChildren = false;
+					}
 				}
 
-				output += ")";
+				if (staticChildren) { 
+					output += "children: nodeArr(";
+					for (int i = 0; i < childNodes.Count; i++) {
+						output += stringifyNode(childNodes[i]) + ((i + 1 < childNodes.Count) ? ", " : "");
+					}
+
+					output += ")";
+				} else { // TODO: don't regenerate non-jsx segments (define them above creation code)
+
+					int elemCount = 0;
+					output += "childrenFunc: (Func^^HtmlNode[]^) (() =^ nodeArr(";
+
+					int i = 0;
+					while (i < mainInnerContents.Length) {
+						var chars = mainInnerContents.ToCharArray();
+
+						char c = chars[i];
+						if (c == '<' || c == '{') {
+							if (elemCount > 0) output += ", ";
+
+							if (c == '<') {
+								string thisChildNode = childNodesIndicesDict[i];
+								output += stringifyNode(thisChildNode);
+								i += thisChildNode.Length;
+							} else {
+								DelimPair bracketPair = mainInnerContents.searchPairs("{", "}", i);
+
+								string jsxChild = bracketPair.contents(mainInnerContents);
+
+								for (int j = childNodes.Count - 1; j >= 0; j--) {
+									int childIndex = childNodesIndices[j];
+									string childNodeStr = childNodesIndicesDict[childIndex];
+									if (childIndex > bracketPair.openIndex && childIndex < bracketPair.closeIndex) {
+
+										int childNewIndex = childIndex - (i + 1);
+										jsxChild = jsxChild.Substring(0, childNewIndex) + stringifyNode(childNodeStr) 
+										                                                + jsxChild.Substring(childNewIndex + childNodeStr.Length);
+									}
+								}
+
+								output += $"({jsxChild})";
+
+								i = bracketPair.closeIndex + 1;
+							}
+
+							elemCount++;
+						} else {
+							i++;
+						}
+					}
+					
+					output += "))";
+				}
+
+				object arr = (Func<HtmlNode[]>) (() => StatePack.nodeArr(null, null));
+
 			} else {
 				string text = mainPair.htmlContents(node).Trim();
 				
@@ -195,9 +271,13 @@ namespace PixelArt {
 						
 						string initValue = DelimPair.searchPairs(line, "(", ")", line.IndexOf("(")).contents(line);
 
+						// TODO: use comparison in state action to check if there was a change
 						stateStr += $@"
 {type} {varNames[0]} = {initValue};
-Action<{type}> {varNames[1]} = (val) => {varNames[0]} = val;
+Action<{type}> {varNames[1]} = (___val) => {{
+	{varNames[0]} = ___val;
+	___node.stateChangeDown();
+}};
 ";
 					} else if (line != "") {
 						if (line.StartsWith("var")) { // multi-inline var declarations
@@ -259,11 +339,15 @@ Action<{type}> {varNames[1]} = (val) => {varNames[0]} = val;
 			}
 
 			string output = @$"
-public HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {{
+HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {{
+	HtmlNode ___node = null;
 	{stateStr}
-	return {stringifyNode(returnContents)};
+	___node = {stringifyNode(returnContents)};
+	return ___node;
 }}
 ";
+			
+			
 			
 			applyNamedArrayElements: {
 				foreach (string key in namedArrayElements.Keys) {
@@ -333,6 +417,8 @@ public HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null,
 
 		public static async Task<HtmlNode> genHTML(string code, StatePack pack, Dictionary<string, string> macros = null, string[] components = null) {
 
+			string inputString = code;
+			
 			if (macros != null) code = applyMacros(code, macros);
 
 			code = removeOpenClosed(code);
@@ -348,7 +434,7 @@ public HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null,
 using System.Linq;
 using PixelArt;
 using Microsoft.Xna.Framework;
-
+/*IMPORTS_DONE*/
 ";
 			if (components != null) { 
 				foreach (string component in components) {
@@ -358,8 +444,8 @@ using Microsoft.Xna.Framework;
 
 			code = preHTML + code;
 
-			foreach (string key in pack.vars.Keys) {
-				code = code.Replace($"${key}", $"(({pack.types[key]})vars[\"{key}\"])");
+			foreach (string key in StatePack.vars.Keys) {
+				code = code.Replace($"${key}", $"(({StatePack.types[key]})vars[\"{key}\"])");
 			}
 
 			mapToSelect: {
@@ -398,6 +484,12 @@ using Microsoft.Xna.Framework;
 
 
 			Logger.log("OUTPUT C#===============\n\n" + code);
+
+			if (HtmlSettings.useCache) {
+				string toCache = code.Substring(code.IndexOf("/*IMPORTS_DONE*/"));
+				string[] input = new List<string> {inputString}.Concat(components ?? new string[]{}).ToArray();
+				HtmlCache.CacheHtml(input, toCache);
+			}
 
 			object htmlObj = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System", "System.Collections.Generic").AddReferences(
 				typeof(HtmlNode).Assembly

@@ -211,7 +211,7 @@ namespace PixelArt
             // TODO: masking
             // https://medium.com/@sfranks/i-originally-wrote-this-for-the-best-way-to-mask-2d-sprites-in-xna-game-development-stack-949cf7bd7421
             
-            const string Apple = @"
+            /*const string Apple = @"
 const CounterColumn = () => {
 
     float [speed, setSpeed] = useState(3);
@@ -245,13 +245,34 @@ const Counter = () => {
         </div>
     );
 }
+";*/
+            const string stateTest = @"
+const Test = () => {
+    
+    bool [val, setVal] = useState(false);
+
+    return (
+        <div onTick={()=^{
+            if (val != ((int)@t % 2 == 0)) {
+                setVal(!val);    
+            }
+        }}>
+            {(val) ? 
+                    null :
+                    <div align='center'>
+                        <div backgroundColor='yellow' dimens={150} />
+                        <div backgroundColor='lightblue' dimens={75} />
+                    </div>}
+        </div>
+    );
+}
 ";
 
+
             const string html = @"
-<div flexDirection='row' dimens='100%' backgroundColor='black'>
-    <div -flex={float: cos(@t) * 0.5F + 0.5F}/>
-    <CounterColumn/>
-    <div -flex={float: 1 - (cos(@t) * 0.5F + 0.5F)}/>
+<div flexDirection='row' dimens='100%' backgroundColor='black' alignX='flexEnd' alignY='center'>
+    <div dimens={200} backgroundColor='red'/>
+    <Test/>
 </div>
 ";
             var statePack = new StatePack(
@@ -263,7 +284,7 @@ const Counter = () => {
             );
 
             var components = PixelArt.Components.create(
-                Apple, Grape
+                stateTest
             );
 
             var watch = new System.Diagnostics.Stopwatch();

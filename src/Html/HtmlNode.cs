@@ -18,6 +18,7 @@ namespace PixelArt {
 
 		public HtmlNode parent;
 		public HtmlNode[] children;
+		public Func<HtmlNode[]> childrenFunc;
 		
 		public Dictionary<string, object> props;
 		public Dictionary<string, object> funcs; // TODO:
@@ -51,13 +52,13 @@ namespace PixelArt {
 
 		// Layout
 		public float flex;
-		public AlignType alignX, alignY;
+		public AlignType alignX = AlignType.flexStart, alignY = AlignType.flexStart;
 		public DirectionType flexDirection = DirectionType.column;
 		public TextAlignType textAlign = TextAlignType.topLeft;
 
 		// FUNCTIONS
 		public bool hover;
-		public Action onPress, onMouseEnter, onMouseExit, onHover;
+		public Action onPress, onMouseEnter, onMouseExit, onHover, onTick;
 		
 		// ENUMS
 		public enum TextAlignType {
@@ -86,7 +87,7 @@ namespace PixelArt {
 			["h6"] = 26,
 		};
 
-		public HtmlNode(string tag, Dictionary<string, object> props = null, object textContent = null, HtmlNode[] children = null) {
+		public HtmlNode(string tag, Dictionary<string, object> props = null, object textContent = null, HtmlNode[] children = null, Func<HtmlNode[]> childrenFunc = null) {
 			this.tag = tag;
 			this.props = props;
 			if (props == null) this.props = nullProps;
@@ -106,10 +107,63 @@ namespace PixelArt {
 				}
 			}
 			this.children = children;
+			this.childrenFunc = childrenFunc;
 
+			makeParentOfChildren();
+
+			if (childrenFunc != null) { 
+				generateChildren();
+			}
+		}
+
+		public void makeParentOfChildren() {
 			if (children != null) {
 				foreach (HtmlNode child in children) {
 					child.parent = this;
+				}
+			}
+		}
+
+		public void generateChildren() {
+			children = childrenFunc();
+
+			if (children != null) { 
+				if (children.Contains(null)) { // remove null elements
+					children = children.Where(child => child != null).ToArray();
+				}
+
+				if (children.Length == 0) {
+					children = null;
+					if (DynamicWidth) {
+						width = 0;
+						onWidthChange();
+					}
+
+					if (DynamicHeight) {
+						height = 0;
+						onHeightChange();
+					}
+				}
+			}
+
+			if (children != null) {
+				makeParentOfChildren();
+				
+				foreach (HtmlNode child in children) {
+					child.topDownInit();
+				}
+				findBase().bottomUpInit();
+				
+				findBase().layoutDown();
+			}
+		}
+
+		public void stateChangeDown() { // TODO: perhaps find out if childrenFunc has any reliance on the changed state
+			if (childrenFunc != null) { 
+				generateChildren();
+			} else if (children != null) {
+				foreach (HtmlNode child in children) {
+					child.stateChangeDown();
 				}
 			}
 		}
@@ -126,7 +180,7 @@ namespace PixelArt {
 			return (parent == null) ? this : parent.findBase();
 		}
 
-		public void onResize() {
+		public void onResize() { // TODO: sus? do i need to do a topDownInit()  ??????
 			// TODO:
 			findBase().layoutDown();
 
@@ -178,10 +232,14 @@ namespace PixelArt {
 
 			if (children != null) { 
 				if (DynamicWidth) {
-					width = children.Select(child => child.width).Sum();
+					width = flexDirection == DirectionType.row ? children.Select(child => child.width).Sum() : 
+						children.Select(child => child.width).Max();
+					onWidthChange();
 				}
 				if (DynamicHeight) {
-					height = children.Select(child => child.height).Sum();
+					height = flexDirection == DirectionType.column ? children.Select(child => child.height).Sum() : 
+						children.Select(child => child.height).Max();
+					onHeightChange();
 				}
 			}
 		}
@@ -345,6 +403,7 @@ namespace PixelArt {
 				if (props.ContainsKey("onMouseEnter")) onMouseEnter = prop<Action>("onMouseEnter");
 				if (props.ContainsKey("onMouseExit")) onMouseExit = prop<Action>("onMouseExit");
 				if (props.ContainsKey("onHover")) onHover = prop<Action>("onHover");
+				if (props.ContainsKey("onTick")) onTick = prop<Action>("onTick");
 
 
 				if (props.ContainsKey("borderWidth")) borderWidth = prop<int>("borderWidth");
@@ -650,6 +709,8 @@ namespace PixelArt {
 
 		public void update(float deltaTime, MouseInfo mouse) {
 
+			onTick?.Invoke();
+			
 			if (actionList != null) {
 				foreach (Action action in actionList) {
 					action.Invoke();
