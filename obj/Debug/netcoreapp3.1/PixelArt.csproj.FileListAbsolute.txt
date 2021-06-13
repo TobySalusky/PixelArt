@@ -138,7 +138,6 @@ D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\runtimes\rhe
 D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\runtimes\win7-arm\native\libuv.dll
 D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\runtimes\win7-x64\native\libuv.dll
 D:\Users\Tobafett\Documents\GitHub\PixelArt\bin\Debug\netcoreapp3.1\runtimes\win7-x86\native\libuv.dll
-D:\Users\Tobafett\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.csprojAssemblyReference.cache
 D:\Users\Tobafett\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.AssemblyInfoInputs.cache
 D:\Users\Tobafett\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.AssemblyInfo.cs
 D:\Users\Tobafett\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.csproj.CoreCompileInputs.cache
@@ -305,3 +304,4 @@ C:\Users\815328\Documents\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.csproj.CopyC
 C:\Users\815328\Documents\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.dll
 C:\Users\815328\Documents\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.pdb
 C:\Users\815328\Documents\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.genruntimeconfig.cache
+D:\Users\Tobafett\Documents\GitHub\PixelArt\obj\Debug\netcoreapp3.1\PixelArt.csproj.AssemblyReference.cache

@@ -41,7 +41,6 @@
 		public static async void UpdateCache(string[] input, string outputCode) {
 			string path = StatePack.StatePackAbsolutePath();
 			string text = await System.IO.File.ReadAllTextAsync(path);
-			Logger.log(text);
 
 			string inputArrString = "";
 			for (int i = 0; i < input.Length; i++) {

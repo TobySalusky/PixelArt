@@ -209,6 +209,7 @@ const Test = () => {
     
     bool [val, setVal] = useState(false);
 
+    string[] colorArr = arr['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
 
     return (
         <div onTick={()=^{
@@ -221,7 +222,13 @@ const Test = () => {
                     <div align='center'>
                         <div backgroundColor='yellow' dimens={150} />
                         <div backgroundColor='lightblue' dimens={75} />
-                    </div>}
+                    </div>
+            }
+            
+            {
+                arr[1, 2].map((color, i) =^ <div backgroundColor='yellow' dimens={150 * i} />),
+                arr[1, 2].map((color, i) =^ <div backgroundColor='yellow' dimens={150 * i} />)
+            }
         </div>
     );
 }
@@ -229,13 +236,21 @@ const Test = () => {
 
 
             const string html = @"
-<div flexDirection='row' dimens='100%' backgroundColor='black' alignX='flexEnd' alignY='center'>
-    <div dimens={200} backgroundColor='red'/>
-    <Test/>
+<div flexDirection='row' dimens='100%' backgroundColor='black' align='center' onTick={()=^{
+            for (int j = 0; j ^^ $a.Length; j++) {
+                $a[j] = (int) (Util.sin01(Util.sin01(@t) * 100 + j * 0.05F) * 255);
+            }
+        }}>
+
+    {$a.map((val, i) =^ 
+        <div -backgroundColor={new Color($a[i], $a[i], $a[i])} flex={1}/>
+    )}
+    
 </div>
 ";
+            
             var statePack = new StatePack(
-                
+                "a", new int[1920]
             );
             
             var macros = Macros.create(
@@ -252,7 +267,7 @@ const Test = () => {
             htmlNode = await HtmlProcessor.genHTML(html, statePack, macros, components);
 
             watch.Stop();
-            Logger.log("compiling HTML took:", watch.Elapsed.TotalSeconds);
+            Logger.log("creating HTML took:", watch.Elapsed.TotalSeconds);
         }
 
         public static void setProject(Project project) {

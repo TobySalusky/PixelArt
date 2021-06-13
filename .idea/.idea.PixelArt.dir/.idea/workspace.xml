@@ -25,13 +25,22 @@
     <list default="true" id="6c742f77-da5b-4ff1-9600-6aa6b2bad433" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csprojAssemblyReference.cache" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/apphost.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.packagespec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/HtmlCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlCache.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/HtmlSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlSettings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/StatePack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/StatePack.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Main.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +77,7 @@
     <setting file="file://$PROJECT_DIR$/src/UI/UITextInput.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/UISlider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/PanelSide.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/UI/UITransition.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/UIButton.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/UIBack.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/Exporting.cs" root0="FORCE_HIGHLIGHTING" />
@@ -79,11 +89,14 @@
     <setting file="file://$PROJECT_DIR$/src/UI/PanelTop.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/Screens/UIScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/UI/Screens/FileOpenScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Art/ToolSettings.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Art/Brush.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Art/Canvas.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Art/Layer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Art/ToolUtil.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Html/Macros.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Art/UI/ExportTypeButton.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Art/UI/BrushButton.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Art/UI/LayerButton.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Art/UI/HueSlider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Art/UI/ColorWheel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -116,11 +129,11 @@
         <option value="$PROJECT_DIR$/src/Html/StringUtil.cs" />
         <option value="$PROJECT_DIR$/src/Html/HtmlNode.cs" />
         <option value="$PROJECT_DIR$/src/Html/CacheData.cs" />
-        <option value="$PROJECT_DIR$/src/Html/HtmlSettings.cs" />
-        <option value="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" />
-        <option value="$PROJECT_DIR$/src/Html/StatePack.cs" />
-        <option value="$PROJECT_DIR$/src/Main/Main.cs" />
         <option value="$PROJECT_DIR$/src/Html/HtmlCache.cs" />
+        <option value="$PROJECT_DIR$/src/Html/HtmlSettings.cs" />
+        <option value="$PROJECT_DIR$/src/Html/StatePack.cs" />
+        <option value="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" />
+        <option value="$PROJECT_DIR$/src/Main/Main.cs" />
       </list>
     </option>
   </component>
@@ -236,11 +249,13 @@
       <workItem from="1621958129455" duration="3016000" />
       <workItem from="1621965484409" duration="3673000" />
       <workItem from="1622136916834" duration="5627000" />
+      <workItem from="1623033557133" duration="1470000" />
+      <workItem from="1623559234892" duration="5354000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
+    <option name="version" value="2" />
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
@@ -260,22 +275,26 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1623028988562">
+    <state x="636" y="256" width="648" height="524" key="#Context_Actions" timestamp="1623559405571">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623028988562" />
-    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1623028988562">
+    <state x="636" y="256" width="648" height="524" key="#Context_Actions/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623559405571" />
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1623564631616">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623028988562" />
-    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1623028988562">
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
+    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1623564631616">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623028988562" />
-    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1623028988562">
+    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
+    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1623564631616">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623028988562" />
+    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
+    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1623564631616">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
     <state width="1877" height="375" key="GridCell.Tab.1.bottom" timestamp="1623017575815">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -344,10 +363,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623027710352" />
-    <state x="638" y="253" width="644" height="534" key="find.popup" timestamp="1623029008830">
+    <state x="638" y="253" width="644" height="534" key="find.popup" timestamp="1623564267559">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="638" y="253" width="644" height="534" key="find.popup/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623029008830" />
+    <state x="638" y="253" width="644" height="534" key="find.popup/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564267559" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

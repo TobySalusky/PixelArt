@@ -54,6 +54,7 @@ namespace PixelArt {
 				string tag = (firstSpace == -1) ? headerContent : headerContent.Substring(0, firstSpace);
 				string data = (firstSpace == -1) ? null : headerContent.Substring(firstSpace + 1).Trim();
 
+				Logger.log("efefeefef", tag);
 				char firstTagLetter = tag.ToCharArray()[0];
 				output = (firstTagLetter >= 'A' && firstTagLetter <= 'Z') ? $"Create{tag}(" : "newNode(";
 				
@@ -359,7 +360,6 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 		}
 
 		public static string applyMacros(string str, Dictionary<string, string> macros) { // TODO: allow recursive macros!
-			Logger.log("hi");
 			
 			foreach (string macroID in macros.Keys) {
 				if (macroID.Contains("(")) {
@@ -417,6 +417,7 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 
 		public static async Task<HtmlNode> genHTML(string code, StatePack pack, Dictionary<string, string> macros = null, string[] components = null) {
 
+			// cache ====
 			string inputString = code;
 			string[] inputArr = new List<string> {inputString}.Concat(components ?? new string[]{}).ToArray();
 
@@ -424,6 +425,9 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 				Logger.log("Using Cached HTML");
 				return HtmlCache.UseCache();
 			}
+			
+			// code generation
+			code = code.Replace("=>", "=^");
 
 			if (macros != null) code = applyMacros(code, macros);
 
@@ -491,16 +495,20 @@ using Microsoft.Xna.Framework;
 
 			Logger.log("OUTPUT C#===============\n\n" + code);
 
-			if (HtmlSettings.generateCache) {
-				string toCache = code.Substring(code.IndexOf("/*IMPORTS_DONE*/"));
-				HtmlCache.CacheHtml(inputArr, toCache);
-			}
+			
 
 			object htmlObj = await CSharpScript.EvaluateAsync(code, ScriptOptions.Default.WithImports("System", "System.Collections.Generic").AddReferences(
 				typeof(HtmlNode).Assembly
 				), pack);
 			
-			return (HtmlNode) htmlObj;
+			HtmlNode returnNode = (HtmlNode) htmlObj;
+			
+			if (HtmlSettings.generateCache) { // Only caches when node generation is successful
+				string toCache = code.Substring(code.IndexOf("/*IMPORTS_DONE*/"));
+				HtmlCache.CacheHtml(inputArr, toCache);
+			}
+			
+			return returnNode;
 		}
 	}
 }
