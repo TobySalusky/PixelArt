@@ -1,0 +1,16 @@
+﻿.hi {
+    background-color: #29e2e2;
+    width: 100px;
+    height: 100%;
+    border-color: white;
+}
+
+.hi, .sup {
+    border-width: 10px;
+    border-radius: 30%;
+}
+
+span {
+    background-color: orange;
+    font-size: 30px;
+}

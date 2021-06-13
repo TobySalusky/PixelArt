@@ -5,12 +5,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework;
 
 namespace PixelArt {
 	public class StatePack {
 
-		public static Dictionary<string, object> vars;
-		public static Dictionary<string, string> types;
+		public static Dictionary<string, object> ___vars;
+		public static Dictionary<string, string> ___types;
 
 		public static Func<float, float> sin = (rad) => (float) Math.Sin(rad);
 		public static Func<float, float> cos = (rad) => (float) Math.Cos(rad);
@@ -66,8 +67,8 @@ namespace PixelArt {
 		}
 
 		public StatePack(params object[] varList) {
-			vars = new Dictionary<string, object>();
-			types = new Dictionary<string, string>();
+			___vars = new Dictionary<string, object>();
+			___types = new Dictionary<string, string>();
 			for (int i = 0; i < varList.Length; i += 2) {
 				object obj = varList[i + 1];
 				
@@ -78,8 +79,8 @@ namespace PixelArt {
 				type = Regex.Replace(type, @"`[0-9]*\[", "<");
 				type = type.Replace("[>", "[]");
 
-				vars[name] = obj;
-				types[name] = type;
+				___vars[name] = obj;
+				___types[name] = type;
 				
 				Logger.log($"{name}({type}): {obj}");
 			}
@@ -101,43 +102,17 @@ namespace PixelArt {
 				return new string[]{ @"
 <div flexDirection='row' dimens='100%' backgroundColor='black' align='center'>
 
-    {arr[10, 20, 50, 100, 200, 100, 50, 20, 10].map(n =^ <div flexDirection='row' align='center'>
-        {nStream(n).map(i =^
-            <div backgroundColor='red' width={1} height={i} />
-        )}
-        
-        {nStream(n).map(i =^
-            <div backgroundColor='red' width={1} height={n-i} />
-        )}
-    </div>)}
+    <span dimens={50}> sup </span>
+    <div class='hi' dimens='20%'></div>
+    <div class='sup' dimens={70} borderColor={Color.Pink}></div>
     
 </div>
 ", @"
 const Test = () => {
     
-    bool [val, setVal] = useState(false);
-
-    string[] colorArr = arr['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
 
     return (
-        <div onTick={()=^{
-            if (val != ((int)@t % 2 == 0)) {
-                setVal(!val);    
-            }
-        }}>
-            {(val) ? 
-                    null :
-                    <div align='center'>
-                        <div backgroundColor='yellow' dimens={150} />
-                        <div backgroundColor='lightblue' dimens={75} />
-                    </div>
-            }
-            
-            {
-                arr[1, 2].map((color, i) =^ <div backgroundColor='yellow' dimens={150 * i} />),
-                arr[1, 2].map((color, i) =^ <div backgroundColor='yellow' dimens={150 * i} />)
-            }
-        </div>
+        <div></div>
     );
 }
 " };
@@ -149,31 +124,10 @@ const Test = () => {
 HtmlNode CreateTest(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {
 	HtmlNode ___node = null;
 	
-bool val = false;
-Action<bool> setVal = (___val) => {
-	val = ___val;
-	___node.stateChangeDown();
-};
-
-string[] colorArr = (new []{"red", "orange", "yellow", "green", "blue", "purple"});
-	___node = newNode("div", props: new Dictionary<string, object> {["onTick"]=((Action)(()=>{
-            if (val != ((int)timePassed() % 2 == 0)) {
-                setVal(!val);    
-            }
-        }))}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr(((val) ? 
-                    null :
-                    newNode("div", props: new Dictionary<string, object> {["align"]="center"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="yellow", ["dimens"]=(150)}, textContent: ""), newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="lightblue", ["dimens"]=(75)}, textContent: "")))
-            ), (
-                (new []{1, 2}).Select((color, i) => newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="yellow", ["dimens"]=(150 * i)}, textContent: "")).ToArray(),
-                (new []{1, 2}).Select((color, i) => newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="yellow", ["dimens"]=(150 * i)}, textContent: "")).ToArray()
-            ))));
+	___node = newNode("div", textContent: "");
 	return ___node;
 }
-HtmlNode node = newNode("div", props: new Dictionary<string, object> {["flexDirection"]="row", ["dimens"]="100%", ["backgroundColor"]="black", ["align"]="center"}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr(((new []{10, 20, 50, 100, 200, 100, 50, 20, 10}).Select(n => newNode("div", props: new Dictionary<string, object> {["flexDirection"]="row", ["align"]="center"}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr((nStream(n).Select(i =>
-            newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="red", ["width"]=(1), ["height"]=(i)}, textContent: "")
-        ).ToArray()), (nStream(n).Select(i =>
-            newNode("div", props: new Dictionary<string, object> {["backgroundColor"]="red", ["width"]=(1), ["height"]=(n-i)}, textContent: "")
-        ).ToArray()))))).ToArray()))));
+HtmlNode node = newNode("div", props: new Dictionary<string, object> {["flexDirection"]="row", ["dimens"]="100%", ["backgroundColor"]="black", ["align"]="center"}, children: nodeArr(newNode("span", props: new Dictionary<string, object> {["dimens"]=(50)}, textContent: "sup"), newNode("div", props: new Dictionary<string, object> {["class"]="hi", ["dimens"]="20%"}, textContent: ""), newNode("div", props: new Dictionary<string, object> {["class"]="sup", ["dimens"]=(70), ["borderColor"]=(Color.Pink)}, textContent: "")));
 setupNode(node);
 return node;
 			}

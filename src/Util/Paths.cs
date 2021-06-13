@@ -3,7 +3,7 @@
 namespace PixelArt {
     public static class Paths {
 
-        public static string solutionPath, assetPath, texturePath, exportPath, fontPath;
+        public static string solutionPath, assetPath, texturePath, exportPath, fontPath, cssPath;
 
         static Paths() {
             string path = Path.GetFullPath("hi");
@@ -12,6 +12,7 @@ namespace PixelArt {
             texturePath = assetPath + "Textures\\";
             fontPath = assetPath + "Fonts\\";
             exportPath = assetPath + "Exports\\";
+            cssPath = assetPath + "CSS\\";
         }
 
     }

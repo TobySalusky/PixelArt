@@ -54,7 +54,6 @@ namespace PixelArt {
 				string tag = (firstSpace == -1) ? headerContent : headerContent.Substring(0, firstSpace);
 				string data = (firstSpace == -1) ? null : headerContent.Substring(firstSpace + 1).Trim();
 
-				Logger.log("efefeefef", tag);
 				char firstTagLetter = tag.ToCharArray()[0];
 				output = (firstTagLetter >= 'A' && firstTagLetter <= 'Z') ? $"Create{tag}(" : "newNode(";
 				
@@ -454,8 +453,8 @@ using Microsoft.Xna.Framework;
 
 			code = preHTML + code;
 
-			foreach (string key in StatePack.vars.Keys) {
-				code = code.Replace($"${key}", $"(({StatePack.types[key]})vars[\"{key}\"])");
+			foreach (string key in StatePack.___vars.Keys) {
+				code = code.Replace($"${key}", $"(({StatePack.___types[key]})___vars[\"{key}\"])");
 			}
 
 			mapToSelect: {

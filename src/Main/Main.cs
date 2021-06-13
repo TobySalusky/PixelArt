@@ -207,47 +207,24 @@ namespace PixelArt
             const string stateTest = @"
 const Test = () => {
     
-    bool [val, setVal] = useState(false);
-
-    string[] colorArr = arr['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
 
     return (
-        <div onTick={()=^{
-            if (val != ((int)@t % 2 == 0)) {
-                setVal(!val);    
-            }
-        }}>
-            {(val) ? 
-                    null :
-                    <div align='center'>
-                        <div backgroundColor='yellow' dimens={150} />
-                        <div backgroundColor='lightblue' dimens={75} />
-                    </div>
-            }
-            
-            {
-                arr[1, 2].map((color, i) =^ <div backgroundColor='yellow' dimens={150 * i} />),
-                arr[1, 2].map((color, i) =^ <div backgroundColor='yellow' dimens={150 * i} />)
-            }
-        </div>
+        <div></div>
     );
 }
 ";
 
 
             const string html = @"
-<div flexDirection='row' dimens='100%' backgroundColor='black' align='center' onTick={()=^{
-            for (int j = 0; j ^^ $a.Length; j++) {
-                $a[j] = (int) (Util.sin01(Util.sin01(@t) * 100 + j * 0.05F) * 255);
-            }
-        }}>
+<div flexDirection='row' dimens='100%' backgroundColor='black' align='center'>
 
-    {$a.map((val, i) =^ 
-        <div -backgroundColor={new Color($a[i], $a[i], $a[i])} flex={1}/>
-    )}
+    <span dimens={50}> sup </span>
+    <div class='hi' dimens='20%'></div>
+    <div class='sup' dimens={70} borderColor={Color.Pink}></div>
     
 </div>
 ";
+            CSSHandler.addCSS($"{Paths.cssPath}/Test.css");
             
             var statePack = new StatePack(
                 "a", new int[1920]

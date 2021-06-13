@@ -46,7 +46,7 @@ namespace PixelArt {
 
 			if (prop is string str) {
 				if (str.Substring(str.Length - 1) == "%") {
-					int maxWidth = (parent == null) ? Main.screenWidth : parent.width;
+					int maxWidth = parent?.width ?? Main.screenWidth;
 
 					return (int) (float.Parse(str.Substring(0, str.Length - 1))/100F * maxWidth);
 				}

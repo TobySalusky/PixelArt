@@ -22,7 +22,7 @@ namespace PixelArt {
 		
 		public Dictionary<string, object> props;
 		public Dictionary<string, object> funcs; // TODO:
-
+		
 		public List<Action> actionList;
 
 		// STATIC
@@ -244,8 +244,30 @@ namespace PixelArt {
 			}
 		}
 
+		public void addCSSUnder(CSSDefinition cssDefinition) {
+			foreach (string key in cssDefinition.styleProps.Keys) {
+				if (!props.ContainsKey(key)) {
+					props[key] = cssDefinition.styleProps[key];
+				}
+			}
+		}
+
 		public void topDownInit() {
 
+			// Load tag/class CSS (class has precedence over tags)
+			if (props.ContainsKey("class") && CSSHandler.classes.ContainsKey(prop<string>("class"))) { // currently no support for dynamic class // TODO: ADD THIS
+				CSSDefinition classDefinition = CSSHandler.classes[prop<string>("class")];
+				addCSSUnder(classDefinition);
+			}
+			
+			if (CSSHandler.tags.ContainsKey(tag)) {
+				CSSDefinition tagDefinition = CSSHandler.tags[tag];
+				addCSSUnder(tagDefinition);
+			}
+
+
+
+			// load props
 			if (fontSizeDefaults.ContainsKey(tag)) {
 				fontSize = fontSizeDefaults[tag];
 				if (textContent != null) onFontChange();

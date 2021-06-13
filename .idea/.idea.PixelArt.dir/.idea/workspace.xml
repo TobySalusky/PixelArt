@@ -23,24 +23,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c742f77-da5b-4ff1-9600-6aa6b2bad433" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/CSS/Test.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Html/CSSHandler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelArt.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csprojAssemblyReference.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/PixelArt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/apphost.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/PixelArt.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Html/HtmlCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlCache.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Html/DelimPair.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/DelimPair.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Html/HtmlNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlNode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/HtmlSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/HtmlSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Html/NodeUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/NodeUtil.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Html/StatePack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/StatePack.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Html/StringUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Html/StringUtil.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main/Main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Main.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Util/Paths.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util/Paths.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +50,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -103,6 +103,7 @@
     <setting file="file://$PROJECT_DIR$/src/Main/Main.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Main/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Util/Fonts.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/Html/CSSHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Util/Logger.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Util/KeyInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Util/FileUtil.cs" root0="FORCE_HIGHLIGHTING" />
@@ -125,15 +126,20 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Html/DelimPair.cs" />
-        <option value="$PROJECT_DIR$/src/Html/StringUtil.cs" />
-        <option value="$PROJECT_DIR$/src/Html/HtmlNode.cs" />
         <option value="$PROJECT_DIR$/src/Html/CacheData.cs" />
         <option value="$PROJECT_DIR$/src/Html/HtmlCache.cs" />
-        <option value="$PROJECT_DIR$/src/Html/HtmlSettings.cs" />
-        <option value="$PROJECT_DIR$/src/Html/StatePack.cs" />
+        <option value="$PROJECT_DIR$/src/Html/Test.css" />
+        <option value="$PROJECT_DIR$/src/Html/DelimPair.cs" />
+        <option value="$PROJECT_DIR$/src/Util/Paths.cs" />
         <option value="$PROJECT_DIR$/src/Html/HtmlProcessor.cs" />
+        <option value="$PROJECT_DIR$/src/Html/HtmlSettings.cs" />
+        <option value="$PROJECT_DIR$/src/Html/HtmlNode.cs" />
+        <option value="$PROJECT_DIR$/src/Html/StatePack.cs" />
         <option value="$PROJECT_DIR$/src/Main/Main.cs" />
+        <option value="$PROJECT_DIR$/Assets/CSS/Test.css" />
+        <option value="$PROJECT_DIR$/src/Html/StringUtil.cs" />
+        <option value="$PROJECT_DIR$/src/Html/CSSHandler.cs" />
+        <option value="$PROJECT_DIR$/src/Html/NodeUtil.cs" />
       </list>
     </option>
   </component>
@@ -153,6 +159,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -251,6 +258,7 @@
       <workItem from="1622136916834" duration="5627000" />
       <workItem from="1623033557133" duration="1470000" />
       <workItem from="1623559234892" duration="5354000" />
+      <workItem from="1623617888520" duration="7240000" />
     </task>
     <servers />
   </component>
@@ -279,22 +287,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="636" y="256" width="648" height="524" key="#Context_Actions/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623559405571" />
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1623564631616">
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom" timestamp="1623627537334">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
-    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1623564631616">
+    <state width="1877" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623627537334" />
+    <state width="1877" height="175" key="GridCell.Tab.0.center" timestamp="1623627537334">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
-    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1623564631616">
+    <state width="1877" height="175" key="GridCell.Tab.0.center/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623627537334" />
+    <state width="1877" height="175" key="GridCell.Tab.0.left" timestamp="1623627537334">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
-    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1623564631616">
+    <state width="1877" height="175" key="GridCell.Tab.0.left/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623627537334" />
+    <state width="1877" height="175" key="GridCell.Tab.0.right" timestamp="1623627537334">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564631616" />
+    <state width="1877" height="175" key="GridCell.Tab.0.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623627537334" />
     <state width="1877" height="375" key="GridCell.Tab.1.bottom" timestamp="1623017575815">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -359,14 +367,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="375" key="GridCell.Tab.4.right/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623017575816" />
-    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog" timestamp="1623027710352">
+    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog" timestamp="1623621969624">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623027710352" />
-    <state x="638" y="253" width="644" height="534" key="find.popup" timestamp="1623564267559">
+    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623621969624" />
+    <state x="638" y="253" width="644" height="534" key="find.popup" timestamp="1623627664516">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="638" y="253" width="644" height="534" key="find.popup/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623564267559" />
+    <state x="638" y="253" width="644" height="534" key="find.popup/0.0.1920.1040/0.1080.1920.1040@0.0.1920.1040" timestamp="1623627664516" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

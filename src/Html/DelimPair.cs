@@ -65,6 +65,11 @@ namespace PixelArt {
 			return content.Substring(content.IndexOf(">") + 1);
 		}
 
+		public static Dictionary<int, DelimPair> genPairDict(string str, (string, string) openAndClose) {
+			(string open, string close) = openAndClose;
+			return genPairDict(str, open, close);
+		}
+		
 		public static Dictionary<int, DelimPair> genPairDict(string str, string open, string close) {
 			var list = genPairs(str, open, close);
 			Dictionary<int, DelimPair> dict = new Dictionary<int, DelimPair>();
@@ -75,6 +80,11 @@ namespace PixelArt {
 			}
 
 			return dict;
+		}
+
+		public static List<DelimPair> genPairs(string str, (string, string) openAndClose) {
+			(string open, string close) = openAndClose;
+			return genPairs(str, open, close);
 		}
 
 		public static List<DelimPair> genPairs(string str, string open, string close) {
