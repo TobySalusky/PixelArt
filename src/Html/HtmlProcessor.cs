@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework;
 namespace PixelArt {
 
 	
-	[SuppressMessage("ReSharper", "StringIndexOfIsCultureSpecific.1")]
 	public static class HtmlProcessor {
 
 		public static string stringifyNode(string node) {
@@ -50,7 +49,7 @@ namespace PixelArt {
 			
 			processHeader: {
 				
-				int firstSpace = headerContent.IndexOf(" ");
+				int firstSpace = headerContent.indexOf(" ");
 				string tag = (firstSpace == -1) ? headerContent : headerContent.Substring(0, firstSpace);
 				string data = (firstSpace == -1) ? null : headerContent.Substring(firstSpace + 1).Trim();
 
@@ -88,7 +87,7 @@ namespace PixelArt {
 							string jsx = data.Substring(i + 1, fin - (i + 1)).Trim();
 
 							if (currLabel.StartsWith("-")) { // dynamic value (auto generate Func)
-								int sep = jsx.IndexOf(":");
+								int sep = jsx.indexOf(":");
 								bool typeless = false;
 								if (sep != -1) { 
 									string returnType = jsx.Substring(0, sep).Trim();
@@ -113,7 +112,7 @@ namespace PixelArt {
 								}
 
 							} else if (Util.noSpaces(jsx).StartsWith("()=^")) {
-								int sep = jsx.IndexOf("=^");
+								int sep = jsx.indexOf("=^");
 								jsx = jsx.Substring(sep + 2).Trim();
 								jsx = $"(Action)(()=^{jsx})";
 							}
@@ -128,7 +127,7 @@ namespace PixelArt {
 
 					var keys = props.Keys;
 					string startWith = "";
-					foreach (string key in keys) {
+					foreach (string key in keys) { // TODO: component props
 						propStr += $"{startWith}['{key}']={props[key]}";
 						startWith = ", ";
 					}
@@ -145,13 +144,11 @@ namespace PixelArt {
 				bool staticChildren = true;
 
 				var bracketPairs = DelimPair.genPairs(mainInnerContents, "{", "}");
-				List<DelimPair> jsxPairs = new List<DelimPair>();
 
 				foreach (DelimPair bracketPair in bracketPairs) {
 					var dict = mainInnerContents.nestAmountsRange((bracketPair.openIndex, bracketPair.closeIndex), 
 						DelimPair.Carrots, DelimPair.CurlyBrackets, DelimPair.SquareBrackets, DelimPair.Parens, ("<", "</"));
 					if (DelimPair.nestsAll(dict, 0)) {
-						jsxPairs.Add(bracketPair);
 						staticChildren = false;
 					}
 				}
@@ -218,7 +215,7 @@ namespace PixelArt {
 				if (text.Contains("{")) {
 					string textExpression = "";
 					while (text.Contains("{")) {
-						int index = text.IndexOf("{");
+						int index = text.indexOf("{");
 						DelimPair pair = text.searchPairs("{", "}", index);
 						if (textExpression != "") textExpression += "+";
 						textExpression += $"'{text.beforePair(pair)}'+({pair.contents(text)})";
@@ -245,31 +242,31 @@ namespace PixelArt {
 		public static string defineComponent(string code) {
 			
 			string before = "const ";
-			string tagEtc = code.Substring(code.IndexOf(before) + before.Length);
+			string tagEtc = code.Substring(code.indexOf(before) + before.Length);
 			string tag = tagEtc.sub(0, tagEtc.minValidIndex(" ", "="));
 
 			before = "return"; // TODO: check nesting b/c returns in functions are possible
-			string afterReturn = code.Substring(code.IndexOf(before) + before.Length).Trim();
+			string afterReturn = code.Substring(code.indexOf(before) + before.Length).Trim();
 			DelimPair pair = DelimPair.genPairDict(afterReturn, "(", ")")[0];
 			string returnContents = pair.contents(afterReturn).Trim();
 			returnContents = removeOpenClosed(returnContents);
 
 			string stateStr = "";
 			state: {
-				string stateDefinitions = code.sub(code.IndexOf("{") + 1, code.IndexOf(before));
+				string stateDefinitions = code.sub(code.indexOf("{") + 1, code.indexOf(before));
 				string[] lines = stateDefinitions.Split(new [] { '\r', '\n' });
 				foreach (string str in lines) {
 					string line = str.Trim();
 					const string stateOpen = "useState(";
-					int stateIndex = line.IndexOf(stateOpen);
+					int stateIndex = line.indexOf(stateOpen);
 					
 					if (stateIndex != -1) {
-						string type = line.Substring(0, line.IndexOf(" "));
-						string afterType = line.Substring(line.IndexOf(" ") + 1);
-						string varNameContents = afterType.searchPairs("[", "]", afterType.IndexOf("[")).contents(afterType);
+						string type = line.Substring(0, line.indexOf(" "));
+						string afterType = line.Substring(line.indexOf(" ") + 1);
+						string varNameContents = afterType.searchPairs("[", "]", afterType.indexOf("[")).contents(afterType);
 						string[] varNames = varNameContents.Split(",").Select(s => s.Trim()).ToArray();
 						
-						string initValue = DelimPair.searchPairs(line, "(", ")", line.IndexOf("(")).contents(line);
+						string initValue = DelimPair.searchPairs(line, "(", ")", line.indexOf("(")).contents(line);
 
 						// TODO: use comparison in state action to check if there was a change
 						stateStr += $@"
@@ -363,15 +360,15 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 			foreach (string macroID in macros.Keys) {
 				if (macroID.Contains("(")) {
 
-					int openInd = macroID.IndexOf("(");
-					string paramString = macroID.Substring(openInd + 1, macroID.LastIndexOf(")") - openInd - 1);
+					int openInd = macroID.indexOf("(");
+					string paramString = macroID.Substring(openInd + 1, macroID.lastIndexOf(")") - openInd - 1);
 
 					var paramNames = paramString.Split(",").Select(str => str.Trim()).ToArray();
 
 					string find = "@" + macroID.Substring(0, openInd) + "(";
-					int currIndex = str.IndexOf(find);
+					int currIndex = str.indexOf(find);
 					while (currIndex != -1) {
-						var pair = DelimPair.genPairDict(str, "(", ")")[currIndex+macroID.Substring(0, openInd).Length+1];
+						var pair = DelimPair.genPairDict(str, DelimPair.Parens)[currIndex+macroID.Substring(0, openInd).Length+1];
 
 						string content = pair.contents(str);
 						var valStrs = content.Split(",").Select(str => str.Trim()).ToArray();
@@ -386,7 +383,7 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 
 						str = str.Substring(0, currIndex) + macroStr + str.Substring(pair.closeIndex + 1);
 
-						currIndex = str.IndexOf(find);
+						currIndex = str.indexOf(find);
 					}
 							
 				} else {
@@ -399,12 +396,12 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 
 		public static string removeOpenClosed(string code) {
 			while (code.Contains("/>")) {
-				int endIndex = code.IndexOf("/>");
-				DelimPair pair = DelimPair.genPairDict(code, "<", ">")[endIndex + 1];
+				int endIndex = code.indexOf("/>");
+				DelimPair pair = DelimPair.genPairDict(code, DelimPair.Carrots)[endIndex + 1];
 				int startIndex = pair.openIndex;
 
 				string str = pair.whole(code);
-				string tag = (str.Contains(" ")) ? str.sub(1, str.IndexOf(" ")) :  str.sub(1, str.IndexOf("/"));
+				string tag = (str.Contains(" ")) ? str.sub(1, str.indexOf(" ")) :  str.sub(1, str.indexOf("/"));
 
 				str = str.Substring(0, str.Length - 2) + $"></{tag}>";
 
@@ -459,7 +456,7 @@ using Microsoft.Xna.Framework;
 
 			mapToSelect: {
 				while (code.Contains(".map(")) {
-					int index = code.IndexOf(".map(");
+					int index = code.indexOf(".map(");
 					DelimPair pair = code.searchPairs("(", ")", index + 4);
 
 					code = code.Substring(0, index) + $".Select({pair.contents(code)}).ToArray()" + code.Substring(pair.closeIndex + 1);
@@ -503,7 +500,7 @@ using Microsoft.Xna.Framework;
 			HtmlNode returnNode = (HtmlNode) htmlObj;
 			
 			if (HtmlSettings.generateCache) { // Only caches when node generation is successful
-				string toCache = code.Substring(code.IndexOf("/*IMPORTS_DONE*/"));
+				string toCache = code.Substring(code.indexOf("/*IMPORTS_DONE*/"));
 				HtmlCache.CacheHtml(inputArr, toCache);
 			}
 			

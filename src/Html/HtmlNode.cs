@@ -252,7 +252,7 @@ namespace PixelArt {
 			}
 		}
 
-		public void topDownInit() {
+		public void topDownInit() { // INITIALIZE USING PROPS (and such) =================
 
 			// Load tag/class CSS (class has precedence over tags)
 			if (props.ContainsKey("class") && CSSHandler.classes.ContainsKey(prop<string>("class"))) { // currently no support for dynamic class // TODO: ADD THIS
@@ -487,7 +487,6 @@ namespace PixelArt {
 				if (props.ContainsKey("ref")) {
 					((Action<HtmlNode>) props["ref"])(this);
 				}
-
 			} finishProps: { }
 
 			if (children != null) {

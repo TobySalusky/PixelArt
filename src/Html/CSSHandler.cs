@@ -86,6 +86,9 @@ namespace PixelArt {
 
 		public object parseValue(string value) {
 			
+			if (int.TryParse(value, out int intVal)) {
+				return intVal;
+			}
 			if (value.EndsWith("px")) { // processes pixel values ending with px as integers
 				bool isInt = int.TryParse(value.Substring(0, value.indexOf("px")), out int pixelValue);
 				if (isInt) return pixelValue;

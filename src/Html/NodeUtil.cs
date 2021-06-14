@@ -61,7 +61,7 @@ namespace PixelArt {
 
 			if (prop is string str) {
 				if (str.Substring(str.Length - 1) == "%") {
-					int maxHeight = (parent == null) ? Main.screenHeight : parent.height;
+					int maxHeight = parent?.height ?? Main.screenHeight;
 
 					return (int) (float.Parse(str.Substring(0, str.Length - 1))/100F * maxHeight);
 				}

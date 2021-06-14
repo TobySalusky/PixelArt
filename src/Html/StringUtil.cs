@@ -8,6 +8,10 @@ namespace PixelArt {
         public static int indexOf(this string str, string value) {
             return str.IndexOf(value, StringComparison.Ordinal);
         }
+        
+        public static int lastIndexOf(this string str, string value) {
+            return str.LastIndexOf(value, StringComparison.Ordinal);
+        }
 
         public static string ReplaceFirst(this string str, string oldStr, string newStr) { // NOTE: should crash if no instance exists
             int index = str.IndexOf(oldStr);

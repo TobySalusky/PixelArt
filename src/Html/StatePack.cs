@@ -100,12 +100,13 @@ namespace PixelArt {
 
 			public static string[] CachedInput() {
 				return new string[]{ @"
-<div flexDirection='row' dimens='100%' backgroundColor='black' align='center'>
+<div class='back' flexDirection='row' dimens='100%' alignX='center' alignY='flexStart'>
 
-    <span dimens={50}> sup </span>
-    <div class='hi' dimens='20%'></div>
-    <div class='sup' dimens={70} borderColor={Color.Pink}></div>
-    
+    <div class='container'>
+        {arr['jeffery', 'jim', 'bob'].map(str => 
+            <div class='entry'>{str}</div>
+        )}
+    </div>
 </div>
 ", @"
 const Test = () => {
@@ -127,7 +128,9 @@ HtmlNode CreateTest(string tag, Dictionary<string, object> props = null, string 
 	___node = newNode("div", textContent: "");
 	return ___node;
 }
-HtmlNode node = newNode("div", props: new Dictionary<string, object> {["flexDirection"]="row", ["dimens"]="100%", ["backgroundColor"]="black", ["align"]="center"}, children: nodeArr(newNode("span", props: new Dictionary<string, object> {["dimens"]=(50)}, textContent: "sup"), newNode("div", props: new Dictionary<string, object> {["class"]="hi", ["dimens"]="20%"}, textContent: ""), newNode("div", props: new Dictionary<string, object> {["class"]="sup", ["dimens"]=(70), ["borderColor"]=(Color.Pink)}, textContent: "")));
+HtmlNode node = newNode("div", props: new Dictionary<string, object> {["class"]="back", ["flexDirection"]="row", ["dimens"]="100%", ["alignX"]="center", ["alignY"]="flexStart"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["class"]="container"}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr(((new []{"jeffery", "jim", "bob"}).Select(str => 
+            newNode("div", props: new Dictionary<string, object> {["class"]="entry"}, textContent: (Func<string>)(()=> ""+(str)+""))
+        ).ToArray()))))));
 setupNode(node);
 return node;
 			}

@@ -216,15 +216,16 @@ const Test = () => {
 
 
             const string html = @"
-<div flexDirection='row' dimens='100%' backgroundColor='black' align='center'>
+<div class='back' flexDirection='row' dimens='100%' alignX='center' alignY='flexStart'>
 
-    <span dimens={50}> sup </span>
-    <div class='hi' dimens='20%'></div>
-    <div class='sup' dimens={70} borderColor={Color.Pink}></div>
-    
+    <div class='container'>
+        {arr['jeffery', 'jim', 'bob'].map(str => 
+            <div class='entry'>{str}</div>
+        )}
+    </div>
 </div>
 ";
-            CSSHandler.addCSS($"{Paths.cssPath}/Test.css");
+            CSSHandler.addCSS($"{Paths.cssPath}/Styles.css");
             
             var statePack = new StatePack(
                 "a", new int[1920]
