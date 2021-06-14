@@ -45,6 +45,10 @@ namespace PixelArt {
         public static DelimPair searchPairs(this string str, string open, string close, int searchIndex) {
             return DelimPair.genPairDict(str, open, close)[searchIndex];
         }
+        
+        public static DelimPair searchPairs(this string str, (string, string) openAndClose, int searchIndex) {
+            return DelimPair.genPairDict(str, openAndClose.Item1, openAndClose.Item2)[searchIndex];
+        }
 
         public static Dictionary<(string, string), int> nestAmountsLen(this string str, int start, int len, params (string, string)[] delimTypes) {
             return nestAmountsRange(str, (start, start + len - 1), delimTypes);

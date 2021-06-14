@@ -14,6 +14,12 @@ namespace PixelArt {
 	
 	public static class HtmlProcessor {
 
+		public static HtmlProcessorExtras extras;
+
+		public class HtmlProcessorExtras {
+			public Dictionary<string, List<string>> componentProps = new Dictionary<string, List<string>>();
+		}
+
 		public static string stringifyNode(string node) {
 			node = node.Trim();
 			
@@ -47,14 +53,18 @@ namespace PixelArt {
 
 			string output = "";
 			
+			int firstSpace = headerContent.indexOf(" ");
+			string tag = (firstSpace == -1) ? headerContent : headerContent.Substring(0, firstSpace);
+			string data = (firstSpace == -1) ? null : headerContent.Substring(firstSpace + 1).Trim();
+
+			char firstTagLetter = tag.ToCharArray()[0];
+			bool customComponent = (firstTagLetter >= 'A' && firstTagLetter <= 'Z');
+			
+			Dictionary<string, string> props = new Dictionary<string, string>();
+
 			processHeader: {
 				
-				int firstSpace = headerContent.indexOf(" ");
-				string tag = (firstSpace == -1) ? headerContent : headerContent.Substring(0, firstSpace);
-				string data = (firstSpace == -1) ? null : headerContent.Substring(firstSpace + 1).Trim();
-
-				char firstTagLetter = tag.ToCharArray()[0];
-				output = (firstTagLetter >= 'A' && firstTagLetter <= 'Z') ? $"Create{tag}(" : "newNode(";
+				output = customComponent ? $"Create{tag}(" : "newNode(";
 				
 				output += $"'{tag}', ";
 				
@@ -66,7 +76,6 @@ namespace PixelArt {
 
 					int lastFin = 0;
 					string currLabel = "InvalidProp";
-					Dictionary<string, string> props = new Dictionary<string, string>();
 
 					var chars = data.ToCharArray();
 					for (int i = 0; i < data.Length; i++) {
@@ -127,7 +136,7 @@ namespace PixelArt {
 
 					var keys = props.Keys;
 					string startWith = "";
-					foreach (string key in keys) { // TODO: component props
+					foreach (string key in keys) {
 						propStr += $"{startWith}['{key}']={props[key]}";
 						startWith = ", ";
 					}
@@ -135,7 +144,6 @@ namespace PixelArt {
 					propStr += "}, ";
 					output += propStr;
 
-					
 				} finishData: { }
 			}
 
@@ -203,12 +211,11 @@ namespace PixelArt {
 							i++;
 						}
 					}
-					
+
+
 					output += "))";
 				}
-
-				object arr = (Func<HtmlNode[]>) (() => StatePack.nodeArr(null, null));
-
+				
 			} else {
 				string text = mainPair.htmlContents(node).Trim();
 				
@@ -230,6 +237,13 @@ namespace PixelArt {
 					output += $"textContent: '{text}'";
 				}
 			}
+			
+			if (customComponent && extras.componentProps.ContainsKey(tag)) {
+				var customProps = extras.componentProps[tag];
+				foreach (string key in props.Keys) {
+					if (customProps.Contains(key)) output += $", {key}: {props[key]}";
+				}
+			}
 
 			return output + ")";
 		}
@@ -245,6 +259,27 @@ namespace PixelArt {
 			string tagEtc = code.Substring(code.indexOf(before) + before.Length);
 			string tag = tagEtc.sub(0, tagEtc.minValidIndex(" ", "="));
 
+			// contents of first parenthesis (define the props you want to grab)
+			var customPropDefinitions = code.searchPairs(DelimPair.Parens, code.indexOf("(")).contents(code).Split(",")
+				.Select(str => str.Trim());
+			string extraPropsString = "";
+			foreach (string customPropDefinition in customPropDefinitions) {
+				int firstSpace = customPropDefinition.indexOf(" ");
+				string type = customPropDefinition.Substring(0, firstSpace);
+				
+				// MAKES ALL TYPES NULLABLE TODO: figure out if this is a good thing?! (maybe don't do it there is a default/if object)
+				if (!type.EndsWith("?")) type += "?"; 
+				string afterType = customPropDefinition.Substring(firstSpace + 1).Trim();
+				bool hasDefault = customPropDefinition.Contains("=");
+				string variableName = hasDefault ? afterType.Substring(0, afterType.indexOf("=")).Trim() : afterType;
+				extraPropsString += $", {type} {variableName} = ";
+				extraPropsString += (hasDefault) ? afterType.Substring(afterType.indexOf("=") + 1).Trim() : "null";
+
+				if (!extras.componentProps.ContainsKey(tag)) extras.componentProps[tag] = new List<string>();
+				extras.componentProps[tag].Add(variableName);
+			}
+			
+			
 			before = "return"; // TODO: check nesting b/c returns in functions are possible
 			string afterReturn = code.Substring(code.indexOf(before) + before.Length).Trim();
 			DelimPair pair = DelimPair.genPairDict(afterReturn, "(", ")")[0];
@@ -336,7 +371,7 @@ Action<{type}> {varNames[1]} = (___val) => {{
 			}
 
 			string output = @$"
-HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {{
+HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null{extraPropsString}) {{
 	HtmlNode ___node = null;
 	{stateStr}
 	___node = {stringifyNode(returnContents)};
@@ -423,6 +458,8 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 			}
 			
 			// code generation
+			extras = new HtmlProcessorExtras();
+
 			code = code.Replace("=>", "=^");
 
 			if (macros != null) code = applyMacros(code, macros);
@@ -430,11 +467,7 @@ HtmlNode Create{tag}(string tag, Dictionary<string, object> props = null, string
 			code = removeOpenClosed(code);
 
 			Logger.log("OUTPUT HTML===============\n\n" + code);
-
-
-			code = "HtmlNode node = " + stringifyNode(code) + ";";
-			code += "\nsetupNode(node);";
-			code += "\nreturn node;";
+			
 
 			string preHTML = @"
 using System.Linq;
@@ -447,9 +480,12 @@ using Microsoft.Xna.Framework;
 					preHTML += defineComponent((macros == null) ? component : applyMacros(component, macros));
 				}
 			}
-
-			code = preHTML + code;
-
+			
+			code = preHTML + "HtmlNode node = " + stringifyNode(code) + ";";
+			code += "\nsetupNode(node);";
+			code += "\nreturn node;";
+			
+			
 			foreach (string key in StatePack.___vars.Keys) {
 				code = code.Replace($"${key}", $"(({StatePack.___types[key]})___vars[\"{key}\"])");
 			}

@@ -103,17 +103,18 @@ namespace PixelArt {
 <div class='back' flexDirection='row' dimens='100%' alignX='center' alignY='flexStart'>
 
     <div class='container'>
-        {arr['jeffery', 'jim', 'bob'].map(str => 
-            <div class='entry'>{str}</div>
+        {arr['jeffery', 'jim', 'bob'].map((str, i) => 
+            <Test name={str} number={i}/>
         )}
     </div>
 </div>
 ", @"
-const Test = () => {
-    
+const Test = (string name, int number = 999) => {
 
     return (
-        <div></div>
+        <div class='entry'>
+            {name}: {number}
+        </div>
     );
 }
 " };
@@ -122,14 +123,14 @@ const Test = () => {
 			public static HtmlNode CachedNode() {
 				/*IMPORTS_DONE*/
 
-HtmlNode CreateTest(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null) {
+HtmlNode CreateTest(string tag, Dictionary<string, object> props = null, string textContent = null, HtmlNode[] children = null, string? name = null, int? number = 999) {
 	HtmlNode ___node = null;
 	
-	___node = newNode("div", textContent: "");
+	___node = newNode("div", props: new Dictionary<string, object> {["class"]="entry"}, textContent: (Func<string>)(()=> ""+(name)+": "+(number)+""));
 	return ___node;
 }
-HtmlNode node = newNode("div", props: new Dictionary<string, object> {["class"]="back", ["flexDirection"]="row", ["dimens"]="100%", ["alignX"]="center", ["alignY"]="flexStart"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["class"]="container"}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr(((new []{"jeffery", "jim", "bob"}).Select(str => 
-            newNode("div", props: new Dictionary<string, object> {["class"]="entry"}, textContent: (Func<string>)(()=> ""+(str)+""))
+HtmlNode node = newNode("div", props: new Dictionary<string, object> {["class"]="back", ["flexDirection"]="row", ["dimens"]="100%", ["alignX"]="center", ["alignY"]="flexStart"}, children: nodeArr(newNode("div", props: new Dictionary<string, object> {["class"]="container"}, childrenFunc: (Func<HtmlNode[]>) (() => nodeArr(((new []{"jeffery", "jim", "bob"}).Select((str, i) => 
+            CreateTest("Test", props: new Dictionary<string, object> {["name"]=(str), ["number"]=(i)}, textContent: "")
         ).ToArray()))))));
 setupNode(node);
 return node;

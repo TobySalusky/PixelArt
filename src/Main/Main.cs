@@ -205,11 +205,12 @@ namespace PixelArt
             // https://medium.com/@sfranks/i-originally-wrote-this-for-the-best-way-to-mask-2d-sprites-in-xna-game-development-stack-949cf7bd7421
             
             const string stateTest = @"
-const Test = () => {
-    
+const Test = (string name, int number = 999) => {
 
     return (
-        <div></div>
+        <div class='entry'>
+            {name}: {number}
+        </div>
     );
 }
 ";
@@ -219,8 +220,8 @@ const Test = () => {
 <div class='back' flexDirection='row' dimens='100%' alignX='center' alignY='flexStart'>
 
     <div class='container'>
-        {arr['jeffery', 'jim', 'bob'].map(str => 
-            <div class='entry'>{str}</div>
+        {arr['jeffery', 'jim', 'bob'].map((str, i) => 
+            <Test name={str} number={i}/>
         )}
     </div>
 </div>
