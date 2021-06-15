@@ -588,7 +588,7 @@ namespace PixelArt {
 						break;
 					}
 				}
-			} else {
+			} else { // TODO: FIX THIS WHAT IS THIS WHY Are the ifs laid out like this its horrible
 
 				int nonFlexWidth = 0;
 				foreach (HtmlNode child in children) {
@@ -597,7 +597,7 @@ namespace PixelArt {
 				
 				float perFlex = (width - nonFlexWidth) / sumFlex;
 
-				int thisX = 0;
+				int thisX = x;
 				foreach (HtmlNode child in children) {
 					child.x = thisX;
 					if (child.flex > 0) child.width = (int) (perFlex * child.flex);
@@ -694,7 +694,7 @@ namespace PixelArt {
 				
 				float perFlex = (height - nonFlexHeight) / sumFlex;
 
-				int thisY = 0;
+				int thisY = y;
 				foreach (HtmlNode child in children) {
 					child.y = thisY;
 					if (child.flex > 0) child.height = (int) (perFlex * child.flex);

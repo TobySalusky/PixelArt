@@ -220,7 +220,7 @@ const Test = (string name, int number = 999) => {
 <div class='back' flexDirection='row' dimens='100%' alignX='center' alignY='flexStart'>
 
     <div class='container'>
-        {arr['jeffery', 'jim', 'bob'].map((str, i) => 
+        {arr['jeffery', 'jim', 'bob','jeffery'].map((str, i) =>
             <Test name={str} number={i}/>
         )}
     </div>

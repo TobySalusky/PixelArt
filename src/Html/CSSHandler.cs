@@ -93,6 +93,9 @@ namespace PixelArt {
 				bool isInt = int.TryParse(value.Substring(0, value.indexOf("px")), out int pixelValue);
 				if (isInt) return pixelValue;
 			}
+
+			if (value.Contains("-")) return camelCase(value);
+
 			return value;
 		}
 	}
