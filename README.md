@@ -1,3 +1,3 @@
 # PixelArt
 
-A simple but clean `Winforms` **Pixel-art application**.
+A simple but clean `Winforms` pixel-art application.
