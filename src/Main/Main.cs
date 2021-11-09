@@ -60,10 +60,6 @@ namespace PixelArt
         public static Project project;
 
         public static List<Project> projects = new List<Project>();
-
-        // HTML UI
-        public static HtmlNode htmlNode;
-        public static float htmlTestVal;
         
         // settings
         public static Tool tool = Tool.Brush;
@@ -193,60 +189,6 @@ namespace PixelArt
             }
             
             setTool(Tool.Brush);
-
-
-            startHTML();
-        }
-
-        public static async void startHTML() { 
-            // HTML TESTING
-
-            // TODO: masking
-            // https://medium.com/@sfranks/i-originally-wrote-this-for-the-best-way-to-mask-2d-sprites-in-xna-game-development-stack-949cf7bd7421
-            
-            const string stateTest = @"
-const Test = (string name, int number = 999) => {
-
-    return (
-        <div class='entry'>
-            {name}: {number}
-        </div>
-    );
-}
-";
-
-
-            const string html = @"
-<div class='back' flexDirection='row' dimens='100%' alignX='center' alignY='flexStart'>
-
-    <div class='container'>
-        {arr['jeffery', 'jim', 'bob','jeffery'].map((str, i) =>
-            <Test name={str} number={i}/>
-        )}
-    </div>
-</div>
-";
-            CSSHandler.addCSS($"{Paths.cssPath}/Styles.css");
-            
-            var statePack = new StatePack(
-                "a", new int[1920]
-            );
-            
-            var macros = Macros.create(
-                "div(html)", "<div>$$html</div>"
-            );
-
-            var components = PixelArt.Components.create(
-                stateTest
-            );
-
-            var watch = new System.Diagnostics.Stopwatch();
-            watch.Start();
-            
-            htmlNode = await HtmlProcessor.genHTML(html, statePack, macros, components);
-
-            watch.Stop();
-            Logger.log("creating HTML took:", watch.Elapsed.TotalSeconds);
         }
 
         public static void setProject(Project project) {
@@ -521,13 +463,6 @@ const Test = (string name, int number = 999) => {
                 setTool(tool);
                 lastTool = tool;
             }
-
-            htmlTestVal += deltaTime;
-            htmlNode?.update(deltaTime, mouse);
-            
-            if (mouse.leftPressed) {
-                htmlNode?.clickRecurse(mouse.pos);
-            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -560,9 +495,7 @@ const Test = (string name, int number = 999) => {
             spriteBatch.Draw(rect, new Rectangle(7, 37, 36, 56), Color.Black);
             spriteBatch.Draw(rect, new Rectangle(8, 38, 34, 54), Color.LightGray);
             spriteBatch.Draw(rect, new Rectangle(10, 40, 30, 50), brushColor);
-
-            htmlNode?.render(spriteBatch);
-
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
